@@ -1,0 +1,72 @@
+<mat-sidenav-container class="container">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    opened
+    [position]="'start'"
+    class="nav-sidenav"
+    [ngClass]="{ closing: !isExpanded }"
+  >
+    <ul>
+      <li>
+        <a mat-button>
+          <mat-icon svgIcon="icon_iso"></mat-icon>
+          <img *ngIf="isExpanded" src="../../../assets/logos/Logo.png" alt="" />
+        </a>
+      </li>
+      <li>
+        <a mat-button>
+          <mat-icon svgIcon="icon_user"></mat-icon>
+          <span *ngIf="isExpanded">Employees</span>
+        </a>
+      </li>
+      <li>
+        <a mat-button>
+          <mat-icon svgIcon="icon_request"></mat-icon>
+          <span *ngIf="isExpanded">Access Requests</span>
+        </a>
+      </li>
+      <li>
+        <a mat-button>
+          <mat-icon svgIcon="icon_app"></mat-icon>
+          <span *ngIf="isExpanded">Applications</span>
+        </a>
+      </li>
+      <li>
+        <a mat-button>
+          <mat-icon svgIcon="icon_settings"></mat-icon>
+          <span *ngIf="isExpanded">Settings</span>
+        </a>
+      </li>
+      <li>
+        <a mat-button>
+          <mat-icon svgIcon="icon_about"></mat-icon>
+          <span *ngIf="isExpanded">About</span>
+        </a>
+      </li>
+      <li class="spacer">
+        <a mat-button>
+          <mat-icon svgIcon="icon_logout"></mat-icon>
+          <span *ngIf="isExpanded">Log Out</span>
+        </a>
+      </li>
+      <li>
+        <a mat-button>
+          <mat-icon
+            *ngIf="!isExpanded"
+            svgIcon="icon_right"
+            (click)="isExpanded = !isExpanded"
+          ></mat-icon>
+          <mat-icon
+            *ngIf="isExpanded"
+            svgIcon="icon_left"
+            (click)="isExpanded = !isExpanded"
+          ></mat-icon>
+        </a>
+      </li>
+    </ul>
+  </mat-sidenav>
+  <mat-sidenav-content [ngClass]="{ resizing: !isExpanded }">
+    Click arrow btn to collapse and expand panel
+  </mat-sidenav-content>
+</mat-sidenav-container>
