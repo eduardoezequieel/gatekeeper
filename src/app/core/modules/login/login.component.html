@@ -1,0 +1,25 @@
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+<div class="container">
+  <div class="panel-left">
+    <div class="logo-container">
+      <img src="./../../../../assets/images/gatekeeper-logo.png" alt="">
+    </div>
+    <router-outlet></router-outlet>
+    
+  </div>
+  <div class="panel-right">
+    <h2>Best place to code</h2>
+    <div class="error" *ngIf="false">
+      <div class="icon-container"><i class="ri-forbid-line"></i></div>
+      <div class="error-title">Error</div>
+      <div class="icon-container"><i class="ri-close-line"></i></div>
+      <div class="error-description">Credentials are invalid</div>
+    </div>
+    <div class="success" *ngIf="false">
+      <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
+      <div class="error-title">Success</div>
+      <div class="icon-container"><i class="ri-close-line"></i></div>
+      <div class="error-description">Now, you can log in</div>
+    </div>
+  </div>
+</div>

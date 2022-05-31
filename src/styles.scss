@@ -1,39 +1,81 @@
+  $applaudo-navy-blue: #011625;
+  $cool-gray: #687177;
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
-// Plus imports for other components in your app.
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Avenir Next LT Pro', sans-serif;
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
+}
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$gatekeeper-trainee-program-primary: mat.define-palette(mat.$indigo-palette);
-$gatekeeper-trainee-program-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+html,
+body {
+  height: 100%;
+}
 
-// The warn palette is optional (defaults to red).
-$gatekeeper-trainee-program-warn: mat.define-palette(mat.$red-palette);
+body {
+  margin: 0;
+}
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$gatekeeper-trainee-program-theme: mat.define-light-theme((
-  color: (
-    primary: $gatekeeper-trainee-program-primary,
-    accent: $gatekeeper-trainee-program-accent,
-    warn: $gatekeeper-trainee-program-warn,
-  )
-));
+a {
+  text-decoration: none;
+}
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($gatekeeper-trainee-program-theme);
+.mat-form-field {
+  line-height: 1.5;
+  .mat-input-element {
+    color: $applaudo-navy-blue
+  }
+  .mat-form-field-label {
+    color: #687177;
+  }
+  .mat-form-field-underline {
+    background-color: #687177;
+  }
+  .mat-form-field-ripple {
+    background-color: #687177;
+  }
+  .mat-form-field-required-marker {
+    color: #687177;
+  }
+  .mat-hint {
+    color: $cool-gray
+  }
+}
 
-/* You can add global styles to this file, and also import other style files */
+.mat-dialog-container {
+  background-color: white;
+  padding: 0 !important;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@mixin primary-button {
+  button {
+    width: 161px;
+    height: 40px;
+    margin-top: 40px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: white;
+  }
+
+  .primary-button {
+    background: #ff4040;
+  }
+}
+
+@font-face {
+  font-family: "Avenir Next LT Pro";
+  src: local("Avenir Next LT Pro"), url(./assets/fonts/Avenir-Next-LT-Pro-Regular/Avenir-Next-LT-Pro-Regular.otf) format("truetype");
+}
+@font-face {
+  font-family: "Avenir Next LT Pro";
+  src: local("Avenir Next LT Pro"), url(./assets/fonts/Avenir-Next-LT-Pro-Regular/AvenirLTProBlack.otf) format("truetype");
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Avenir Next LT Pro";
+  src: local("Avenir Next LT Pro"), url(./assets/fonts/Avenir-Next-LT-Pro-Regular/AvenirLTProHeavy.otf) format("truetype");
+  font-weight: 600;
+}

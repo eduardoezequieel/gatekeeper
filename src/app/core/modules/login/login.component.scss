@@ -1,0 +1,105 @@
+$applaudo-navy-blue: #011625;
+$cool-gray: #687177;
+
+.container {
+  display: flex;
+  height: 100vh;
+
+  .panel-left {
+    width: 40%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    .logo-container {
+      img {
+        width: 172px;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .panel-right {
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: 
+      url("./../../../../assets/images/pattern-points.png"),
+      url("./../../../../assets/images/pattern-points.png"),
+      #011625;
+    background-size: 20%;
+    background-blend-mode: soft-light, soft-light, normal;
+
+    h2 {
+      width: 259px;
+      color: white;
+      font-family: "Avenir Next LT Pro";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 64px;
+      text-align: center;
+      letter-spacing: -0.04em;
+    }
+
+    .error, .success {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-items: center;
+      justify-content: center;
+      right: 40px;
+      bottom: 40px;
+      width: 424px;
+      height: 104px;
+      background: #ffffff;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+      border-left: 4px solid #B80000;
+
+      .error-title, .error-description {
+        margin-left: 56px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      
+      .error-title {
+        color: #011625;
+        font-weight: 700;
+      }
+
+      .error-description {
+        color: $applaudo-navy-blue;
+        font-weight: 400;
+      }
+
+      .icon-container {
+        position: absolute;
+        i {
+          position: relative;
+          color: #B80000;
+          font-size: 1.2rem;
+        }
+        .ri-forbid-line, .ri-checkbox-circle-line {
+          top: -16px;
+          left: 32px;
+        }
+        .ri-close-line {
+          bottom: 22px;
+          left: 380px;     
+          cursor: pointer;     
+        }
+      }
+    }
+
+    .success {
+      border-left: 4px solid #1BCB80;
+      .icon-container {
+        i {
+          color: #1BCB80;
+        }
+      }
+    }
+  }
+}
