@@ -1,0 +1,24 @@
+<div class="dialog-head">
+  <h4 mat-dialog-title>Multi-Factor Recovery Keys</h4>
+  <span class="close-x" (click)="onNoClick()">X</span>
+</div>
+<div mat-dialog-content>
+  <p>
+    This are your personal recovery keys. Please make sure to save them since
+    this will be the only time in wich you will be able to see them.
+  </p>
+
+  <ul>
+    <li>Code 1</li>
+    <li>Code 2</li>
+    <li>Code 3</li>
+    <li>Code 4</li>
+    <li>Code 5</li>
+    <li>Code 6</li>
+  </ul>
+</div>
+<div mat-dialog-actions>
+  <button mat-button class="clear-btn" (click)="continueClick()">
+    Continue
+  </button>
+</div>

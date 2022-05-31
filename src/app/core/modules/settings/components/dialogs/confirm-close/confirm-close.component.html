@@ -1,0 +1,13 @@
+<div class="dialog-head">
+  <h4 mat-dialog-title>Are you sure you want to close?</h4>
+  <span class="close-x" (click)="onNoClick()">X</span>
+</div>
+<div mat-dialog-content>
+  <p>If you continue, your won’t be able to see the keys again.</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button class="cancel-btn" (click)="goBackClick()">
+    Go Back
+  </button>
+  <button mat-button class="clear-btn" (click)="onNoClick()">Close</button>
+</div>

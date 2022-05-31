@@ -1,0 +1,48 @@
+<div class="dialog-head">
+  <h4 mat-dialog-title>Enable Multi-Factor Authentication</h4>
+  <span class="close-x" (click)="onNoClick()">X</span>
+</div>
+<div mat-dialog-content>
+  <p class="steps">
+    1. Scan the QR code with your Multi-Factor Authentication App:
+  </p>
+  <div class="instructions">
+    <img src="http://placehold.jp/144x144.png" alt="" />
+    <p>
+      If you don’t have an multi-factor authentication app, here are some
+      suggestions:<br />
+      For IOS: Authy, Microsoft Authenticator.<br />
+      For Android: Microsoft Authenticator, Google Authenticator.<br /><br />
+
+      If you are unable to scan the code, you can manually register your
+      application by filling in the following information:
+    </p>
+  </div>
+  <div>
+    <ul>
+      <li>Account name: <b>clopez@applaudostudios.com</b></li>
+      <li>Multi-Factor Authentication key: <b>KBOESKNKFNS2H</b></li>
+    </ul>
+  </div>
+  <p class="steps">2. Enter the 6-digit one-time code password:</p>
+  <form [formGroup]="form">
+    <mat-form-field class="full-width">
+      <input
+        formControlName="codePassword"
+        matInput
+        placeholder="Code password"
+        type="password"
+        autocomplete="disabled"
+      />
+      <mat-error *ngIf="f['codePassword'].errors?.['required']">
+        Code password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button class="cancel-btn" (click)="onNoClick()">
+    Cancel
+  </button>
+  <button mat-button class="clear-btn" (click)="acceptClick()">Accept</button>
+</div>

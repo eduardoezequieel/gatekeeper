@@ -1,0 +1,59 @@
+<div class="heading">
+  <div class="title">
+    <h2>Settings</h2>
+  </div>
+  <div class="user">
+    <img src="http://placehold.jp/40x40.png" alt="" />
+    <span class="username">Jose Lopez</span>
+  </div>
+</div>
+<div class="user-settings">
+  <div class="user-info">
+    <div class="details">
+      <img src="http://placehold.jp/121x121.png" alt="" />
+      <div class="info">
+        <h4>Carlos Lopez</h4>
+        <span class="job">Back-End Developer</span>
+        <span class="email">clopez@gmail.com</span>
+      </div>
+    </div>
+    <div class="action-btn">
+      <div>
+        <button
+          routerLink="/setting/webhooks"
+          *ngIf="admin"
+          class="webhooks-btn"
+          mat-flat-button
+        >
+          Manage WebHook Logs
+        </button>
+        <button
+          (click)="openPassDialog()"
+          class="change-pass"
+          mat-flat-button
+          color="warn"
+        >
+          Change password
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="auth-container">
+    <div class="desc-container">
+      <h4>Multi-Factor Authentication</h4>
+      <p>
+        This option allows Gatekeeper to use the multi-factor authentication
+        code when you log in to your account.
+      </p>
+    </div>
+    <div class="toggle-container">
+      <span *ngIf="!disabled">Disabled</span>
+      <span *ngIf="disabled">Enabled</span>
+      <mat-slide-toggle
+        color="warn"
+        [(ngModel)]="disabled"
+        (click)="openAuthDialog()"
+      ></mat-slide-toggle>
+    </div>
+  </div>
+</div>
