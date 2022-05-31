@@ -1,0 +1,55 @@
+.container-one-time-code {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 80vh;
+
+  .title {
+    h3 {
+      height: 48px;
+      font-style: demi;
+      font-weight: 600;
+      font-size: 36px;
+      line-height: 48px;
+      color: #011625;
+    }
+  
+    h4 {
+      height: 32px;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+      color: #687177;
+    }
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  
+    button {
+      width: 161px;
+      height: 40px;
+      background: #ff4040;
+      // border-radius: 20px;
+      margin-top: 40px;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+  
+  .footer {
+    display: flex;
+  
+    a {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+  
+      color: #ff4040;
+      margin-left: 40px;
+    }
+  }
+}
