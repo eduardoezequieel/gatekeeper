@@ -11,6 +11,7 @@ $charcoal:#36434E;
   right: 0;
 }
 mat-sidenav-content{
+  background-color: white;
   transition: 300ms ease-in-out;
   margin-left: 200px !important;
   &.resizing{

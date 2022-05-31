@@ -1,0 +1,127 @@
+$Applaudo-Red: #FF4040;
+$Applaudo-Navy:#011625;
+$cool-gray:#687177;
+.heading{
+  display: flex;
+  padding: 5px 30px;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 2px solid #E2E2E2;
+  &>.title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    h2{
+      font-family: 'Avenir Next LT Pro';
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+      margin-bottom: 0;
+    }
+  }
+  &>.user{
+    display: flex;
+    flex-direction: row;
+    img{
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .username{
+      font-family: 'Avenir Next LT Pro';
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+}
+.user-settings{
+  padding: 0px 30px;
+}
+.user-info{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 40px 0;
+  border-bottom: 2px solid #E2E2E2;
+  &>.action-btn{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    .change-pass{
+      font-family: 'Avenir Next LT Pro';
+      border-radius: 0;
+      background-color: $Applaudo-Red;
+      border: 2px solid $Applaudo-Red;
+      color: white;
+    }
+    .webhooks-btn{
+      margin-right: 10px;
+      font-family: 'Avenir Next LT Pro';
+      border-radius: 0;
+      background-color:white;
+      border: 2px solid #E2E2E2;
+      color: $Applaudo-Red;
+    }
+  }
+}
+.details{
+  display: flex;
+  flex-direction: row;
+  &>img{
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  .info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    &>h4{
+      font-family: 'Avenir Next LT Pro';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+      margin-bottom: 0;
+    }
+    &>.job{
+      font-family: 'Avenir Next LT Pro';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 24px;
+      color: $cool-gray;
+    }
+    &>.email{
+      color: $cool-gray;
+      font-family: 'Avenir Next LT Pro';
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 700;
+    }
+  }
+}
+.auth-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 40px 0;
+  .desc-container{
+    &>h4{
+      font-family: 'Avenir Next LT Pro';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+    }
+  }
+  .toggle-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    span{
+      font-family: 'Avenir Next LT Pro';
+      color: $cool-gray;
+    }
+  }
+}

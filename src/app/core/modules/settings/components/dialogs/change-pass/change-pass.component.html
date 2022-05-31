@@ -1,0 +1,51 @@
+<div class="dialog-head">
+  <h4 mat-dialog-title>Change Password</h4>
+  <span class="close-x" (click)="onNoClick()">X</span>
+</div>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field class="full-width">
+      <input
+        formControlName="currentPassword"
+        matInput
+        placeholder="Current password"
+        type="password"
+        autocomplete="disabled"
+      />
+      <mat-error *ngIf="f['currentPassword'].errors?.['required']">
+        Current Password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <h4>New password:</h4>
+    <mat-form-field class="full-width">
+      <input
+        formControlName="newPassword"
+        matInput
+        placeholder="New password"
+        type="password"
+        autocomplete="disabled"
+      />
+      <mat-error *ngIf="f['newPassword'].errors?.['required']">
+        New Password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <input
+        formControlName="confirmPassword"
+        matInput
+        placeholder="Repeat new password"
+        type="password"
+        autocomplete="disabled"
+      />
+      <mat-error *ngIf="f['confirmPassword'].errors?.['required']">
+        Confirm Password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button class="cancel-btn" (click)="onNoClick()">
+    Cancel
+  </button>
+  <button mat-button class="clear-btn">Update</button>
+</div>

@@ -1,0 +1,30 @@
+<div class="dialog-head">
+  <h4 mat-dialog-title>Multi-Factor Authentication</h4>
+  <span class="close-x" (click)="onNoClick()">X</span>
+</div>
+<div mat-dialog-content>
+  <p>
+    To disable your multi-factor authentication, you must enter a 6 digit
+    one-time password or a recovery code.
+  </p>
+  <form [formGroup]="form">
+    <mat-form-field class="full-width">
+      <input
+        formControlName="recoveryCode"
+        matInput
+        placeholder="Current password"
+        type="password"
+        autocomplete="disabled"
+      />
+      <mat-error *ngIf="f['recoveryCode'].errors?.['required']">
+        Recovery code is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button class="cancel-btn" (click)="onNoClick()">
+    Cancel
+  </button>
+  <button mat-button class="clear-btn" (click)="disableAuth()">Confirm</button>
+</div>

@@ -1,0 +1,13 @@
+<div class="dialog-head">
+  <h4 mat-dialog-title>Clear WebHook Logs</h4>
+  <span class="close-x" (click)="onNoClick()">X</span>
+</div>
+<div mat-dialog-content>
+  <p>If you continue, your will clear all WebHook Logs.</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button class="cancel-btn" (click)="onNoClick()">
+    Cancel
+  </button>
+  <button mat-button class="clear-btn" (click)="onNoClick()">Clear</button>
+</div>
