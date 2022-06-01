@@ -12,6 +12,7 @@ $cool-gray:#687177;
     flex-direction: column;
     justify-content: center;
     h2{
+      color: black;
       font-family: 'Avenir Next LT Pro';
       font-weight: 600;
       font-size: 24px;
@@ -31,6 +32,7 @@ $cool-gray:#687177;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      color: black;
     }
   }
 }
@@ -83,6 +85,7 @@ $cool-gray:#687177;
       font-size: 24px;
       line-height: 32px;
       margin-bottom: 0;
+      color: black;
     }
     &>.job{
       font-family: 'Avenir Next LT Pro';
@@ -113,6 +116,7 @@ $cool-gray:#687177;
       font-weight: 600;
       font-size: 24px;
       line-height: 32px;
+      color: black;
     }
   }
   .toggle-container{

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -8,7 +9,9 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./nav.component.scss'],
 })
 export class NavComponent {
-  isExpanded: boolean = true;
+  isExpanded: boolean = false;
+  login: boolean = true;
+
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer

@@ -6,6 +6,7 @@
     [position]="'start'"
     class="nav-sidenav"
     [ngClass]="{ closing: !isExpanded }"
+    *ngIf="login"
   >
     <ul>
       <li>
@@ -58,7 +59,7 @@
       </li>
     </ul>
   </mat-sidenav>
-  <mat-sidenav-content [ngClass]="{ resizing: !isExpanded }">
+  <mat-sidenav-content [ngClass]="{ resizing: !isExpanded, offline: !login }">
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

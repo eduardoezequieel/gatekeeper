@@ -1,3 +1,23 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+$gatekeeper-trainee-program-primary: mat.define-palette(mat.$indigo-palette);
+$gatekeeper-trainee-program-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+$gatekeeper-trainee-program-warn: mat.define-palette(mat.$red-palette);
+$gatekeeper-trainee-program-theme: mat.define-light-theme((
+  color: (
+    primary: $gatekeeper-trainee-program-primary,
+    accent: $gatekeeper-trainee-program-accent,
+    warn: $gatekeeper-trainee-program-warn,
+  )
+));
+
+@include mat.all-component-themes($gatekeeper-trainee-program-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+  
   $applaudo-navy-blue: #011625;
   $cool-gray: #687177;
 
@@ -5,7 +25,7 @@
   margin: 0;
   padding: 0;
   font-family: 'Avenir Next LT Pro', sans-serif;
-
+  
 }
 
 html,
@@ -15,6 +35,7 @@ body {
 
 body {
   margin: 0;
+  padding: 0;
 }
 
 a {
@@ -45,7 +66,7 @@ a {
 
 .mat-dialog-container {
   background-color: white;
-  padding: 0 !important;
+  
 }
 
 
