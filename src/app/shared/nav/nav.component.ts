@@ -1,61 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
 })
-export class NavComponent {
+export class NavComponent implements OnInit {
   isExpanded: boolean = false;
-  login: boolean = true;
-
+  login: boolean = false;
+  loggedIn = new BehaviorSubject<boolean>(false);
+  path: any;
   constructor(
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private router: Router
   ) {
-    this.matIconRegistry.addSvgIcon(
-      `icon_user`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        '../../../assets/logos/user.svg'
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `icon_app`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        '../../../assets/logos/app.svg'
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `icon_settings`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        '../../../assets/logos/settings.svg'
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `icon_right`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        '../../../assets/logos/right.svg'
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `icon_about`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        '../../../assets/logos/about.svg'
-      )
-    );
     this.matIconRegistry.addSvgIcon(
       `icon_request`,
       this.domSanitizer.bypassSecurityTrustResourceUrl(
         '../../../assets/logos/request.svg'
-      )
-    );
-    this.matIconRegistry.addSvgIcon(
-      `icon_left`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        '../../../assets/logos/left.svg'
       )
     );
     this.matIconRegistry.addSvgIcon(
@@ -64,11 +31,16 @@ export class NavComponent {
         '../../../assets/logos/Isotype.svg'
       )
     );
-    this.matIconRegistry.addSvgIcon(
-      `icon_logout`,
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        '../../../assets/logos/logout.svg'
-      )
-    );
+  }
+  ngOnInit(): void {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.path = (<NavigationEnd>event).url;
+        this.login = true;
+        if (this.path.indexOf('login') !== -1) {
+          this.login = false;
+        }
+      }
+    });
   }
 }
