@@ -17,7 +17,7 @@
       </li>
       <li>
         <a mat-button>
-          <mat-icon svgIcon="icon_user"></mat-icon>
+          <i class="ri-group-line"></i>
           <span *ngIf="isExpanded">Employees</span>
         </a>
       </li>
@@ -29,32 +29,32 @@
       </li>
       <li>
         <a mat-button>
-          <mat-icon svgIcon="icon_app"></mat-icon>
+          <i class="ri-apps-line"></i>
           <span *ngIf="isExpanded">Applications</span>
         </a>
       </li>
       <li>
         <a mat-button routerLink="/setting">
-          <mat-icon svgIcon="icon_settings"></mat-icon>
+          <i class="ri-settings-4-line"></i>
           <span *ngIf="isExpanded">Settings</span>
         </a>
       </li>
       <li>
         <a mat-button>
-          <mat-icon svgIcon="icon_about"></mat-icon>
+          <i class="ri-information-line"></i>
           <span *ngIf="isExpanded">About</span>
         </a>
       </li>
       <li class="spacer">
         <a mat-button>
-          <mat-icon svgIcon="icon_logout"></mat-icon>
+          <i class="ri-logout-box-line"></i>
           <span *ngIf="isExpanded">Log Out</span>
         </a>
       </li>
       <li>
         <a mat-button (click)="isExpanded = !isExpanded">
-          <mat-icon *ngIf="!isExpanded" svgIcon="icon_right"></mat-icon>
-          <mat-icon *ngIf="isExpanded" svgIcon="icon_left"></mat-icon>
+          <i *ngIf="!isExpanded" class="ri-arrow-right-line"></i>
+          <i *ngIf="isExpanded" class="ri-arrow-left-line"></i>
         </a>
       </li>
     </ul>

@@ -56,6 +56,13 @@ mat-sidenav-content{
       border-left:3px solid $white;
       border-radius: 0;
     }
+    & i{
+      font-size: 24px;
+    }
+    & .ri-arrow-right-line, & .ri-arrow-left-line{
+      color: $Applaudo-Red;
+      font-size: 32;
+    }
   }
   span{
     margin-left: 20px;
