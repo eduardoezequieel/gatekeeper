@@ -46,7 +46,7 @@
         </a>
       </li>
       <li class="spacer">
-        <a mat-button>
+        <a mat-button (click)="logOut()">
           <i class="ri-logout-box-line"></i>
           <span *ngIf="isExpanded">Log Out</span>
         </a>

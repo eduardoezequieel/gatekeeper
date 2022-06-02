@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { SettingsService } from '../../../services/settings.service';
 import { ConfirmCloseComponent } from '../confirm-close/confirm-close.component';
 
 @Component({
@@ -7,11 +12,15 @@ import { ConfirmCloseComponent } from '../confirm-close/confirm-close.component'
   templateUrl: './recovery-keys.component.html',
   styleUrls: ['./recovery-keys.component.scss'],
 })
-export class RecoveryKeysComponent {
+export class RecoveryKeysComponent implements OnInit {
   constructor(
-    public dialogRef: MatDialogRef<RecoveryKeysComponent>,
-    public dialog: MatDialog
+    private dialogRef: MatDialogRef<RecoveryKeysComponent>,
+    private dialog: MatDialog,
+    private settingsService: SettingsService,
+    @Inject(MAT_DIALOG_DATA) public data: string
   ) {}
+
+  ngOnInit(): void {}
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -22,6 +31,7 @@ export class RecoveryKeysComponent {
     this.dialog.open(ConfirmCloseComponent, {
       width: '556px',
       height: '200px',
+      data: this.data,
     });
   }
 }

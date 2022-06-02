@@ -35,6 +35,7 @@ mat-sidenav-content{
     height: inherit;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
     & li:last-child{
       border-top: 2px solid $charcoal;
     
