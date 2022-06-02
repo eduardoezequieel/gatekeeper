@@ -39,10 +39,12 @@ export class InitComponent {
           localStorage.setItem('accessToken', resp.data.tokens.accessToken);
           localStorage.setItem('refreshToken', resp.data.tokens.refreshToken);
           localStorage.setItem('user', JSON.stringify(resp.data.employee));
+          this.loginService.setUserRole(resp.data.employee.role.name)
+          this.loginErrors.turnErrorsOff()
           this.router.navigate(['/setting']);
         }
       },
-      (err) => {
+      () => {
         this.loginErrors.LoginErrorOn();
       }
     );

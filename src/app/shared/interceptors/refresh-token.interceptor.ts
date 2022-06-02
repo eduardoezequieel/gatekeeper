@@ -24,20 +24,30 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     
     let token = localStorage.getItem('accessToken')
     if(token) {
-      const req = this.addToken(request, token)
+      let req = this.addToken(request, token)
       
       return next.handle(req)
       .pipe( catchError( (err: HttpErrorResponse) => {
           if(err.status === 401) {
-            this.isRefreshing = true;
-            return this.loginService.refreshToken(localStorage.getItem('refreshToken')!)
-            .pipe(
-              switchMap( (res) => {
-                localStorage.setItem('token', res.data.accessToken);
-                return next.handle( this.addToken(req, res.data.accessToken))
-              }),
-              catchError( () => next.handle(request)),
-            )
+            if(!this.isRefreshing) {
+              this.isRefreshing = true;
+              return this.loginService.refreshToken(localStorage.getItem('refreshToken')!)
+              .pipe(
+                switchMap( (res) => {
+                  localStorage.setItem('token', res.data.accessToken);
+                  return next.handle( this.addToken(req, res.data.accessToken) )
+                }),
+                // catchError( () => next.handle(request)),
+              )
+            } else {
+              return this.refreshTokenSubject.pipe(
+                filter(accessToken => accessToken !== null),
+                take(1),
+                switchMap( token => {
+                  req = this.addToken(request, token);
+                  return next.handle(req)})
+              )
+            }
           } else {
             return next.handle(request)
           }

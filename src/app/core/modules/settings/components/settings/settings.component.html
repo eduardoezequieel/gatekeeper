@@ -18,24 +18,24 @@
       </div>
     </div>
     <div class="action-btn">
-      <div>
+
         <button
           routerLink="/setting/webhooks"
           *ngIf="admin"
-          class="webhooks-btn"
+          class="secondary-button"
           mat-flat-button
         >
           Manage WebHook Logs
         </button>
         <button
           (click)="openPassDialog()"
-          class="change-pass"
+          class="primary-button"
           mat-flat-button
           color="warn"
         >
           Change password
         </button>
-      </div>
+
     </div>
   </div>
   <div class="auth-container">

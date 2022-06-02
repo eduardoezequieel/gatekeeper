@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
 import { LoginResponse } from 'src/app/shared/interfaces/loginResponse';
 import { RefreshTokenResponse } from 'src/app/shared/interfaces/refreshTokenResponse';
 import { environment } from 'src/environments/environment.prod';
@@ -11,6 +11,9 @@ import { environment } from 'src/environments/environment.prod';
 export class LoginService {
   private user = new BehaviorSubject({ email: '', password: '' });
   user$ = this.user.asObservable();
+
+  private userRole = new BehaviorSubject('regular');
+  userRole$ = this.userRole.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -78,10 +81,18 @@ export class LoginService {
       {
         refreshToken: token,
       }
+    ).pipe( map(resp => resp), catchError( err => {
+      console.log('Refresh Token error'); 
+      return throwError(err)})
     );
   }
 
   setUser(email: string, password: string) {
     this.user.next({ email, password });
+  }
+
+  setUserRole(role: string) {
+    console.log('role', role)
+    this.userRole.next(role);
   }
 }

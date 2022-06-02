@@ -1,6 +1,8 @@
 $Applaudo-Red: #FF4040;
 $Applaudo-Navy:#011625;
 $cool-gray:#687177;
+@import '../../../../../../styles.scss';
+
 .heading{
   display: flex;
   padding: 5px 30px;
@@ -45,26 +47,12 @@ $cool-gray:#687177;
   justify-content: space-between;
   padding: 40px 0;
   border-bottom: 2px solid #E2E2E2;
-  &>.action-btn{
-    
+  .action-btn{
     display: flex;
-    flex-direction: column;
     justify-content: flex-end;
-    .change-pass{
-      font-family: 'Avenir Next LT Pro';
-      border-radius: 0;
-      background-color: $Applaudo-Red;
-      border: 2px solid $Applaudo-Red;
-      color: white;
-    }
-    .webhooks-btn{
-      margin-right: 10px;
-      font-family: 'Avenir Next LT Pro';
-      border-radius: 0;
-      background-color:white;
-      border: 2px solid #E2E2E2;
-      color: $Applaudo-Red;
-    }
+    gap: 20px;
+    @include primary-button;
+    @include secondary-button;
   }
 }
 .details{

@@ -35,4 +35,10 @@ export class LoginErrorsService {
   turnPasswordResetSuccessOff() {
     this.passwordResetSuccess.next(false)
   }
+
+  turnErrorsOff() {
+    this.passwordResetSuccess.next(false)
+    this.recoveryCodeError.next(false)
+    this.loginError.next(false)
+  }
 }
