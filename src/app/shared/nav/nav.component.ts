@@ -3,6 +3,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { BehaviorSubject, map, Observable } from 'rxjs';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-nav',
@@ -17,7 +18,8 @@ export class NavComponent implements OnInit {
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {
     this.matIconRegistry.addSvgIcon(
       `icon_request`,
@@ -32,15 +34,26 @@ export class NavComponent implements OnInit {
       )
     );
   }
+
   ngOnInit(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.path = (<NavigationEnd>event).url;
         this.login = true;
-        if (this.path.indexOf('login') !== -1) {
+        // if (this.path.indexOf('login') !== -1) {
+        //   this.login = false;
+        // }
+        if (!this.userService.getUser()) {
           this.login = false;
         }
       }
     });
+  }
+
+  logOut() {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    this.router.navigate(['/login']);
   }
 }

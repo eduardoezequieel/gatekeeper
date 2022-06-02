@@ -14,12 +14,12 @@
       <input
         formControlName="recoveryCode"
         matInput
-        placeholder="Current password"
-        type="password"
+        placeholder="One-Time Code"
+        type="text"
         autocomplete="disabled"
       />
       <mat-error *ngIf="f['recoveryCode'].errors?.['required']">
-        Recovery code is <strong>required</strong>
+        One-Time code is <strong>required</strong>
       </mat-error>
     </mat-form-field>
   </form>

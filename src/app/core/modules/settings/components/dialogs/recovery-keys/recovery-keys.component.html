@@ -11,12 +11,7 @@
   </p>
 
   <ul>
-    <li>Code 1</li>
-    <li>Code 2</li>
-    <li>Code 3</li>
-    <li>Code 4</li>
-    <li>Code 5</li>
-    <li>Code 6</li>
+    <li *ngFor="let recovery of data">{{ recovery }}</li>
   </ul>
 </div>
 <div mat-dialog-actions>

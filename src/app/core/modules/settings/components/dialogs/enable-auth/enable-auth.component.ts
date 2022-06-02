@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { take } from 'rxjs';
+import { Generate2FA } from 'src/app/shared/interfaces/generate2-fa';
+import { Employee } from 'src/app/shared/interfaces/loginResponse';
+import { UserService } from 'src/app/shared/nav/services/user.service';
+import { SettingsService } from '../../../services/settings.service';
 import { RecoveryKeysComponent } from '../recovery-keys/recovery-keys.component';
 
 @Component({
@@ -10,15 +15,29 @@ import { RecoveryKeysComponent } from '../recovery-keys/recovery-keys.component'
 })
 export class EnableAuthComponent {
   form: FormGroup = new FormGroup({});
+  user!: Employee;
+  auth!: Generate2FA;
   constructor(
     public dialogRef: MatDialogRef<EnableAuthComponent>,
     private fb: FormBuilder,
-    public dialog: MatDialog
+    private dialog: MatDialog,
+    private settingsService: SettingsService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
+    this.user = this.userService.getUser();
+    this.settingsService
+      .generateTwoStep()
+      .pipe(take(1))
+      .subscribe((res) => {
+        this.auth = res;
+      });
     this.form = this.fb.group({
-      codePassword: ['', [Validators.required]],
+      codePassword: [
+        '',
+        [Validators.required, Validators.minLength(6), Validators.maxLength(6)],
+      ],
     });
   }
 
@@ -29,12 +48,19 @@ export class EnableAuthComponent {
     if (this.form.invalid) {
       return;
     }
-
-    this.dialogRef.close();
-    this.dialog.open(RecoveryKeysComponent, {
-      width: '846px',
-      height: '504px',
-    });
+    const token = this.f['codePassword'].value;
+    this.settingsService
+      .activateTwoStep(token)
+      .pipe(take(1))
+      .subscribe((res) => {
+        this.settingsService.setEnabled(true);
+        this.dialogRef.close();
+        this.dialog.open(RecoveryKeysComponent, {
+          width: '846px',
+          height: '504px',
+          data: res.data.twoFactorRecoveryKeys,
+        });
+      });
   }
   onNoClick(): void {
     this.dialogRef.close();

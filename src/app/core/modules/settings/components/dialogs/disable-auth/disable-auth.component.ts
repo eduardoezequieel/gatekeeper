@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { take } from 'rxjs';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
   selector: 'app-disable-auth',
@@ -11,7 +13,8 @@ export class DisableAuthComponent {
   form: FormGroup = new FormGroup({});
   constructor(
     public dialogRef: MatDialogRef<DisableAuthComponent>,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private settingsService: SettingsService
   ) {}
 
   ngOnInit(): void {
@@ -28,6 +31,16 @@ export class DisableAuthComponent {
     this.dialogRef.close();
   }
   disableAuth(): void {
-    this.dialogRef.close();
+    if (this.form.invalid) {
+      return;
+    }
+    const token = this.f['recoveryCode'].value;
+    this.settingsService
+      .deactivateTwoStep(token)
+      .pipe(take(1))
+      .subscribe((res) => {
+        this.settingsService.setEnabled(false);
+        this.dialogRef.close();
+      });
   }
 }

@@ -7,44 +7,44 @@ import { LoginService } from '../../services/login.service';
 @Component({
   selector: 'app-init',
   templateUrl: './init.component.html',
-  styleUrls: ['./init.component.scss']
+  styleUrls: ['./init.component.scss'],
 })
-export class InitComponent  {
-
+export class InitComponent {
   constructor(
-    private loginService: LoginService, 
+    private loginService: LoginService,
     private loginErrors: LoginErrorsService,
-    private router: Router) { }
-  
+    private router: Router
+  ) {}
+
   loginForm = new FormGroup({
     email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
   });
 
   get email() {
-    return this.loginForm.get('email')!.value
+    return this.loginForm.get('email')!.value;
   }
 
   get password() {
-    return this.loginForm.get('password')!.value
+    return this.loginForm.get('password')!.value;
   }
 
   onSubmit() {
     this.loginService.login(this.email, this.password).subscribe(
-      resp => {        
-        this.loginService.setUser(this.email, this.password) 
-        if(resp.data.employee.twoFactorEnabled) {
-          this.router.navigate(['/login/one-time-code'])
+      (resp) => {
+        this.loginService.setUser(this.email, this.password);
+        if (resp.data.employee.twoFactorEnabled) {
+          this.router.navigate(['/login/one-time-code']);
         } else {
           localStorage.setItem('accessToken', resp.data.tokens.accessToken);
           localStorage.setItem('refreshToken', resp.data.tokens.refreshToken);
-          this.router.navigate(['/setting'])
+          localStorage.setItem('user', JSON.stringify(resp.data.employee));
+          this.router.navigate(['/setting']);
         }
       },
-      err => {
-        this.loginErrors.LoginErrorOn()
+      (err) => {
+        this.loginErrors.LoginErrorOn();
       }
-    )
+    );
   }
-
 }

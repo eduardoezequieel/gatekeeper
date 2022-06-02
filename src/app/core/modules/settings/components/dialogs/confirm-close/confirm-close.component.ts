@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { RecoveryKeysComponent } from '../recovery-keys/recovery-keys.component';
 
 @Component({
@@ -10,7 +14,8 @@ import { RecoveryKeysComponent } from '../recovery-keys/recovery-keys.component'
 export class ConfirmCloseComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmCloseComponent>,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: string
   ) {}
 
   onNoClick(): void {
@@ -21,6 +26,7 @@ export class ConfirmCloseComponent {
     this.dialog.open(RecoveryKeysComponent, {
       width: '846px',
       height: '504px',
+      data: this.data,
     });
   }
 }

@@ -1,95 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { take } from 'rxjs';
+import { Employee } from 'src/app/shared/interfaces/loginResponse';
+import { WebHook } from 'src/app/shared/interfaces/webHookResponse';
+import { UserService } from 'src/app/shared/nav/services/user.service';
+import { SettingsService } from '../../services/settings.service';
 import { ClearHooksComponent } from '../dialogs/clear-hooks/clear-hooks.component';
 import { DetailsComponent } from '../dialogs/details/details.component';
-export interface PeriodicElement {
-  id: number;
-  url: string;
-  event: string;
-  code: string;
-  response: string;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    id: 1,
-    url: 'URL 1',
-    event: 'AddRole',
-    code: '201',
-    response: 'Details 1',
-  },
-  {
-    id: 2,
-    url: 'URL 2',
-    event: 'AddRole',
-    code: '201',
-    response: 'Details 2',
-  },
-  {
-    id: 3,
-    url: 'URL 3',
-    event: 'AddRole',
-    code: '201',
-    response: 'Details 3',
-  },
-  {
-    id: 4,
-    url: 'URL 4',
-    event: 'AddRole',
-    code: '201',
-    response: 'Details 4',
-  },
-  {
-    id: 5,
-    url: 'URL 5',
-    event: 'AddRole',
-    code: '201',
-    response: 'Details 5',
-  },
-  {
-    id: 6,
-    url: 'URL 6',
-    event: 'AddRole',
-    code: '201',
-    response: 'Details 6',
-  },
-  {
-    id: 7,
-    url: 'URL 7',
-    event: 'AddRole',
-    code: '201',
-    response: 'Details 7',
-  },
-  {
-    id: 8,
-    url: 'URL 8',
-    event: 'AddRole',
-    code: '201',
-    response: 'Details 8',
-  },
-  {
-    id: 9,
-    url: 'URL 9',
-    event: 'AddRole',
-    code: '201',
-    response: 'Details 9',
-  },
-  {
-    id: 10,
-    url: 'URL 10',
-    event: 'AddRole',
-    code: '201',
-    response: 'Details 10',
-  },
-];
+// const ELEMENT_DATA!: WebHook[];
 @Component({
   selector: 'app-webhooks',
   templateUrl: './webhooks.component.html',
   styleUrls: ['./webhooks.component.scss'],
 })
-export class WebhooksComponent {
-  constructor(public dialog: MatDialog) {}
-
+export class WebhooksComponent implements OnInit {
+  user!: Employee;
+  actualPage!: PageEvent;
+  admin = false;
   displayedColumns: string[] = [
     'No.',
     'WebHook URL',
@@ -97,7 +27,38 @@ export class WebhooksComponent {
     'Status Code',
     'Response',
   ];
-  dataSource = ELEMENT_DATA;
+  dataSource!: WebHook[];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  constructor(
+    private dialog: MatDialog,
+    private userService: UserService,
+    private settingsService: SettingsService
+  ) {}
+
+  ngOnInit(): void {
+    //this.dataSource.paginator = this.paginator;
+    // this.onPageChange(1);
+    this.settingsService
+      .getWebHooks()
+      .pipe(take(1))
+      .subscribe((res) => {
+        console.log(res.data);
+        this.dataSource = res.data;
+      });
+    this.user = this.userService.getUser();
+    if (this.user.role.id === 2) {
+      this.admin = true;
+    }
+  }
+
+  // onPageChange($event: PageEvent) {
+  //   this.actualPage = $event;
+  //   this.dataSource = ELEMENT_DATA.slice(
+  //     $event.pageIndex * $event.pageSize,
+  //     $event.pageIndex * $event.pageSize + $event.pageSize
+  //   );
+  // }
 
   clickDetails(value: string) {
     console.log(value);

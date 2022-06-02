@@ -9,7 +9,7 @@
     1. Scan the QR code with your Multi-Factor Authentication App:
   </p>
   <div class="instructions">
-    <img src="http://placehold.jp/144x144.png" alt="" />
+    <img [src]="auth.data.qrImage" alt="" width="144px" height="144px" />
     <p>
       If you don’t have an multi-factor authentication app, here are some
       suggestions:<br />
@@ -22,8 +22,13 @@
   </div>
   <div>
     <ul>
-      <li>Account name: <b>clopez@applaudostudios.com</b></li>
-      <li>Multi-Factor Authentication key: <b>KBOESKNKFNS2H</b></li>
+      <li>
+        Account name: <b>{{ user.email }}</b>
+      </li>
+      <li>
+        Multi-Factor Authentication key:
+        <b>{{ auth.data.secretTwoFactorKey }}</b>
+      </li>
     </ul>
   </div>
   <p class="steps">2. Enter the 6-digit one-time code password:</p>
@@ -32,12 +37,16 @@
       <input
         formControlName="codePassword"
         matInput
-        placeholder="Code password"
-        type="password"
+        placeholder="One-Time Code"
+        type="text"
+        maxlength="6"
         autocomplete="disabled"
       />
       <mat-error *ngIf="f['codePassword'].errors?.['required']">
-        Code password is <strong>required</strong>
+        Code is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="f['codePassword'].errors?.['minLength']">
+        Please provide a <strong>valid</strong> code
       </mat-error>
     </mat-form-field>
   </form>
