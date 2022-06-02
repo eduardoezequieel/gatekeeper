@@ -29,10 +29,6 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.userService.getUser();
     this.settingsService.setEnabled(this.user.twoFactorEnabled);
-    if (!this.user) {
-      this.router.navigate(['/login']);
-      return;
-    }
     this.settingsService.enabled$.subscribe((res) => {
       this.disabled = res;
     });

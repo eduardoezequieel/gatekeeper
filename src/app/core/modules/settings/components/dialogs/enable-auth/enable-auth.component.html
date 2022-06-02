@@ -4,7 +4,7 @@
     ><i class="ri-close-line"></i
   ></span>
 </div>
-<div mat-dialog-content>
+<div mat-dialog-content *ngIf="auth?.data">
   <p class="steps">
     1. Scan the QR code with your Multi-Factor Authentication App:
   </p>
@@ -52,8 +52,8 @@
   </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-flat-button class="cancel-btn" (click)="onNoClick()">
+  <button mat-flat-button class="secondary-button" (click)="onNoClick()">
     Cancel
   </button>
-  <button mat-button class="clear-btn" (click)="acceptClick()">Accept</button>
+  <button mat-button class="primary-button" (click)="acceptClick()">Accept</button>
 </div>

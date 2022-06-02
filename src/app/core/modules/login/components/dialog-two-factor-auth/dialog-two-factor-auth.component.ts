@@ -22,7 +22,7 @@ export class DialogTwoFactorAuthComponent {
   sendRequest() {
     this.loginService.authWithRecoveryCode(this.data.code).subscribe(
       resp => {
-        console.log('sendResquest', resp);
+        this.dialogRef.close();
         this.router.navigate(['/setting'])
       },
       err => {

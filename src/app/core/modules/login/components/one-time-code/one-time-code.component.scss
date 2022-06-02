@@ -29,26 +29,11 @@
   
     .buttons-container {
       display: flex;
-      gap: 120px;  
+      gap: 40px;  
 
-      button {
-        width: 161px;
-        height: 40px;
-        margin-top: 40px;
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 24px;
-      }
-    
-      .primary-button {
-        background: #ff4040;
-      }
-  
-      .secondary-button {
-        color: #ff4040;
-        border: 2px solid lightgrey;
-        background-color: white;
-      }
+      @import '../../../../../../styles.scss';
+      @include primary-button;
+      @include secondary-button
     }
   }
   

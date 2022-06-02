@@ -10,6 +10,7 @@ import { LoginService } from '../../services/login.service';
 })
 export class OneTimeCodeComponent {
   form!: FormGroup;
+  loginErrors: any;
 
   constructor(private router: Router, private loginService: LoginService) {
     this.form = new FormGroup({
@@ -28,6 +29,8 @@ export class OneTimeCodeComponent {
         localStorage.setItem('accessToken', resp.data.tokens.accessToken);
         localStorage.setItem('refreshToken', resp.data.tokens.refreshToken);
         localStorage.setItem('user', JSON.stringify(resp.data.employee));
+        this.loginService.setUserRole(resp.data.employee.role.name)
+        this.loginErrors.turnErrorsOff()
         this.router.navigate(['/setting']);
       });
   }

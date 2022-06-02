@@ -13,7 +13,7 @@ import { DialogPasswordRecoveryComponent } from '../dialog-password-recovery/dia
 export class ForgotPasswordComponent {
 
   formPasswordRecovery = new FormGroup({
-    email: new FormControl('', Validators.required)
+    email: new FormControl('', [Validators.required])
   })
 
   constructor(
@@ -26,9 +26,11 @@ export class ForgotPasswordComponent {
   }
 
   onSubmit() {
-    this.loginService.askPasswordRecovery(this.email).subscribe(
-      () => this.openDialog()
-    )
+    if(this.formPasswordRecovery.valid) {
+      this.loginService.askPasswordRecovery(this.email).subscribe(
+        () => this.openDialog()
+      )
+    }
   }
 
   openDialog(): void {
@@ -38,5 +40,4 @@ export class ForgotPasswordComponent {
   goBack() {
     this.router.navigate(['login'])
   }
-
 }

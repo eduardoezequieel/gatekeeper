@@ -24,8 +24,7 @@ $gatekeeper-trainee-program-theme: mat.define-light-theme((
 * {
   margin: 0;
   padding: 0;
-  font-family: 'Avenir Next LT Pro', sans-serif;
-  
+  font-family: 'Avenir Next LT Pro', sans-serif !important;  
 }
 
 html,
@@ -68,6 +67,7 @@ a {
   background-color: white;
 }
 
+
 .mat-form-field-hint-wrapper {
   flex-direction: column;
   margin-bottom: 10px;
@@ -76,20 +76,31 @@ a {
   }
 }
 
-
 @mixin primary-button {
-  button {
-    width: 161px;
+  .primary-button {
+    padding: 0 32px;
+    width: min-content;
     height: 40px;
     margin-top: 40px;
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
     color: white;
-  }
-
-  .primary-button {
     background: #ff4040;
+  }
+}
+
+@mixin secondary-button {
+  .secondary-button {
+    padding: 0 32px;
+    height: 40px;
+    margin-top: 40px;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #ff4040;
+    border: 2px solid lightgrey;
+    background-color: white;
   }
 }
 

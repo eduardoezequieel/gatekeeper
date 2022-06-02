@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './shared/guard/auth-guard.guard';
 
 const routes: Routes = [
   {path:'', redirectTo:'login/init', pathMatch: 'full'},
@@ -11,7 +12,9 @@ const routes: Routes = [
       import('./core/modules/settings/settings.module').then(
         (m) => m.SettingsModule
       ),
+    canActivate: [AuthGuard]
   },
+  {path:'**', redirectTo:'login'}
 ];
 
 @NgModule({

@@ -15,7 +15,7 @@
           <img *ngIf="isExpanded" src="../../../assets/logos/Logo.png" alt="" />
         </a>
       </li>
-      <li>
+      <li *ngIf="(this.loginService.userRole$ | async) == 'admin'">
         <a mat-button>
           <i class="ri-group-line"></i>
           <span *ngIf="isExpanded">Employees</span>
@@ -27,7 +27,7 @@
           <span *ngIf="isExpanded">Access Requests</span>
         </a>
       </li>
-      <li>
+      <li *ngIf="(this.loginService.userRole$ | async) == 'admin'">
         <a mat-button>
           <i class="ri-apps-line"></i>
           <span *ngIf="isExpanded">Applications</span>
