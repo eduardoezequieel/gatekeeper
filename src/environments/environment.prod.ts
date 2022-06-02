@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  url: 'https://gatekeeper-api.applaudostudios.dev/api/v1'
 };

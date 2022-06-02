@@ -4,16 +4,20 @@
     <h4>with your recovery code</h4>
   </div>
   <div class="form-container">
-    <form>
+    <form [formGroup]="form">
       <mat-form-field appearance="standard">
-        <mat-label>Email</mat-label>
-        <input matInput>
+        <mat-label>Enter code</mat-label>
+        <input matInput formControlName="code">
+        <mat-hint>Use one of your recovery codes</mat-hint>
       </mat-form-field>
-      <button mat-flat-button type="submit">Call to action</button>
+      <div class="buttons-container">
+        <button mat-flat-button class="primary-button" (click)="openDialog()">Continue</button>
+        <button mat-flat-button class="secondary-button" (click)="goBack()">Cancel</button>
+      </div>
     </form>
   </div>
   <div class="footer">
     <p class="normal-link">Still have issues?</p>
-    <a href="" class="link">Use a recovery code</a>
+    <a href="" class="link">Contact an administrator</a>
   </div>
 </div>

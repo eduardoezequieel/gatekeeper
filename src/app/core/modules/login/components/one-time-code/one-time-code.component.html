@@ -4,17 +4,20 @@
     <h4>your one-time code</h4>
   </div>
   <div class="form-container">
-    <form>
+    <form [formGroup]="form" (ngSubmit)="sendCode()">
       <mat-form-field appearance="standard">
         <mat-label>Enter one-time code</mat-label>
-        <input matInput>
+        <input matInput formControlName="code">
         <mat-hint>Code must be 6 digit long</mat-hint>
       </mat-form-field>
-      <button mat-flat-button type="submit">Call to action</button>
+      <div class="buttons-container">
+        <button mat-flat-button class="primary-button" type="submit">Continue</button>
+        <button mat-flat-button class="secondary-button" (click)="goBack()">Cancel</button>
+      </div>
     </form>
   </div>
   <div class="footer">
     <p class="normal-link">Forgot one-time code?</p>
-    <a href="" class="link">Use a recovery code</a>
+    <a [routerLink]="['/login/auth-with-code']" class="link">Use a recovery code</a>
   </div>
 </div>

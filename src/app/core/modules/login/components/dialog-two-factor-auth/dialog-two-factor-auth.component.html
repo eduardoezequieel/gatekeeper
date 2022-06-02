@@ -1,0 +1,9 @@
+<div class="dialog-container">
+  <div class="dialog-title">Remove your two factor authentification</div>
+  <div class="icon-container" (click)="onNoClick()"><i class="ri-close-line"></i></div>
+  <div class="dialog-content">If you continue, your two factor authentication will be automatically removed.</div>
+  <div class="buttons-container">
+    <button mat-flat-button class="primary-button" (click)="sendRequest()" >Continue</button>
+    <button mat-flat-button class="secondary-button" (click)="onNoClick()">Cancel</button>
+  </div>
+</div>
