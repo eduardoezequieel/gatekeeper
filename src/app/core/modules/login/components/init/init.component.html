@@ -4,14 +4,14 @@
     <h4>to your account</h4>
   </div>
   <div class="form-container">
-    <form>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="standard">
         <mat-label>Email</mat-label>
-        <input matInput>
+        <input matInput formControlName="email">
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label>Password</mat-label>
-        <input matInput>
+        <input matInput type="password" formControlName="password">
       </mat-form-field>
       <button mat-flat-button type="submit">Log In</button>
     </form>

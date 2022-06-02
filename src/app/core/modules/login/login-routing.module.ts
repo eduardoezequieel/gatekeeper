@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthWithRCodeComponent } from './components/auth-with-r-code/auth-with-r-code.component';
-import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { InitComponent } from './components/init/init.component';
 
 import { OneTimeCodeComponent } from './components/one-time-code/one-time-code.component';
@@ -14,7 +14,7 @@ const routes: Routes = [
     children: [
       {path: 'init', component: InitComponent},
       {path: 'one-time-code', component: OneTimeCodeComponent},
-      {path: 'password-recovery', component: ForgetPasswordComponent},
+      {path: 'password-recovery', component: ForgotPasswordComponent},
       {path: 'reset-password', component: ResetPasswordComponent},
       {path: 'auth-with-code', component: AuthWithRCodeComponent},
     ]}

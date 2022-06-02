@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginErrorsService } from './services/login-errors.service';
 
 @Component({
   selector: 'app-login',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(public loginErrors: LoginErrorsService) { }
 
   ngOnInit(): void {
+  }
+
+  closeLoginError() {
+    this.loginErrors.LoginErrorOff();
+    this.loginErrors.recoveryCodeErrorOff();
+    this.loginErrors.turnPasswordResetSuccessOff();
   }
 
 }
