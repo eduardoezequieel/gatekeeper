@@ -6,6 +6,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { take } from 'rxjs';
+import { CustomValidators } from 'src/app/core/modules/login/validators/passwordMatch';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
   selector: 'app-change-pass',
@@ -19,15 +22,24 @@ export class ChangePassComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ChangePassComponent>,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private settingsService: SettingsService
   ) {}
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      currentPassword: ['', [Validators.required]],
-      newPassword: ['', [Validators.required]],
-      confirmPassword: ['', [Validators.required]],
-    });
+    this.form = this.fb.group(
+      {
+        currentPassword: ['', [Validators.required]],
+        newPassword: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      {
+        validators: CustomValidators.mustMatch(
+          'newPassword',
+          'confirmPassword'
+        ),
+      }
+    );
   }
 
   onNoClick(): void {
@@ -36,5 +48,22 @@ export class ChangePassComponent implements OnInit {
 
   get f() {
     return this.form.controls;
+  }
+
+  submitUpdatePass() {
+    if (this.form.invalid) {
+      return;
+    }
+    const current = this.f['currentPassword'].value;
+    const newPass = this.f['newPassword'].value;
+    const confirm = this.f['confirmPassword'].value;
+
+    this.settingsService
+      .changePassword(current, newPass, confirm)
+      .pipe(take(1))
+      .subscribe((res) => {
+        console.log(res.data);
+        console.log('pass changed succesfully');
+      });
   }
 }
