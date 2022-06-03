@@ -10,7 +10,6 @@ import { SettingsService } from '../../services/settings.service';
 import { ClearHooksComponent } from '../dialogs/clear-hooks/clear-hooks.component';
 import { DetailsComponent } from '../dialogs/details/details.component';
 
-// const ELEMENT_DATA!: WebHook[];
 @Component({
   selector: 'app-webhooks',
   templateUrl: './webhooks.component.html',
@@ -43,7 +42,6 @@ export class WebhooksComponent implements OnInit {
       .getWebHooks()
       .pipe(take(1))
       .subscribe((res) => {
-        console.log(res.data);
         this.dataSource = res.data;
       });
     this.user = this.userService.getUser();

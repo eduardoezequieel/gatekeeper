@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
 import { Employee } from 'src/app/shared/interfaces/loginResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { LoginService } from '../../../login/services/login.service';
+import { SettingsErrorService } from '../../services/settings-error.service';
 import { SettingsService } from '../../services/settings.service';
 import { ChangePassComponent } from '../dialogs/change-pass/change-pass.component';
 import { DisableAuthComponent } from '../dialogs/disable-auth/disable-auth.component';
@@ -23,8 +26,18 @@ export class SettingsComponent implements OnInit {
     private dialog: MatDialog,
     private userService: UserService,
     private settingsService: SettingsService,
-    private router: Router
-  ) {}
+    private router: Router,
+    public settingMessages: SettingsErrorService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+  ) {
+    this.matIconRegistry.addSvgIcon(
+      `icon_user_link`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        '../../../assets/logos/user_link.svg'
+      )
+    );
+  }
 
   ngOnInit(): void {
     this.user = this.userService.getUser();
@@ -42,6 +55,14 @@ export class SettingsComponent implements OnInit {
       width: '556px',
       height: '480px',
     });
+  }
+
+  openWebHooks() {
+    if (!this.disabled) {
+      this.settingMessages.warningCodeErrorOn();
+      return;
+    }
+    this.router.navigate(['/setting/webhooks']);
   }
 
   openAuthDialog(): void {
@@ -65,5 +86,8 @@ export class SettingsComponent implements OnInit {
 
   updateToggle(event: any) {
     event.checked = this.disabled;
+  }
+  closeSettingsError() {
+    this.settingMessages.turnErrorsOff();
   }
 }

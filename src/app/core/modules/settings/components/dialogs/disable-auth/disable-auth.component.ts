@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { take } from 'rxjs';
+import { SettingsErrorService } from '../../../services/settings-error.service';
 import { SettingsService } from '../../../services/settings.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class DisableAuthComponent {
   constructor(
     public dialogRef: MatDialogRef<DisableAuthComponent>,
     private fb: FormBuilder,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    public settingsMessages: SettingsErrorService
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +43,7 @@ export class DisableAuthComponent {
       .subscribe((res) => {
         this.settingsService.setEnabled(false);
         this.dialogRef.close();
+        this.settingsMessages.disableTwoStepSuccessOn();
       });
   }
 }

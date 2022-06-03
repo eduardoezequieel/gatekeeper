@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
 import { LoginResponse } from 'src/app/shared/interfaces/loginResponse';
 import { RefreshTokenResponse } from 'src/app/shared/interfaces/refreshTokenResponse';
+import { UserService } from 'src/app/shared/nav/services/user.service';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
@@ -15,7 +16,7 @@ export class LoginService {
   private userRole = new BehaviorSubject('regular');
   userRole$ = this.userRole.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(
@@ -76,15 +77,20 @@ export class LoginService {
   }
 
   refreshToken(token: string): Observable<RefreshTokenResponse> {
-    return this.http.post<RefreshTokenResponse>(
-      environment.url + '/authentication/refresh-token',
-      {
-        refreshToken: token,
-      }
-    ).pipe( map(resp => resp), catchError( err => {
-      console.log('Refresh Token error'); 
-      return throwError(err)})
-    );
+    return this.http
+      .post<RefreshTokenResponse>(
+        environment.url + '/authentication/refresh-token',
+        {
+          refreshToken: token,
+        }
+      )
+      .pipe(
+        map((resp) => resp),
+        catchError((err) => {
+          console.log('Refresh Token error');
+          return throwError(err);
+        })
+      );
   }
 
   setUser(email: string, password: string) {
@@ -92,7 +98,7 @@ export class LoginService {
   }
 
   setUserRole(role: string) {
-    console.log('role', role)
+    console.log('role', role);
     this.userRole.next(role);
   }
 }

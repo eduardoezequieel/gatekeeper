@@ -62,9 +62,12 @@ a {
     color: $cool-gray
   }
 }
-
+.mat-dialog-content{
+  overflow: hidden !important;
+}
 .mat-dialog-container {
   background-color: white;
+  overflow: hidden !important;
 }
 
 

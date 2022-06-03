@@ -10,4 +10,8 @@ export class UserService {
   getUser(): Employee {
     return <Employee>JSON.parse(localStorage.getItem('user')!);
   }
+
+  setUser(user: Employee) {
+    localStorage.setItem('user', JSON.stringify(user));
+  }
 }
