@@ -21,7 +21,7 @@ export class NavComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private router: Router,
     private userService: UserService,
-    public loginService: LoginService,
+    public loginService: LoginService
   ) {
     this.matIconRegistry.addSvgIcon(
       `icon_request`,
@@ -38,6 +38,7 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loginService.setUserRole(this.userService.getUser().role.name);
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.path = (<NavigationEnd>event).url;

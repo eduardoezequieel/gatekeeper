@@ -5,6 +5,7 @@ import { take } from 'rxjs';
 import { Generate2FA } from 'src/app/shared/interfaces/generate2-fa';
 import { Employee } from 'src/app/shared/interfaces/loginResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
+import { SettingsErrorService } from '../../../services/settings-error.service';
 import { SettingsService } from '../../../services/settings.service';
 import { RecoveryKeysComponent } from '../recovery-keys/recovery-keys.component';
 
@@ -22,7 +23,8 @@ export class EnableAuthComponent {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private settingsService: SettingsService,
-    private userService: UserService
+    private userService: UserService,
+    public settingMessages: SettingsErrorService
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +62,7 @@ export class EnableAuthComponent {
           height: '504px',
           data: res.data.twoFactorRecoveryKeys,
         });
+        this.settingMessages.enableTwoStepSuccessOn();
       });
   }
   onNoClick(): void {

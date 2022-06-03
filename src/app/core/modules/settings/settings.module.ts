@@ -6,6 +6,7 @@ import { SettingsRoutingModule } from './settings-routing.module';
 import { SettingsComponent } from './components/settings/settings.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { WebhooksComponent } from './components/webhooks/webhooks.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -44,6 +45,7 @@ import { RecoveryKeysComponent } from './components/dialogs/recovery-keys/recove
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
+    MatIconModule,
   ],
 })
 export class SettingsModule {}

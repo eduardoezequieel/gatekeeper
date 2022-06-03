@@ -17,10 +17,13 @@
         <span class="email">{{ user.email }}</span>
       </div>
     </div>
-    <div class="action-btn">
-
+    <div class="action-container">
+      <div>
+        <mat-icon *ngIf="admin" svgIcon="icon_user_link"></mat-icon>
+      </div>
+      <div class="action-btn">
         <button
-          routerLink="/setting/webhooks"
+          (click)="openWebHooks()"
           *ngIf="admin"
           class="secondary-button"
           mat-flat-button
@@ -35,7 +38,7 @@
         >
           Change password
         </button>
-
+      </div>
     </div>
   </div>
   <div class="auth-container">
@@ -56,6 +59,45 @@
         (click)="openAuthDialog()"
         (change)="updateToggle(twoFactor)"
       ></mat-slide-toggle>
+    </div>
+  </div>
+  <div class="panel-right">
+    <div
+      class="success"
+      *ngIf="this.settingMessages.disableTwoStepSuccess$ | async"
+    >
+      <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
+      <div class="error-title">Success</div>
+      <div class="icon-container" (click)="closeSettingsError()">
+        <i class="ri-close-line"></i>
+      </div>
+      <div class="error-description">
+        Multi-factor authentication was disabled.
+      </div>
+    </div>
+    <div
+      class="success"
+      *ngIf="this.settingMessages.enableTwoStepSuccess$ | async"
+    >
+      <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
+      <div class="error-title">Success</div>
+      <div class="icon-container" (click)="closeSettingsError()">
+        <i class="ri-close-line"></i>
+      </div>
+      <div class="error-description">
+        Multi-factor authentication was enabled.
+      </div>
+    </div>
+    <div class="warning" *ngIf="this.settingMessages.warningCodeError$ | async">
+      <div class="icon-container"><i class="ri-information-line"></i></div>
+      <div class="error-title">Warning</div>
+      <div class="icon-container" (click)="closeSettingsError()">
+        <i class="ri-close-line"></i>
+      </div>
+      <div class="error-description">
+        You must enable multi-factor<br />
+        authentication to continue.
+      </div>
     </div>
   </div>
 </div>

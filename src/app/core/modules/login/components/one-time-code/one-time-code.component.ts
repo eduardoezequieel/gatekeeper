@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoginErrorsService } from '../../services/login-errors.service';
 import { LoginService } from '../../services/login.service';
 
 @Component({
@@ -10,9 +11,12 @@ import { LoginService } from '../../services/login.service';
 })
 export class OneTimeCodeComponent {
   form!: FormGroup;
-  loginErrors: any;
 
-  constructor(private router: Router, private loginService: LoginService) {
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
+    private loginErrors: LoginErrorsService
+  ) {
     this.form = new FormGroup({
       code: new FormControl('', [
         Validators.required,
@@ -29,8 +33,8 @@ export class OneTimeCodeComponent {
         localStorage.setItem('accessToken', resp.data.tokens.accessToken);
         localStorage.setItem('refreshToken', resp.data.tokens.refreshToken);
         localStorage.setItem('user', JSON.stringify(resp.data.employee));
-        this.loginService.setUserRole(resp.data.employee.role.name)
-        this.loginErrors.turnErrorsOff()
+        this.loginService.setUserRole(resp.data.employee.role.name);
+        this.loginErrors.turnErrorsOff();
         this.router.navigate(['/setting']);
       });
   }

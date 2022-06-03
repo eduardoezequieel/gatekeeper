@@ -16,6 +16,7 @@ export class SettingsService {
     this.userService.getUser().twoFactorEnabled
   );
   enabled$ = this.enabled.asObservable();
+
   constructor(private http: HttpClient, private userService: UserService) {}
 
   generateTwoStep(): Observable<Generate2FA> {
@@ -41,6 +42,9 @@ export class SettingsService {
   }
 
   setEnabled(state: boolean) {
+    let user = this.userService.getUser();
+    user.twoFactorEnabled = state;
+    this.userService.setUser(user);
     this.enabled.next(state);
   }
 
