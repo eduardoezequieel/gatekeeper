@@ -64,7 +64,7 @@ export class AdminRequestComponent implements OnInit {
           request.isSelected = false;
         });
         this.dataSource = new MatTableDataSource(res.data);
-        console.log(this.dataSource.data.length);
+        //console.log(this.dataSource.data.length);
         this.dataSource.filterPredicate = (data, filter) => {
           return data.application.name.toLocaleLowerCase().includes(filter);
         };

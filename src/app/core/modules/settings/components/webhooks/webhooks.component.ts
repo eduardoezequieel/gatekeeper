@@ -19,6 +19,7 @@ export class WebhooksComponent implements OnInit {
   user!: User;
   actualPage!: PageEvent;
   admin = false;
+  length!: number;
   displayedColumns: string[] = [
     'No.',
     'WebHook URL',
@@ -26,8 +27,7 @@ export class WebhooksComponent implements OnInit {
     'Status Code',
     'Response',
   ];
-  dataSource!: WebHook[];
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource!: MatTableDataSource<any>;
 
   constructor(
     private dialog: MatDialog,
@@ -36,13 +36,12 @@ export class WebhooksComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //this.dataSource.paginator = this.paginator;
-    // this.onPageChange(1);
     this.settingsService
-      .getWebHooks()
+      .getWebHooks(1, 10)
       .pipe(take(1))
       .subscribe((res) => {
-        this.dataSource = res.data;
+        this.length = res.pagination.totalItems;
+        this.dataSource = new MatTableDataSource(res.data);
       });
     this.user = this.userService.getUser();
     if (this.user.role.id === 2) {
@@ -50,23 +49,25 @@ export class WebhooksComponent implements OnInit {
     }
   }
 
-  // onPageChange($event: PageEvent) {
-  //   this.actualPage = $event;
-  //   this.dataSource = ELEMENT_DATA.slice(
-  //     $event.pageIndex * $event.pageSize,
-  //     $event.pageIndex * $event.pageSize + $event.pageSize
-  //   );
-  // }
+  onPageChange(pageEvent: PageEvent) {
+    this.settingsService
+      .getWebHooks(pageEvent.pageIndex + 1, pageEvent.pageSize)
+      .pipe(take(1))
+      .subscribe((res) => {
+        this.dataSource = new MatTableDataSource(res.data);
+      });
+  }
 
   clickDetails(value: string) {
     console.log(value);
   }
 
-  openDetailsDialog(response: string): void {
+  openDetailsDialog(detail: string): void {
+    console.log(detail);
     this.dialog.open(DetailsComponent, {
       width: '556px',
       height: '200px',
-      data: response,
+      data: detail,
     });
   }
   openClearDialog(): void {

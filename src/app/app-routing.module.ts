@@ -26,11 +26,19 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'employees', 
-    loadChildren: () => import('./core/modules/employees/employees.module').then(m => m.EmployeesModule), 
-    canActivate: [AuthGuard]
+    path: 'about',
+    loadChildren: () =>
+      import('./core/modules/about/about.module').then((m) => m.AboutModule),
   },
-  {path:'**', redirectTo:'login/init'}
+  {
+    path: 'employees',
+    loadChildren: () =>
+      import('./core/modules/employees/employees.module').then(
+        (m) => m.EmployeesModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  { path: '**', redirectTo: 'login/init' },
 ];
 
 @NgModule({

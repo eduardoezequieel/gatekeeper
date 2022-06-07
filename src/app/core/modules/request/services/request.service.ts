@@ -6,10 +6,8 @@ import {
   ApplicationAccess,
   AssignEmployeeResponse,
 } from 'src/app/shared/interfaces/allRequestsResponse';
-import {
-  ApplicationResponse,
-  ApplicationRoles,
-} from 'src/app/shared/interfaces/applicationResponse';
+import { ApplicationsResponse } from 'src/app/shared/interfaces/applicationResponse';
+import { RolesResponse } from 'src/app/shared/interfaces/rolesResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { environment } from 'src/environments/environment.prod';
 
@@ -31,8 +29,8 @@ export class RequestService {
   getAllAplications(
     page: number,
     item: number
-  ): Observable<ApplicationResponse> {
-    return this.http.get<ApplicationResponse>(
+  ): Observable<ApplicationsResponse> {
+    return this.http.get<ApplicationsResponse>(
       environment.url + `/applications?page=${page}&items=${item}`
     );
   }
@@ -78,8 +76,8 @@ export class RequestService {
     );
   }
 
-  getApplicationRoles(applicationId: number): Observable<ApplicationRoles> {
-    return this.http.get<ApplicationRoles>(
+  getApplicationRoles(applicationId: number): Observable<RolesResponse> {
+    return this.http.get<RolesResponse>(
       environment.url + `/applications/${applicationId}/roles`
     );
   }
