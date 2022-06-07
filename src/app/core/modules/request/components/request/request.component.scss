@@ -2,7 +2,6 @@ $Applaudo-Red: #FF4040;
 $Applaudo-Navy:#011625;
 $cool-gray:#687177;
 
-
 .heading{
   display: flex;
   padding: 5px 30px;
@@ -38,28 +37,56 @@ $cool-gray:#687177;
     }
   }
 }
-.user-settings{
-  padding: 0px 30px;
-}
-.user-info{
+
+.body{
+  height: 89%;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 40px 0;
-  border-bottom: 2px solid #E2E2E2;
-  .action-container{
+  flex-direction: column;
+  padding: 20px 30px 0px 30px;
+  .actions{
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    flex-direction: row;
     justify-content: space-between;
+    align-items: flex-end;
+    .search{
+      width: 500px
+    }
     .action-btn{
       display: flex;
-      align-items: flex-end;
       gap: 20px;
       button{
-        width: 250px
+        width: 250px;
+      }
+      
+    }
+  }
+  .table-container{
+    table{
+      width: 100%;
+      th{
+        font-weight: 700;
+      }
+      .deleteBtn{
+        font-size: 20px;
+        color: $Applaudo-Red;
+        background: none;
+        border: none;
+        &:hover{
+          cursor: pointer;
+        } 
+      }
+      .hideRow{
+        display: none;
+      } 
+      mat-footer-row mat-footer-cell{
+        justify-content: center;
+        font-style: italic;
       }
     }
+  }
+  .pagination-container{
+    margin-top: auto;
+    border-top: 2px solid lightgray;
   }
 }
 .primary-button {
@@ -83,69 +110,8 @@ $cool-gray:#687177;
   border: 2px solid lightgrey;
   background-color: white;
 }
-.details{
-  display: flex;
-  flex-direction: row;
-  &>img{
-    border-radius: 50%;
-    margin-right: 20px;
-  }
-  .info{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    &>h4{
-      font-family: 'Avenir Next LT Pro';
-      font-style: normal;
-      font-weight: 600;
-      font-size: 24px;
-      line-height: 32px;
-      margin-bottom: 0;
-      color: black;
-    }
-    &>.job{
-      font-family: 'Avenir Next LT Pro';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 24px;
-      color: $cool-gray;
-    }
-    &>.email{
-      color: $cool-gray;
-      font-family: 'Avenir Next LT Pro';
-      font-size: 16px;
-      line-height: 24px;
-      font-weight: 700;
-    }
-  }
-}
-.auth-container{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 40px 0;
-  .desc-container{
-    &>h4{
-      font-family: 'Avenir Next LT Pro';
-      font-style: normal;
-      font-weight: 600;
-      font-size: 24px;
-      line-height: 32px;
-      color: black;
-    }
-  }
-  .toggle-container{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    span{
-      font-family: 'Avenir Next LT Pro';
-      color: $cool-gray;
-    }
-  }
-}
 .panel-right {
+    display: none;/*remove for messages*/
     .error, .success, .warning {
       position: absolute;
       display: flex;

@@ -1,0 +1,36 @@
+<div class="dialog-head">
+  <h4 mat-dialog-title>New access request</h4>
+  <span class="close-x" (click)="onNoClick()"
+    ><i class="ri-close-line"></i
+  ></span>
+</div>
+<form [formGroup]="form" (ngSubmit)="submitAccessRequest()">
+  <div mat-dialog-content class="content-body">
+    <mat-form-field appearance="standard" class="full-width">
+      <mat-label>Application name</mat-label>
+      <mat-select formControlName="appName" overlayPanelClass>
+        <mat-option *ngFor="let app of applications" [value]="app.id">{{
+          app.name
+        }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="f['appName'].errors?.['required']">
+        Please select and application
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Additional message:</mat-label>
+      <textarea
+        formControlName="messageRequest"
+        matInput
+        placeholder="Enter Message"
+      ></textarea>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="actions">
+    <button mat-button (click)="onNoClick()" class="secondary-button">
+      Cancel
+    </button>
+    <button mat-button type="submit" class="primary-button">Submit</button>
+  </div>
+</form>

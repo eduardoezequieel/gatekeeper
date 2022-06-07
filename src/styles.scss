@@ -1,5 +1,4 @@
 @use '@angular/material' as mat;
-
 @include mat.core();
 $gatekeeper-trainee-program-primary: mat.define-palette(mat.$indigo-palette);
 $gatekeeper-trainee-program-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
@@ -81,10 +80,9 @@ a {
 
 @mixin primary-button {
   .primary-button {
+    border-radius: 0;
     padding: 0 32px;
-    width: min-content;
     height: 40px;
-    margin-top: 40px;
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
@@ -95,9 +93,9 @@ a {
 
 @mixin secondary-button {
   .secondary-button {
+    border-radius: 0;
     padding: 0 32px;
     height: 40px;
-    margin-top: 40px;
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
@@ -121,3 +119,4 @@ a {
   src: local("Avenir Next LT Pro"), url(./assets/fonts/Avenir-Next-LT-Pro-Regular/AvenirLTProHeavy.otf) format("truetype");
   font-weight: 600;
 }
+@import url('https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css');

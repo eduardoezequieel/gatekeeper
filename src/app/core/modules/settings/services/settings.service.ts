@@ -53,6 +53,7 @@ export class SettingsService {
       environment.url + '/webhooks/logs?page=1&items=10'
     );
   }
+
   changePassword(
     current: string,
     newPass: string,
@@ -66,5 +67,9 @@ export class SettingsService {
         confirmPassword: confirmPass,
       }
     );
+  }
+
+  clearLogs() {
+    return this.http.delete(environment.url + '/webhooks/logs');
   }
 }
