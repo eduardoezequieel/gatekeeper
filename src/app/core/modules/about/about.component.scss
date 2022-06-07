@@ -1,0 +1,83 @@
+$Applaudo-Red: #FF4040;
+$Applaudo-Navy:#011625;
+$cool-gray:#687177;
+.container{
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  
+}
+.heading{
+  display: flex;
+  padding: 5px 30px;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 2px solid #E2E2E2;
+  &>.title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    h2{
+      color: black;
+      font-family: 'Avenir Next LT Pro';
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+      margin-bottom: 0;
+    }
+  }
+  &>.user{
+    display: flex;
+    flex-direction: row;
+    img{
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .username{
+      font-family: 'Avenir Next LT Pro';
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: black;
+    }
+  }
+}
+.body{
+  width: 50%;
+  margin: auto;
+  .logo{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 100px;
+    img{
+      width: 300px;
+    }
+  }
+}
+footer{
+  margin-top: auto;
+  background-color: #f7f5f8;
+  padding: 25px 0;
+  .footer-container{
+    width: 300px;
+    margin: auto;
+    text-align: center;
+    h4{
+      font-weight: 700;
+      font-size: 20px;
+    }
+    button{
+      border-radius: 0;
+      border: none;
+      padding: 0 10px;
+      height: 40px;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      color: white;
+      background: #ff4040;
+    }
+  }
+}

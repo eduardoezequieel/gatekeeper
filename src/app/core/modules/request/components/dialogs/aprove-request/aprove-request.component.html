@@ -1,0 +1,30 @@
+<div class="dialog-head">
+  <h4 mat-dialog-title>Approve access requests</h4>
+  <span class="close-x" (click)="onNoClick()"
+    ><i class="ri-close-line"></i
+  ></span>
+</div>
+<div mat-dialog-content>
+  <p>Choose user’s role/s for all the access requests.</p>
+  <ul>
+    <li *ngFor="let role of roles">
+      <input
+        type="checkbox"
+        [name]="role.name"
+        [id]="role.name"
+        [value]="role.id"
+        [checked]="role.isSelected"
+        (click)="checkRequest($event)"
+      />
+      <label [for]="role.name">{{ role.name }}</label>
+    </li>
+  </ul>
+</div>
+<div mat-dialog-actions class="actions">
+  <button mat-button (click)="onNoClick()" class="secondary-button">
+    Cancel
+  </button>
+  <button mat-button (click)="aproveRequest()" class="primary-button">
+    Aprove
+  </button>
+</div>

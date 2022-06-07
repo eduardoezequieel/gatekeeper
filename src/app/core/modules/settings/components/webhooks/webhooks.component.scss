@@ -35,6 +35,7 @@ $cool-gray:#687177;
   }
 }
 .webhooks{
+  height: 75%;
   padding: 30px;
   .content-head{
     display: flex;
@@ -59,7 +60,6 @@ $cool-gray:#687177;
     }
   }
 }
-
 table {
   width: 100%;
   & th{
@@ -98,5 +98,6 @@ table {
   }
 }
 .pagination-container{
+  margin-top: auto;
   border-top: 2px solid #E2E2E2;
 }

@@ -1,0 +1,17 @@
+<div class="dialog-head">
+  <h4 mat-dialog-title>{{ data.title }}</h4>
+  <span class="close-x" (click)="onNoClick()"
+    ><i class="ri-close-line"></i
+  ></span>
+</div>
+<div mat-dialog-content>
+  <p>{{ data.desc }}</p>
+</div>
+<div mat-dialog-actions class="actions">
+  <button mat-button (click)="onNoClick()" class="secondary-button">
+    Cancel
+  </button>
+  <button mat-button (click)="deleteAll()" class="primary-button">
+    {{ data.btn }}
+  </button>
+</div>

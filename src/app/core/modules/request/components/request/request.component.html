@@ -1,0 +1,11 @@
+<div class="heading">
+  <div class="title">
+    <h2>Access Requests</h2>
+  </div>
+  <div class="user">
+    <img [src]="user.image" alt="user_img.jpg" width="40px" height="40px" />
+    <span class="username">{{ user.name }}</span>
+  </div>
+</div>
+<app-regular-request *ngIf="!admin"></app-regular-request>
+<app-admin-request *ngIf="admin"></app-admin-request>
