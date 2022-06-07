@@ -1,31 +1,25 @@
-import { Pagination } from './webHookResponse';
-
-export interface ApplicationResponse {
-  data: Application[];
+export interface ApplicationsResponse {
   pagination: Pagination;
+  data:  Application[];
 }
-
+  
 export interface Application {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  public: boolean;
-  enabled: true;
-  webHook: string;
-  roleCount: number;
-  redirectUris: string[];
+    id:           number;
+    name:         string;
+    description:  string;
+    image:        string;
+    public:       boolean;
+    enabled:      boolean;
+    webHook:      string;
+    roleCount:    number;
+    redirectUris: string[] | null;
 }
 
-export interface ApplicationRoles {
-  data: Roles[];
-}
-
-export interface Roles {
-  id: number;
-  name: string;
-  description: string;
-  default: boolean;
-  weight: number;
-  isSelected: boolean;
+export interface Pagination {
+  totalPages:   number;
+  totalItems:   number;
+  nextPage:     number;
+  previousPage: null;
+  itemsPerPage: number;
+  currentPage:  number;
 }

@@ -69,7 +69,6 @@ a {
   overflow: hidden !important;
 }
 
-
 .mat-form-field-hint-wrapper {
   flex-direction: column;
   margin-bottom: 10px;
@@ -77,6 +76,11 @@ a {
     color: #ff4040
   }
 }
+
+.mat-form-field-flex {
+  padding-top: 0 !important;
+}
+
 
 @mixin primary-button {
   .primary-button {

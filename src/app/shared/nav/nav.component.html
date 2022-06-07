@@ -16,7 +16,7 @@
         </a>
       </li>
       <li *ngIf="(this.loginService.userRole$ | async) == 'admin'">
-        <a mat-button>
+        <a mat-button [routerLink]="['/employees']">
           <i class="ri-group-line"></i>
           <span *ngIf="isExpanded">Employees</span>
         </a>
