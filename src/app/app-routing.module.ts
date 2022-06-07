@@ -25,8 +25,12 @@ const routes: Routes = [
         (m) => m.RequestModule
       ),
   },
-  { path: 'about', loadChildren: () => import('./core/modules/about/about.module').then(m => m.AboutModule) },
-  { path: '**', redirectTo: 'login' },
+  {
+    path: 'employees', 
+    loadChildren: () => import('./core/modules/employees/employees.module').then(m => m.EmployeesModule), 
+    canActivate: [AuthGuard]
+  },
+  {path:'**', redirectTo:'login/init'}
 ];
 
 @NgModule({

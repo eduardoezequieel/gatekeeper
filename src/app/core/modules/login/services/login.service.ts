@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
 import { LoginResponse } from 'src/app/shared/interfaces/loginResponse';
 import { RefreshTokenResponse } from 'src/app/shared/interfaces/refreshTokenResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
@@ -77,6 +77,7 @@ export class LoginService {
   }
 
   refreshToken(token: string): Observable<RefreshTokenResponse> {
+    debugger;
     return this.http
       .post<RefreshTokenResponse>(
         environment.url + '/authentication/refresh-token',
@@ -85,7 +86,6 @@ export class LoginService {
         }
       )
       .pipe(
-        map((resp) => resp),
         catchError((err) => {
           console.log('Refresh Token error');
           return throwError(err);
@@ -98,7 +98,6 @@ export class LoginService {
   }
 
   setUserRole(role: string) {
-    console.log('role', role);
     this.userRole.next(role);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Employee } from '../../interfaces/loginResponse';
+import { User } from '../../interfaces/loginResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -7,11 +7,11 @@ import { Employee } from '../../interfaces/loginResponse';
 export class UserService {
   constructor() {}
 
-  getUser(): Employee {
-    return <Employee>JSON.parse(localStorage.getItem('user')!);
+  getUser(): User {
+    return <User>JSON.parse(localStorage.getItem('user')!);
   }
 
-  setUser(user: Employee) {
+  setUser(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
   }
 }

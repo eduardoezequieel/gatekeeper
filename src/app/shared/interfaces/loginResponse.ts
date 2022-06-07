@@ -1,11 +1,11 @@
 export interface LoginResponse {
   data: {
-    employee: Employee;
+    employee: User;
     tokens: Tokens;
   };
 }
 
-export interface Employee {
+export interface User {
   id: number;
   zohoUniqueId: string;
   name: string;
@@ -47,5 +47,5 @@ export interface Tokens {
 }
 
 export interface UpdatePass {
-  data: Employee;
+  data: User;
 }

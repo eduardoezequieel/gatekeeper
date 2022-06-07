@@ -3,10 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { take } from 'rxjs';
-import { Employee } from 'src/app/shared/interfaces/loginResponse';
+import { User } from 'src/app/shared/interfaces/loginResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
-import { LoginService } from '../../../login/services/login.service';
 import { SettingsErrorService } from '../../services/settings-error.service';
 import { SettingsService } from '../../services/settings.service';
 import { ChangePassComponent } from '../dialogs/change-pass/change-pass.component';
@@ -20,7 +18,7 @@ import { EnableAuthComponent } from '../dialogs/enable-auth/enable-auth.componen
 })
 export class SettingsComponent implements OnInit {
   disabled = false;
-  user!: Employee;
+  user!: User;
   admin = false;
   constructor(
     private dialog: MatDialog,

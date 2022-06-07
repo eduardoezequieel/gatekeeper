@@ -1,0 +1,48 @@
+$Applaudo-Red: #FF4040;
+$text:#011625;
+@import '../../../../../../../../styles.scss';
+
+.dialog-head{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  &>h4{
+    font-family: 'Avenir Next LT Pro';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+  }
+  &>.close-x{
+    &:hover{
+      cursor: pointer;
+    }
+  }
+}
+.mat-dialog-content{
+  & p{
+    font-family: 'Avenir Next LT Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: $text;
+    margin-top: 16px;
+  }
+  .checkboxes {
+    padding: 0;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+.mat-dialog-actions{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: auto;
+
+  @include primary-button;
+  @include secondary-button;
+}
+

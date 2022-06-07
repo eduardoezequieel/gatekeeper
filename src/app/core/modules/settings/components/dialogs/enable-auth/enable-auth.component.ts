@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { take } from 'rxjs';
 import { Generate2FA } from 'src/app/shared/interfaces/generate2-fa';
-import { Employee } from 'src/app/shared/interfaces/loginResponse';
+import { User } from 'src/app/shared/interfaces/loginResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { SettingsErrorService } from '../../../services/settings-error.service';
 import { SettingsService } from '../../../services/settings.service';
@@ -16,7 +16,7 @@ import { RecoveryKeysComponent } from '../recovery-keys/recovery-keys.component'
 })
 export class EnableAuthComponent {
   form: FormGroup = new FormGroup({});
-  user!: Employee;
+  user!: User;
   auth!: Generate2FA;
   constructor(
     public dialogRef: MatDialogRef<EnableAuthComponent>,

@@ -28,16 +28,17 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
       
       return next.handle(req)
       .pipe( catchError( (err: HttpErrorResponse) => {
-          if(err.status === 401) {
-            if(!this.isRefreshing) {
+        if(err.status === 401) {
+          if(!this.isRefreshing) {
+              console.log('error en el refreshToken')
               this.isRefreshing = true;
               return this.loginService.refreshToken(localStorage.getItem('refreshToken')!)
               .pipe(
                 switchMap( (res) => {
-                  localStorage.setItem('token', res.data.accessToken);
-                  return next.handle( this.addToken(req, res.data.accessToken) )
-                }),
-                // catchError( () => next.handle(request)),
+                  console.log('en el switchMap', res)
+                  localStorage.setItem('accessToken', res.data.accessToken);
+                  return next.handle( this.addToken(request, res.data.accessToken) )
+                })
               )
             } else {
               return this.refreshTokenSubject.pipe(

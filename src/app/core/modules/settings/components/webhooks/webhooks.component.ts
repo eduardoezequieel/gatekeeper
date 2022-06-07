@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
-import { Employee } from 'src/app/shared/interfaces/loginResponse';
+import { User } from 'src/app/shared/interfaces/loginResponse';
 import { WebHook } from 'src/app/shared/interfaces/webHookResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { SettingsService } from '../../services/settings.service';
@@ -16,7 +16,7 @@ import { DetailsComponent } from '../dialogs/details/details.component';
   styleUrls: ['./webhooks.component.scss'],
 })
 export class WebhooksComponent implements OnInit {
-  user!: Employee;
+  user!: User;
   actualPage!: PageEvent;
   admin = false;
   displayedColumns: string[] = [
