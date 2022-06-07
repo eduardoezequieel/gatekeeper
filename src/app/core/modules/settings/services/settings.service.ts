@@ -48,9 +48,9 @@ export class SettingsService {
     this.enabled.next(state);
   }
 
-  getWebHooks(): Observable<WebHookResponse> {
+  getWebHooks(page: number, items: number): Observable<WebHookResponse> {
     return this.http.get<WebHookResponse>(
-      environment.url + '/webhooks/logs?page=1&items=10'
+      environment.url + `/webhooks/logs?page=${page}&items=${items}`
     );
   }
 

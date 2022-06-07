@@ -1,10 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { take } from 'rxjs';
-import {
-  ApplicationRoles,
-  Roles,
-} from 'src/app/shared/interfaces/applicationResponse';
+import { Roles } from 'src/app/shared/interfaces/rolesResponse';
 import { RequestService } from '../../../services/request.service';
 
 @Component({

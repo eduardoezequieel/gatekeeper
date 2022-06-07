@@ -3,9 +3,10 @@ export interface RolesResponse {
 }
 
 export interface Roles {
-  id:          number;
-  name:        string;
+  id: number;
+  name: string;
   description: string;
-  default:     boolean;
-  weight:      number;
+  default: boolean;
+  weight: number;
+  isSelected: boolean;
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Employee } from 'src/app/shared/interfaces/loginResponse';
+import { User } from 'src/app/shared/interfaces/loginResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { UserService } from 'src/app/shared/nav/services/user.service';
 })
 export class AboutComponent implements OnInit {
   admin = false;
-  user!: Employee;
+  user!: User;
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
