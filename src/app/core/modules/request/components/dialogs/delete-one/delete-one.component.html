@@ -8,7 +8,12 @@
   <p>Are you sure you want to delete the selected access requests?</p>
 </div>
 <div mat-dialog-actions class="actions">
-  <button mat-button (click)="onNoClick()" class="secondary-button">
+  <button
+    type="button"
+    mat-button
+    (click)="onNoClick()"
+    class="secondary-button"
+  >
     Cancel
   </button>
   <button mat-button (click)="deleteRequest()" class="primary-button">

@@ -8,7 +8,12 @@
   <p>Are you sure you want to deny the selected access requests?</p>
 </div>
 <div mat-dialog-actions class="actions">
-  <button mat-button (click)="onNoClick()" class="secondary-button">
+  <button
+    type="button"
+    mat-button
+    (click)="onNoClick()"
+    class="secondary-button"
+  >
     Cancel
   </button>
   <button mat-button (click)="denyRequest()" class="primary-button">

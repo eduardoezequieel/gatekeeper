@@ -52,7 +52,12 @@
   </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-flat-button class="cancel-btn" (click)="onNoClick()">
+  <button
+    type="button"
+    mat-flat-button
+    class="cancel-btn"
+    (click)="onNoClick()"
+  >
     Cancel
   </button>
   <button mat-button class="clear-btn" (click)="submitUpdatePass()">
