@@ -8,8 +8,15 @@
   <p>If you continue, your won’t be able to see the keys again.</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-flat-button class="cancel-btn" (click)="goBackClick()">
+  <button
+    type="button"
+    mat-flat-button
+    class="cancel-btn"
+    (click)="goBackClick()"
+  >
     Go Back
   </button>
-  <button mat-button class="clear-btn" (click)="onNoClick()">Close</button>
+  <button type="button" mat-button class="clear-btn" (click)="onNoClick()">
+    Close
+  </button>
 </div>

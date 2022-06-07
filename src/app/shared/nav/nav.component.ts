@@ -38,7 +38,7 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loginService.setUserRole(this.userService.getUser().role.name);
+    this.loginService.setUserRole(this.userService.getUser()?.role.name);
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.path = (<NavigationEnd>event).url;

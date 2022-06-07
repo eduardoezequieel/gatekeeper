@@ -44,7 +44,7 @@ export class AdminRequestComponent implements OnInit {
       .getAllAplications(1, 84)
       .pipe(take(1))
       .subscribe((res) => {
-        this.applications = res.data;
+        this.applications = res.data.filter((app) => app.enabled === true);
       });
     //this.fillRequestTable();
   }
@@ -63,8 +63,8 @@ export class AdminRequestComponent implements OnInit {
         res.data.forEach((request) => {
           request.isSelected = false;
         });
+
         this.dataSource = new MatTableDataSource(res.data);
-        //console.log(this.dataSource.data.length);
         this.dataSource.filterPredicate = (data, filter) => {
           return data.application.name.toLocaleLowerCase().includes(filter);
         };
@@ -176,10 +176,13 @@ export class AdminRequestComponent implements OnInit {
     const checked = this.dataSource.data.some(
       (data) => data.isSelected === true
     );
-    if (checked) {
-      this.requestSelected = true;
-    } else {
-      this.requestSelected = false;
+    this.requestSelected = checked;
+
+    const allSelected = this.dataSource.data.filter(
+      (data) => data.isSelected === false
+    ).length;
+    if (allSelected < 1) {
+      this.checkAll = true;
     }
   }
 

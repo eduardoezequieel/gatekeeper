@@ -16,31 +16,31 @@
         </a>
       </li>
       <li *ngIf="(this.loginService.userRole$ | async) == 'admin'">
-        <a mat-button [routerLink]="['/employees']">
+        <a mat-button [routerLink]="['/employees']" routerLinkActive="active">
           <i class="ri-group-line"></i>
           <span *ngIf="isExpanded">Employees</span>
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/request">
+        <a mat-button routerLink="/request" routerLinkActive="active">
           <mat-icon svgIcon="icon_request"></mat-icon>
           <span *ngIf="isExpanded">Access Requests</span>
         </a>
       </li>
       <li *ngIf="(this.loginService.userRole$ | async) == 'admin'">
-        <a mat-button>
+        <a mat-button routerLinkActive="active">
           <i class="ri-apps-line"></i>
           <span *ngIf="isExpanded">Applications</span>
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/setting">
+        <a mat-button routerLink="/setting" routerLinkActive="active">
           <i class="ri-settings-4-line"></i>
           <span *ngIf="isExpanded">Settings</span>
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/about">
+        <a mat-button routerLink="/about" routerLinkActive="active">
           <i class="ri-information-line"></i>
           <span *ngIf="isExpanded">About</span>
         </a>

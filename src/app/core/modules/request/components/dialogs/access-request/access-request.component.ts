@@ -25,7 +25,7 @@ export class AccessRequestComponent implements OnInit {
       .getAllAplications(1, 84)
       .pipe(take(1))
       .subscribe((res) => {
-        this.applications = res.data;
+        this.applications = res.data.filter((app) => app.enabled === true);
       });
 
     this.form = this.fb.group({

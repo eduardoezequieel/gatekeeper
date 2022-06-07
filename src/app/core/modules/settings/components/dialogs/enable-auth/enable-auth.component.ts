@@ -59,7 +59,6 @@ export class EnableAuthComponent {
         this.dialogRef.close();
         this.dialog.open(RecoveryKeysComponent, {
           width: '846px',
-          height: '504px',
           data: res.data.twoFactorRecoveryKeys,
         });
         this.settingMessages.enableTwoStepSuccessOn();

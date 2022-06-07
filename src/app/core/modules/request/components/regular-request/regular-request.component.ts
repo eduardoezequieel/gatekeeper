@@ -156,10 +156,13 @@ export class RegularRequestComponent implements OnInit {
     const checked = this.dataSource.data.some(
       (data) => data.isSelected === true
     );
-    if (checked) {
-      this.requestSelected = true;
-    } else {
-      this.requestSelected = false;
+    this.requestSelected = checked;
+
+    const allSelected = this.dataSource.data.filter(
+      (data) => data.isSelected === false
+    ).length;
+    if (allSelected < 1) {
+      this.checkAll = true;
     }
   }
 
