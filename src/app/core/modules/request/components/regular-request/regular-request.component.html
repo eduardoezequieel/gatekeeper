@@ -97,6 +97,9 @@
         [ngClass]="{ hideRow: dataSource != null }"
       ></mat-footer-row>
     </table>
+    <div *ngIf="!noResults" class="noResults">
+      <img src="../../../../../../assets/images/not-found.png" alt="" />
+    </div>
   </div>
   <div class="pagination-container">
     <mat-paginator
@@ -108,23 +111,26 @@
   </div>
 </div>
 <div class="panel-right">
-  <div class="success">
+  <div
+    class="success"
+    *ngIf="this.requestNotifications.requestAddedSuccessfully$ | async"
+  >
     <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
     <div class="error-title">Success</div>
     <div class="icon-container" (click)="closeRequestMessages()">
       <i class="ri-close-line"></i>
     </div>
-    <div class="error-description">Access requests were aproved.</div>
+    <div class="error-description">Access requests added successfully.</div>
   </div>
-  <div class="warning">
-    <div class="icon-container"><i class="ri-information-line"></i></div>
-    <div class="error-title">Warning</div>
+  <div
+    class="success"
+    *ngIf="this.requestNotifications.requestDeletedSuccessfully$ | async"
+  >
+    <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
+    <div class="error-title">Success</div>
     <div class="icon-container" (click)="closeRequestMessages()">
       <i class="ri-close-line"></i>
     </div>
-    <div class="error-description">
-      You must select at least one role to<br />
-      approve all the access requests.
-    </div>
+    <div class="error-description">Access requests deleted successfully.</div>
   </div>
 </div>

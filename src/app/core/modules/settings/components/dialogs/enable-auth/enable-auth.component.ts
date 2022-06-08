@@ -38,7 +38,12 @@ export class EnableAuthComponent {
     this.form = this.fb.group({
       codePassword: [
         '',
-        [Validators.required, Validators.minLength(6), Validators.maxLength(6)],
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(6),
+          Validators.pattern('^[0-9]*$'),
+        ],
       ],
     });
   }
@@ -54,15 +59,20 @@ export class EnableAuthComponent {
     this.settingsService
       .activateTwoStep(token)
       .pipe(take(1))
-      .subscribe((res) => {
-        this.settingsService.setEnabled(true);
-        this.dialogRef.close();
-        this.dialog.open(RecoveryKeysComponent, {
-          width: '846px',
-          data: res.data.twoFactorRecoveryKeys,
-        });
-        this.settingMessages.enableTwoStepSuccessOn();
-      });
+      .subscribe(
+        (res) => {
+          this.settingsService.setEnabled(true);
+          this.dialogRef.close();
+          this.dialog.open(RecoveryKeysComponent, {
+            width: '750px',
+            data: res.data.twoFactorRecoveryKeys,
+          });
+          this.settingMessages.enableTwoStepSuccessOn();
+        },
+        () => {
+          this.settingMessages.wrongCodeOn();
+        }
+      );
   }
   onNoClick(): void {
     this.dialogRef.close();

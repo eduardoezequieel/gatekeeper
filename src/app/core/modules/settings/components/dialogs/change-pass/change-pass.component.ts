@@ -8,6 +8,7 @@ import {
 import { MatDialogRef } from '@angular/material/dialog';
 import { take } from 'rxjs';
 import { CustomValidators } from 'src/app/core/modules/login/validators/passwordMatch';
+import { SettingsErrorService } from '../../../services/settings-error.service';
 import { SettingsService } from '../../../services/settings.service';
 
 @Component({
@@ -23,7 +24,8 @@ export class ChangePassComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ChangePassComponent>,
     private fb: FormBuilder,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    public settingMessages: SettingsErrorService
   ) {}
 
   ngOnInit(): void {
@@ -61,9 +63,14 @@ export class ChangePassComponent implements OnInit {
     this.settingsService
       .changePassword(current, newPass, confirm)
       .pipe(take(1))
-      .subscribe(() => {
-        console.log('pass changed succesfully');
-        this.dialogRef.close();
-      });
+      .subscribe(
+        () => {
+          console.log('pass changed succesfully');
+          this.dialogRef.close();
+        },
+        () => {
+          this.settingMessages.wrongPasswordOn();
+        }
+      );
   }
 }

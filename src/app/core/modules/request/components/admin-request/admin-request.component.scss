@@ -61,6 +61,10 @@ $cool-gray:#687177;
         font-style: italic;
       }
     }
+    .noResults{
+      margin-top: 40px;
+      text-align: center;
+    }
   }
   .pagination-container{
     margin-top: auto;
@@ -88,7 +92,6 @@ $cool-gray:#687177;
   background-color: white;
 }
 .panel-right {
-    display: none;/*remove for messages*/
     .error, .success, .warning {
       position: absolute;
       display: flex;

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MAT_SELECT_CONFIG } from '@angular/material/select';
 import { take } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
+import { RequestNotificationService } from '../../../services/request-notification.service';
 import { RequestService } from '../../../services/request.service';
 
 @Component({
@@ -17,7 +18,9 @@ export class AccessRequestComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AccessRequestComponent>,
     private fb: FormBuilder,
-    private requestService: RequestService
+    private requestService: RequestService,
+    private requestNotification: RequestNotificationService,
+    @Inject(MAT_DIALOG_DATA) public data: number[]
   ) {}
 
   ngOnInit(): void {
@@ -25,7 +28,9 @@ export class AccessRequestComponent implements OnInit {
       .getAllAplications(1, 84)
       .pipe(take(1))
       .subscribe((res) => {
-        this.applications = res.data.filter((app) => app.enabled === true);
+        this.applications = res.data
+          .filter((app) => app.enabled === true)
+          .filter((app) => !this.data.includes(app.id));
       });
 
     this.form = this.fb.group({
@@ -54,6 +59,7 @@ export class AccessRequestComponent implements OnInit {
       .requestAccess(appId, message)
       .pipe(take(1))
       .subscribe((res) => {
+        this.requestNotification.requestAddedSuccessfullyOn();
         this.onNoClick();
       });
   }

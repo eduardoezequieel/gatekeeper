@@ -103,32 +103,12 @@
           </button>
         </td>
       </ng-container>
-      <ng-container matColumnDef="loading">
-        <mat-footer-cell *matFooterCellDef colspan="6">
-          Loading data...
-        </mat-footer-cell>
-      </ng-container>
-      <ng-container matColumnDef="noData">
-        <mat-footer-cell *matFooterCellDef colspan="6">
-          <img
-            src="../../../../../../assets/images/no results were found.png"
-            alt=""
-          />
-        </mat-footer-cell>
-      </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      <mat-footer-row
-        *matFooterRowDef="['loading']"
-        [ngClass]="{ hideRow: dataSource != null }"
-      ></mat-footer-row>
-      <mat-footer-row
-        *matFooterRowDef="['noData']"
-        [ngClass]="{
-          hideRow: dataSource != null && dataSource.data.length == 0
-        }"
-      ></mat-footer-row>
     </table>
+    <div *ngIf="!noResults" class="noResults">
+      <img src="../../../../../../assets/images/not-found.png" alt="" />
+    </div>
   </div>
   <div class="pagination-container">
     <mat-paginator
@@ -140,7 +120,10 @@
   </div>
 </div>
 <div class="panel-right">
-  <div class="success">
+  <div
+    class="success"
+    *ngIf="this.requestNotifications.requestAproved$ | async"
+  >
     <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
     <div class="error-title">Success</div>
     <div class="icon-container" (click)="closeRequestMessages()">
@@ -148,7 +131,17 @@
     </div>
     <div class="error-description">Access requests were aproved.</div>
   </div>
-  <div class="warning">
+  <div class="success" *ngIf="this.requestNotifications.requestDenied$ | async">
+    <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
+    <div class="error-title">Success</div>
+    <div class="icon-container" (click)="closeRequestMessages()">
+      <i class="ri-close-line"></i>
+    </div>
+    <div class="error-description">
+      Access requests were denied succeessfully.
+    </div>
+  </div>
+  <div class="warning" *ngIf="this.requestNotifications.selectRole$ | async">
     <div class="icon-container"><i class="ri-information-line"></i></div>
     <div class="error-title">Warning</div>
     <div class="icon-container" (click)="closeRequestMessages()">
@@ -157,6 +150,20 @@
     <div class="error-description">
       You must select at least one role to<br />
       approve all the access requests.
+    </div>
+  </div>
+  <div
+    class="warning"
+    *ngIf="this.requestNotifications.noRolesAvailable$ | async"
+  >
+    <div class="icon-container"><i class="ri-information-line"></i></div>
+    <div class="error-title">Warning</div>
+    <div class="icon-container" (click)="closeRequestMessages()">
+      <i class="ri-close-line"></i>
+    </div>
+    <div class="error-description">
+      This application does not have<br />
+      any roles available.
     </div>
   </div>
 </div>

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { take } from 'rxjs';
 import { ApplicationAccess } from 'src/app/shared/interfaces/allRequestsResponse';
+import { RequestNotificationService } from '../../../services/request-notification.service';
 import { RequestService } from '../../../services/request.service';
 
 @Component({
@@ -13,6 +14,7 @@ export class DeleteAllComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<DeleteAllComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private requestNotification: RequestNotificationService,
     private requestService: RequestService
   ) {}
 
@@ -26,12 +28,15 @@ export class DeleteAllComponent implements OnInit {
       this.requestService
         .deleteAccessRequest(request.id)
         .pipe(take(1))
-        .subscribe(() => {
-          console.log(
-            `Request ${request.id} has been successfully ${this.data.msg}`
-          );
-        });
+        .subscribe(() => {});
     });
+
+    if (this.data.btn === 'Deny') {
+      this.requestNotification.requestDeniedOn();
+    } else {
+      this.requestNotification.requestDeletedSuccessfullyOn();
+    }
+
     this.onNoClick();
   }
 }

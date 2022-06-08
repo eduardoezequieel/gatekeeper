@@ -54,6 +54,7 @@ mat-sidenav-content{
       border-radius: 0;
     }
     &:hover{
+      cursor: pointer;
       border-left:3px solid $white;
       border-radius: 0;
     }

@@ -5,6 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
+import { RequestNotificationService } from '../../services/request-notification.service';
 import { RequestService } from '../../services/request.service';
 import { AccessRequestComponent } from '../dialogs/access-request/access-request.component';
 import { AproveRequestComponent } from '../dialogs/aprove-request/aprove-request.component';
@@ -21,6 +22,7 @@ export class AdminRequestComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   applications: Application[] = [];
   currentApp!: any;
+  noResults!: boolean;
   requestSelected: boolean = false;
   checkAll = false;
   length!: number;
@@ -36,15 +38,18 @@ export class AdminRequestComponent implements OnInit {
   searchKey!: string;
   constructor(
     private dialog: MatDialog,
-    private requestService: RequestService
+    private requestService: RequestService,
+    public requestNotifications: RequestNotificationService
   ) {}
 
   ngOnInit(): void {
+    this.closeRequestMessages();
     this.requestService
-      .getAllAplications(1, 84)
+      .getAllAplications(1, 100)
       .pipe(take(1))
       .subscribe((res) => {
         this.applications = res.data.filter((app) => app.enabled === true);
+        this.noResults = false;
       });
     //this.fillRequestTable();
   }
@@ -60,6 +65,11 @@ export class AdminRequestComponent implements OnInit {
       .pipe(take(1))
       .subscribe((res) => {
         this.length = res.pagination.totalItems;
+        if (this.length < 1) {
+          this.noResults = false;
+        } else {
+          this.noResults = true;
+        }
         res.data.forEach((request) => {
           request.isSelected = false;
         });
@@ -102,6 +112,8 @@ export class AdminRequestComponent implements OnInit {
     });
     this.dialog.afterAllClosed.subscribe(() => {
       this.fillRequestTable(this.currentApp);
+      this.checkAll = false;
+      this.requestSelected = false;
     });
   }
 
@@ -127,6 +139,7 @@ export class AdminRequestComponent implements OnInit {
       data: {
         applicationId: request.application.id,
         employeeId: request.employee.id,
+        requestId: request.id,
       },
     });
     this.dialog.afterAllClosed.subscribe(() => {
@@ -134,23 +147,26 @@ export class AdminRequestComponent implements OnInit {
     });
   }
   openAproveManyAccess(): void {
-    this.selectedRequests().forEach((request) => {
-      console.log(request);
-      this.dialog.open(AproveRequestComponent, {
-        width: '556px',
-        data: {
-          applicationId: request.application.id,
-          employeeId: request.employee.id,
-        },
-      });
-      this.dialog.afterAllClosed.subscribe(() => {
-        this.fillRequestTable(this.currentApp);
-      });
+    const request = this.selectedRequests();
+    this.dialog.open(AproveRequestComponent, {
+      width: '556px',
+      data: {
+        applicationId: this.currentApp.value,
+        requestArr: request,
+      },
+    });
+    this.dialog.afterAllClosed.subscribe(() => {
+      this.fillRequestTable(this.currentApp);
+      this.checkAll = false;
+      this.requestSelected = false;
     });
   }
 
   filterData() {
     this.dataSource.filter = this.searchKey.trim().toLocaleLowerCase();
+    if (this.dataSource.filteredData.length == 0) {
+      this.noResults = false;
+    }
   }
 
   selectedRequests() {
@@ -186,5 +202,7 @@ export class AdminRequestComponent implements OnInit {
     }
   }
 
-  closeRequestMessages() {}
+  closeRequestMessages() {
+    this.requestNotifications.turnErrorsOff();
+  }
 }

@@ -68,6 +68,7 @@ export class SettingsComponent implements OnInit {
       case false:
         this.dialog.open(EnableAuthComponent, {
           width: '846px',
+          height: '490px',
         });
         break;
       case true:
