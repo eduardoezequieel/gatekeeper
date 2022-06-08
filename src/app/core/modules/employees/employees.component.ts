@@ -4,7 +4,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { PageEvent } from '@angular/material/paginator';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { finalize, map, Observable, of, Subscription, take, tap } from 'rxjs';
+import { catchError, finalize, map, Observable, of, Subscription, take, tap, throwError } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { Employee } from 'src/app/shared/interfaces/employeesResponse';
 import { User } from 'src/app/shared/interfaces/loginResponse';
@@ -12,6 +12,7 @@ import { Roles } from 'src/app/shared/interfaces/rolesResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { ApplicationsService } from './services/applications.service';
 import { EmployeesService } from './services/employees.service';
+import { WarningsService } from './services/warnings.service';
 
 @Component({
   selector: 'app-employees',
@@ -41,6 +42,7 @@ export class EmployeesComponent implements OnInit {
     private router: Router,
     private employeesService: EmployeesService,
     private applicationService: ApplicationsService,
+    public warnings: WarningsService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
   ) {
@@ -67,7 +69,11 @@ export class EmployeesComponent implements OnInit {
       this.employeesService.employees$ = of(resp);
       this.employeesAmount = resp.length;
       this.onPageChange({pageIndex: 0, pageSize: 15, length: resp.length});
-    });
+    },
+      (error) => {
+        this.warnings.mfaWarningOn()
+      }
+    );
     
     this.subs2 = this.applicationService.getApplications().subscribe (resp => {
       this.applicationService.apps$ = of(resp)
@@ -135,6 +141,10 @@ export class EmployeesComponent implements OnInit {
 
   openUserProfile(name: number) {
     this.router.navigate([`/employees/${name}`])
+  }
+
+  closeWarnings() {
+    this.warnings.mfaWarningOff();
   }
 
   ngOnDestroy() {

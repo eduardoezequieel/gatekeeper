@@ -17,7 +17,7 @@ export class AuthWithRCodeComponent {
 
   constructor(private router: Router, private loginService: LoginService, private dialog: MatDialog) {
     this.form = new FormGroup({
-      code: new FormControl('', Validators.required)
+      code: new FormControl('', [Validators.required])
     })
   }
 

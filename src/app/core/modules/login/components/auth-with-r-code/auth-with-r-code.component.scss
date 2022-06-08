@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  height: 80vh;
+  height: 500px;
 
   .title {
     h3 {
@@ -30,6 +30,7 @@
     .buttons-container {
       display: flex;
       gap: 40px;  
+      margin-top: 30px;
 
       @import '../../../../../../styles.scss';
       @include primary-button;
@@ -48,6 +49,17 @@
   
       color: #ff4040;
       margin-left: 40px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .container-auth-with-r-code {
+    height: 85vh;
+    form {
+      .buttons-container {
+        flex-direction: column;
+      }
     }
   }
 }

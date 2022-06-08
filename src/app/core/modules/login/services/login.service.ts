@@ -16,6 +16,9 @@ export class LoginService {
   private userRole = new BehaviorSubject('regular');
   userRole$ = this.userRole.asObservable();
 
+  private guardCode = new BehaviorSubject(0);
+  guardCode$ = this.guardCode.asObservable();
+
   constructor(private http: HttpClient, private userService: UserService) {}
 
   login(email: string, password: string): Observable<LoginResponse> {
@@ -25,7 +28,7 @@ export class LoginService {
         email: email,
         password: password,
       }
-    );
+    )
   }
 
   loginOneTimeCode(code: string): Observable<LoginResponse> {
@@ -77,7 +80,6 @@ export class LoginService {
   }
 
   refreshToken(token: string): Observable<RefreshTokenResponse> {
-    debugger;
     return this.http
       .post<RefreshTokenResponse>(
         environment.url + '/authentication/refresh-token',
@@ -99,5 +101,12 @@ export class LoginService {
 
   setUserRole(role: string) {
     this.userRole.next(role);
+  }
+
+  setGuardCode(code: number) {
+    this.guardCode.next(code)
+  }
+  deleteGuardCode(code:number) {
+    this.guardCode.next(0)
   }
 }

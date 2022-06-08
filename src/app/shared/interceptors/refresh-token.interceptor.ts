@@ -8,7 +8,6 @@ import {
   HttpClient
 } from '@angular/common/http';
 import { BehaviorSubject, catchError, filter, map, Observable, switchMap, take, tap } from 'rxjs';
-import { environment } from 'src/environments/environment.prod';
 import { LoginService } from 'src/app/core/modules/login/services/login.service';
 
 
@@ -28,14 +27,12 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
       
       return next.handle(req)
       .pipe( catchError( (err: HttpErrorResponse) => {
-        if(err.status === 401) {
+        if(err.status === 401 && !err.error.message[0].includes('2FA')) {
           if(!this.isRefreshing) {
-              console.log('error en el refreshToken')
               this.isRefreshing = true;
               return this.loginService.refreshToken(localStorage.getItem('refreshToken')!)
               .pipe(
                 switchMap( (res) => {
-                  console.log('en el switchMap', res)
                   localStorage.setItem('accessToken', res.data.accessToken);
                   return next.handle( this.addToken(request, res.data.accessToken) )
                 })

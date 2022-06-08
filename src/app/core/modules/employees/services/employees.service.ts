@@ -1,24 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap, throwError } from 'rxjs';
 import { Employee, EmployeesResponse } from 'src/app/shared/interfaces/employeesResponse';
 import { environment } from 'src/environments/environment.prod';
+import { WarningsService } from './warnings.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeesService {
 
-  // employees = new BehaviorSubject({})
-  // employees$ = this.employees.asObservable();
-
   employees$!: Observable<Employee[]>
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private warnings: WarningsService) { }
 
   getAllEmployees(): Observable<Employee[]> {
     return this.http.get<EmployeesResponse>(environment.url + '/employees?page=1&items=100').pipe(
-      map(resp => resp.data)
+      map(resp => resp.data),
     )
   }
 
@@ -26,6 +24,12 @@ export class EmployeesService {
     return this.http.get<{data: Employee}>(environment.url + `/employees/${employeeId}`).pipe(
       map(resp => resp.data)
     )
+  }
+
+  changeRole(employeeId: number, roleId: number) {
+    return this.http.put(environment.url + `/api/v1/employees/${employeeId}/roles`, {
+      "roleId": roleId
+    }).pipe(tap(resp => console.log(resp)))
   }
 
   removeMFA(employeeId: number) {

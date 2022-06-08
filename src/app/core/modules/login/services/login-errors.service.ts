@@ -13,6 +13,9 @@ export class LoginErrorsService {
   private passwordResetSuccess = new BehaviorSubject(false)
   passwordResetSuccess$ = this.passwordResetSuccess.asObservable()
 
+  private oneTimeCodeError = new BehaviorSubject(false)
+  oneTimeCodeError$ = this.oneTimeCodeError.asObservable()
+
   constructor() { }
 
   LoginErrorOn() {
@@ -36,9 +39,17 @@ export class LoginErrorsService {
     this.passwordResetSuccess.next(false)
   }
 
+  oneTimeCodeErrorOn() {
+    this.oneTimeCodeError.next(true);
+  }
+  oneTimeCodeErrorOff() {
+    this.oneTimeCodeError.next(false);
+  }
+
   turnErrorsOff() {
     this.passwordResetSuccess.next(false)
     this.recoveryCodeError.next(false)
     this.loginError.next(false)
+    this.oneTimeCodeError.next(false)
   }
 }

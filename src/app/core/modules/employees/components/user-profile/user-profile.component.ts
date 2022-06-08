@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,7 +34,6 @@ export class UserProfileComponent implements OnInit {
     private appService: ApplicationsService,
     private employeeService: EmployeesService,
     private activatedRoute: ActivatedRoute,
-    private router: Router,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private dialog: MatDialog,
@@ -65,7 +64,7 @@ export class UserProfileComponent implements OnInit {
   changeRoles(): void {
     this.dialog.open(ChangeRolesComponent, {
       width: '556px',
-      data: {user: this.user.name},
+      data: {userName: this.user.name, userRole: this.user.role.name, userId: this.user.id},
     });
   }
   

@@ -24,29 +24,31 @@ export class InitComponent {
   get email() {
     return this.loginForm.get('email')!.value;
   }
-
   get password() {
     return this.loginForm.get('password')!.value;
   }
 
   onSubmit() {
-    this.loginService.login(this.email, this.password).subscribe(
-      (resp) => {
-        this.loginService.setUser(this.email, this.password);
-        if (resp.data.employee.twoFactorEnabled) {
-          this.router.navigate(['/login/one-time-code']);
-        } else {
-          localStorage.setItem('accessToken', resp.data.tokens.accessToken);
-          localStorage.setItem('refreshToken', resp.data.tokens.refreshToken);
-          localStorage.setItem('user', JSON.stringify(resp.data.employee));
-          this.loginService.setUserRole(resp.data.employee.role.name)
-          this.loginErrors.turnErrorsOff()
-          this.router.navigate(['/setting']);
+    if(this.loginForm.valid) {
+      this.loginService.login(this.email, this.password).subscribe(
+        (resp) => {
+          this.loginService.setUser(this.email, this.password);
+          if (resp.data.employee.twoFactorEnabled) {
+            this.loginService.setGuardCode(3)
+            this.router.navigate(['/login/one-time-code']);
+          } else {
+            localStorage.setItem('accessToken', resp.data.tokens.accessToken);
+            localStorage.setItem('refreshToken', resp.data.tokens.refreshToken);
+            localStorage.setItem('user', JSON.stringify(resp.data.employee));
+            this.loginService.setUserRole(resp.data.employee.role.name)
+            this.loginErrors.turnErrorsOff()
+            this.router.navigate(['/setting']);
+          }
+        },
+        () => {
+          this.loginErrors.LoginErrorOn();
         }
-      },
-      () => {
-        this.loginErrors.LoginErrorOn();
-      }
-    );
+      );
+    }
   }
 }
