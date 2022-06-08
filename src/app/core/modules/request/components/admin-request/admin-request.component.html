@@ -25,6 +25,7 @@
         class="secondary-button"
         mat-flat-button
         (click)="openAproveManyAccess()"
+        *ngIf="twoFAuthEnabled"
       >
         Aprove
       </button>
@@ -32,6 +33,7 @@
         class="secondary-button"
         mat-flat-button
         (click)="openDenyManyDialog()"
+        *ngIf="twoFAuthEnabled"
       >
         Deny
       </button>
@@ -90,6 +92,7 @@
             [value]="element.id"
             class="denyBtn"
             (click)="openDenyDialog(denyBtn.value)"
+            *ngIf="twoFAuthEnabled"
           >
             <i class="ri-close-circle-line"></i>
           </button>
@@ -98,6 +101,7 @@
             [value]="element.id"
             class="aproveBtn"
             (click)="openAproveAccess(aproveBtn.value)"
+            *ngIf="twoFAuthEnabled"
           >
             <i class="ri-checkbox-circle-line"></i>
           </button>
@@ -164,6 +168,17 @@
     <div class="error-description">
       This application does not have<br />
       any roles available.
+    </div>
+  </div>
+  <div class="warning" *ngIf="this.requestNotifications.enableTwoStep$ | async">
+    <div class="icon-container"><i class="ri-information-line"></i></div>
+    <div class="error-title">Warning</div>
+    <div class="icon-container" (click)="closeRequestMessages()">
+      <i class="ri-close-line"></i>
+    </div>
+    <div class="error-description">
+      You need to have Two-step Verification<br />
+      enabled for admin controls.
     </div>
   </div>
 </div>

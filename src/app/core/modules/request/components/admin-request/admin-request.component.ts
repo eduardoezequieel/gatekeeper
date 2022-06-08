@@ -5,6 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
+import { UserService } from 'src/app/shared/nav/services/user.service';
 import { RequestNotificationService } from '../../services/request-notification.service';
 import { RequestService } from '../../services/request.service';
 import { AccessRequestComponent } from '../dialogs/access-request/access-request.component';
@@ -24,6 +25,7 @@ export class AdminRequestComponent implements OnInit {
   currentApp!: any;
   noResults!: boolean;
   requestSelected: boolean = false;
+  twoFAuthEnabled = false;
   checkAll = false;
   length!: number;
   displayedColumns: string[] = [
@@ -39,10 +41,12 @@ export class AdminRequestComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private requestService: RequestService,
-    public requestNotifications: RequestNotificationService
+    public requestNotifications: RequestNotificationService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
+    this.twoFAuthEnabled = this.userService.getUser().twoFactorEnabled;
     this.closeRequestMessages();
     this.requestService
       .getAllAplications(1, 100)
@@ -51,6 +55,10 @@ export class AdminRequestComponent implements OnInit {
         this.applications = res.data.filter((app) => app.enabled === true);
         this.noResults = false;
       });
+
+    if (!this.twoFAuthEnabled) {
+      this.requestNotifications.enableTwoStepOn();
+    }
     //this.fillRequestTable();
   }
 
