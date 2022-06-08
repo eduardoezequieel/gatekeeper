@@ -19,7 +19,6 @@ import { ShortNamesPipe } from './shared/short-names.pipe';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    // ReactiveFormsModule,
     HttpClientModule,
     NavModule,
   ],

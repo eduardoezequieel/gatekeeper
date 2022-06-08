@@ -4,28 +4,45 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { Roles } from 'src/app/shared/interfaces/rolesResponse';
+import { take, tap } from 'rxjs';
 import { ApplicationsService } from '../../../../services/applications.service';
+import { EmployeesService } from '../../../../services/employees.service';
+
+interface aux {roleName: string, roleId: number, isSelected: boolean}
 
 @Component({
   selector: 'app-change-roles',
   templateUrl: './change-roles.component.html',
   styleUrls: ['./change-roles.component.scss']
 })
-export class ChangeRolesComponent implements OnInit {
 
-  roles!: Observable<Roles[]>;
+
+export class ChangeRolesComponent implements OnInit {
+  roles: aux[] = []
+  roleSelected = ''
 
   constructor(
     private dialogRef: MatDialogRef<ChangeRolesComponent>,
     private dialog: MatDialog,
     private applicationService: ApplicationsService,
-    @Inject(MAT_DIALOG_DATA) public data: {user: string}
+    private employeeService: EmployeesService,
+    @Inject(MAT_DIALOG_DATA) public data: {userName: string, userRole: string, userId: number}
   ) {}
 
   ngOnInit(): void {
-    this.roles = this.applicationService.getRoles()
+    this.applicationService.getRoles().pipe(
+      tap( roles => {
+        roles.forEach( rol => {
+          if(rol.name == this.data.userRole) {
+            this.roles.push({roleName: rol.name, roleId: rol.id, isSelected: true})
+          } else {
+            this.roles.push({roleName: rol.name, roleId: rol.id, isSelected: false})
+          }
+        })
+
+      }),
+      take(1),
+      ).subscribe()
   }
 
   onNoClick(): void {
@@ -34,10 +51,6 @@ export class ChangeRolesComponent implements OnInit {
 
   continueClick(): void {
     this.dialogRef.close();
-    // this.dialog.open(ConfirmCloseComponent, {
-    //   width: '556px',
-    //   height: '200px',
-    //   data: this.data,
-    // });
+    this.employeeService.changeRole(this.data.userId, +this.roleSelected)
   }
 }

@@ -6,11 +6,11 @@
 </div>
 <div mat-dialog-content>
   <p>
-    Update {{data.user}}'s roles for GateKeeper.
+    Update {{data.userName}}'s roles for GateKeeper.
   </p>
 
-  <mat-radio-group aria-label="Select an option" #rolSelection>
-    <mat-radio-button value="rol.name" *ngFor="let rol of roles | async">{{ rol.name }}</mat-radio-button>
+  <mat-radio-group aria-label="Select an option" *ngIf="roles" [(ngModel)]="roleSelected">
+    <mat-radio-button *ngFor="let rol of roles; index as i" [value]=rol.roleId>{{ rol.roleName }}</mat-radio-button>
   </mat-radio-group>
 </div>
 <div mat-dialog-actions>

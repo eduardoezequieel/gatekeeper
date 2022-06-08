@@ -8,10 +8,12 @@
       <mat-form-field appearance="standard">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email">
+        <mat-error class="label-error">Email is required</mat-error>
       </mat-form-field>
       <mat-form-field appearance="standard">
         <mat-label>Password</mat-label>
         <input matInput type="password" formControlName="password">
+        <mat-error class="label-error">Password is required</mat-error>
       </mat-form-field>
       <button mat-flat-button type="submit" class="primary-button">Log In</button>
     </form>

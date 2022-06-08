@@ -14,9 +14,6 @@ export class LoginComponent implements OnInit {
   }
 
   closeLoginError() {
-    this.loginErrors.LoginErrorOff();
-    this.loginErrors.recoveryCodeErrorOff();
-    this.loginErrors.turnPasswordResetSuccessOff();
+    this.loginErrors.turnErrorsOff();
   }
-
 }

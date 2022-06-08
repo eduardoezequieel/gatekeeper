@@ -26,7 +26,7 @@ export class DialogTwoFactorAuthComponent {
         this.router.navigate(['/setting'])
       },
       err => {
-        console.log(err); 
+        this.dialogRef.close();
         this.loginErrors.recoveryCodeErrorOn()
       }
     )

@@ -3,8 +3,7 @@
 .dialog-container {
   display: flex;
   flex-direction: column;
-  width: 588px;
-  height: 224px;
+  // width: 588px;
   background: #ffffff;
 
 
@@ -32,7 +31,7 @@
       font-size: 1.5rem;
     }
     .ri-close-line {
-      bottom: -7px;
+      bottom: -3px;
       left: 570px; 
       cursor: pointer;     
     }
@@ -51,3 +50,17 @@
   }
 }
    
+@media (max-width: 600px) {
+  .dialog-container {
+    .icon-container {
+      .ri-close-line {
+        left: 62vw;
+      }
+    }
+    .buttons-container {
+      align-self: center;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
