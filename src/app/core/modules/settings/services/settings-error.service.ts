@@ -24,6 +24,7 @@ export class SettingsErrorService {
   constructor() {}
 
   disableTwoStepSuccessOn() {
+    this.turnErrorsOff();
     this.disableTwoStepSuccess.next(true);
   }
   disableTwoStepSuccessOff() {
@@ -31,6 +32,7 @@ export class SettingsErrorService {
   }
 
   warningCodeErrorOn() {
+    this.turnErrorsOff();
     this.warningCodeError.next(true);
   }
   warningCodeErrorOff() {
@@ -38,6 +40,7 @@ export class SettingsErrorService {
   }
 
   enableTwoStepSuccessOn() {
+    this.turnErrorsOff();
     this.enableTwoStepSuccess.next(true);
   }
   enableTwoStepSuccessOff() {
@@ -45,6 +48,7 @@ export class SettingsErrorService {
   }
 
   wrongPasswordOn() {
+    this.turnErrorsOff();
     this.wrongPassword.next(true);
   }
   wrongPasswordOff() {
@@ -52,6 +56,7 @@ export class SettingsErrorService {
   }
 
   wrongCodeOn() {
+    this.turnErrorsOff();
     this.wrongCode.next(true);
   }
   wrongCodeOff() {

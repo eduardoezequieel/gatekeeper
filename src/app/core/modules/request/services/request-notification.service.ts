@@ -23,7 +23,18 @@ export class RequestNotificationService {
   private requestDenied = new BehaviorSubject(false);
   requestDenied$ = this.requestDenied.asObservable();
 
+  private enableTwoStep = new BehaviorSubject(false);
+  enableTwoStep$ = this.enableTwoStep.asObservable();
+
   constructor() {}
+
+  enableTwoStepOn() {
+    this.turnErrorsOff();
+    this.enableTwoStep.next(true);
+  }
+  enableTwoStepOff() {
+    this.enableTwoStep.next(false);
+  }
 
   requestAddedSuccessfullyOn() {
     this.turnErrorsOff();
@@ -81,5 +92,6 @@ export class RequestNotificationService {
     this.requestAddedSuccessfully.next(false);
     this.requestDeletedSuccessfully.next(false);
     this.requestDenied.next(false);
+    this.enableTwoStep.next(false);
   }
 }
