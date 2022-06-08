@@ -48,6 +48,9 @@
       <mat-error *ngIf="f['codePassword'].errors?.['minlength']">
         Please provide a <strong>valid</strong> code
       </mat-error>
+      <mat-error *ngIf="f['codePassword'].errors?.['pattern']">
+        Please only <strong>numbers</strong>
+      </mat-error>
     </mat-form-field>
   </form>
 </div>
@@ -55,5 +58,7 @@
   <button mat-flat-button class="secondary-button" (click)="onNoClick()">
     Cancel
   </button>
-  <button mat-button class="primary-button" (click)="acceptClick()">Accept</button>
+  <button mat-button class="primary-button" (click)="acceptClick()">
+    Accept
+  </button>
 </div>

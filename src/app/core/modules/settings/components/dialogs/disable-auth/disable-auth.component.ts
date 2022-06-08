@@ -40,10 +40,15 @@ export class DisableAuthComponent {
     this.settingsService
       .deactivateTwoStep(token)
       .pipe(take(1))
-      .subscribe((res) => {
-        this.settingsService.setEnabled(false);
-        this.dialogRef.close();
-        this.settingsMessages.disableTwoStepSuccessOn();
-      });
+      .subscribe(
+        (res) => {
+          this.settingsService.setEnabled(false);
+          this.dialogRef.close();
+          this.settingsMessages.disableTwoStepSuccessOn();
+        },
+        () => {
+          this.settingsMessages.wrongCodeOn();
+        }
+      );
   }
 }

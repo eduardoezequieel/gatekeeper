@@ -29,7 +29,20 @@
   >
     Cancel
   </button>
-  <button mat-button (click)="aproveRequest()" class="primary-button">
+  <button
+    *ngIf="data.requestId"
+    mat-button
+    (click)="aproveRequest()"
+    class="primary-button"
+  >
+    Aprove
+  </button>
+  <button
+    *ngIf="data.requestArr"
+    mat-button
+    (click)="aproveManyRequest()"
+    class="primary-button"
+  >
     Aprove
   </button>
 </div>

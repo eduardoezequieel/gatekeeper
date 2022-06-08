@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { take } from 'rxjs';
+import { ApplicationAccess } from 'src/app/shared/interfaces/allRequestsResponse';
 import { Roles } from 'src/app/shared/interfaces/rolesResponse';
+import { RequestNotificationService } from '../../../services/request-notification.service';
 import { RequestService } from '../../../services/request.service';
 
 @Component({
@@ -15,6 +17,7 @@ export class AproveRequestComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AproveRequestComponent>,
     private requestService: RequestService,
+    private requestNotifications: RequestNotificationService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
@@ -28,6 +31,10 @@ export class AproveRequestComponent implements OnInit {
         });
 
         this.roles = res.data;
+        console.log(this.roles);
+        if (this.roles.length < 1) {
+          this.requestNotifications.noRolesAvailableOn();
+        }
       });
   }
 
@@ -42,10 +49,46 @@ export class AproveRequestComponent implements OnInit {
         .pipe(take(1))
         .subscribe(() => {
           console.log('Access request aproved');
-          this.onNoClick();
+          this.requestNotifications.requestAprovedOn();
         });
+      this.requestService
+        .deleteAccessRequest(this.data.employeeId)
+        .pipe(take(1))
+        .subscribe(() => {
+          console.log('aproved and deleted');
+        });
+      this.onNoClick();
     } else {
-      console.log('please select role');
+      this.requestNotifications.selectRoleOn();
+    }
+  }
+
+  aproveManyRequest() {
+    if (this.getRolesSelected().length > 0) {
+      this.data.requestArr.forEach((req: ApplicationAccess) => {
+        console.log(req);
+        this.requestService
+          .aproveAccessRequest(
+            this.data.applicationId,
+            req.employee.id,
+            this.getRolesSelected()
+          )
+          .pipe(take(1))
+          .subscribe(() => {
+            console.log('Access request aproved');
+            this.requestNotifications.requestAprovedOn();
+          });
+
+        this.requestService
+          .deleteAccessRequest(req.id)
+          .pipe(take(1))
+          .subscribe(() => {
+            console.log('aproved and deleted');
+          });
+        this.onNoClick();
+      });
+    } else {
+      this.requestNotifications.selectRoleOn();
     }
   }
 

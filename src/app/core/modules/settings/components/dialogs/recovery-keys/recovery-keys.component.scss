@@ -28,10 +28,10 @@ $text:#011625;
   }
   &>ul{
     padding: 0;
-    margin: 0;
+    margin: 10px 0;
     list-style: none;
     & li{
-      padding: 5px 0;
+      padding: 10px 0;
     }
   }
 }
@@ -45,18 +45,13 @@ $text:#011625;
   & button{
     display: inline-block;
     width: 128px;
+    margin-bottom: 10px;
   }
   &>.clear-btn{
     border-radius: 0;
     color: white;
     background-color: $Applaudo-Red;
     border: 2px solid $Applaudo-Red;
-  }
-  &>.cancel-btn{
-    border-radius: 0;
-    color: $Applaudo-Red;
-    background-color: white;
-    border: 2px solid #E2E2E2;
   }
 }
 

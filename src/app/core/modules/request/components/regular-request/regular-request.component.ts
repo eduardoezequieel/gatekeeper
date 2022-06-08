@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
+import { RequestNotificationService } from '../../services/request-notification.service';
 import { RequestService } from '../../services/request.service';
 import { AccessRequestComponent } from '../dialogs/access-request/access-request.component';
 import { DeleteAllComponent } from '../dialogs/delete-all/delete-all.component';
@@ -17,6 +18,7 @@ import { DeleteOneComponent } from '../dialogs/delete-one/delete-one.component';
 export class RegularRequestComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   requestSelected: boolean = false;
+  noResults!: boolean;
   checkAll = false;
   length!: number;
   displayedColumns: string[] = [
@@ -30,10 +32,12 @@ export class RegularRequestComponent implements OnInit {
   searchKey!: string;
   constructor(
     private dialog: MatDialog,
-    private requestService: RequestService
+    private requestService: RequestService,
+    public requestNotifications: RequestNotificationService
   ) {}
 
   ngOnInit(): void {
+    this.closeRequestMessages();
     this.fillRequestTable();
   }
 
@@ -44,13 +48,19 @@ export class RegularRequestComponent implements OnInit {
   fillRequestTable() {
     this.requestService
       .getUserRequests(1, 10)
-      //.pipe(take(1))
+      .pipe(take(1))
       .subscribe((res) => {
         this.length = res.pagination.totalItems;
+        if (this.length < 1) {
+          this.noResults = false;
+        } else {
+          this.noResults = true;
+        }
         res.data.forEach((request) => {
           request.isSelected = false;
         });
         this.dataSource = new MatTableDataSource(res.data);
+
         this.dataSource.filterPredicate = (data, filter) => {
           return data.application.name.toLocaleLowerCase().includes(filter);
         };
@@ -101,6 +111,8 @@ export class RegularRequestComponent implements OnInit {
     }
     this.dialog.afterAllClosed.subscribe(() => {
       this.fillRequestTable();
+      this.checkAll = false;
+      this.requestSelected = false;
     });
   }
 
@@ -120,9 +132,14 @@ export class RegularRequestComponent implements OnInit {
   }
 
   openRequestAccess(): void {
+    const alreadyRequested: number[] = [];
+    this.dataSource.data.forEach((req) => {
+      alreadyRequested.push(req.application.id);
+    });
     this.dialog.open(AccessRequestComponent, {
       width: '556px',
       height: '432px',
+      data: alreadyRequested,
     });
     this.dialog.afterAllClosed.subscribe(() => {
       this.fillRequestTable();
@@ -131,6 +148,11 @@ export class RegularRequestComponent implements OnInit {
 
   filterData() {
     this.dataSource.filter = this.searchKey.trim().toLocaleLowerCase();
+    if (this.dataSource.filteredData.length == 0) {
+      this.noResults = false;
+    } else {
+      this.noResults = true;
+    }
   }
 
   deleteChecks() {
@@ -166,5 +188,7 @@ export class RegularRequestComponent implements OnInit {
     }
   }
 
-  closeRequestMessages() {}
+  closeRequestMessages() {
+    this.requestNotifications.turnErrorsOff();
+  }
 }

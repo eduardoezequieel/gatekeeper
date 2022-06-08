@@ -1,5 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,12 @@ export class SettingsErrorService {
 
   private enableTwoStepSuccess = new BehaviorSubject(false);
   enableTwoStepSuccess$ = this.enableTwoStepSuccess.asObservable();
+
+  private wrongPassword = new BehaviorSubject(false);
+  wrongPassword$ = this.wrongPassword.asObservable();
+
+  private wrongCode = new BehaviorSubject(false);
+  wrongCode$ = this.wrongCode.asObservable();
 
   constructor() {}
 
@@ -37,9 +44,25 @@ export class SettingsErrorService {
     this.enableTwoStepSuccess.next(false);
   }
 
+  wrongPasswordOn() {
+    this.wrongPassword.next(true);
+  }
+  wrongPasswordOff() {
+    this.wrongPassword.next(false);
+  }
+
+  wrongCodeOn() {
+    this.wrongCode.next(true);
+  }
+  wrongCodeOff() {
+    this.wrongCode.next(false);
+  }
+
   turnErrorsOff() {
     this.disableTwoStepSuccess.next(false);
     this.warningCodeError.next(false);
     this.enableTwoStepSuccess.next(false);
+    this.wrongPassword.next(false);
+    this.wrongCode.next(false);
   }
 }

@@ -99,5 +99,21 @@
         authentication to continue.
       </div>
     </div>
+    <div class="error" *ngIf="this.settingMessages.wrongPassword$ | async">
+      <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
+      <div class="error-title">Error</div>
+      <div class="icon-container" (click)="closeSettingsError()">
+        <i class="ri-close-line"></i>
+      </div>
+      <div class="error-description">Incorrect password</div>
+    </div>
+    <div class="error" *ngIf="this.settingMessages.wrongCode$ | async">
+      <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
+      <div class="error-title">Error</div>
+      <div class="icon-container" (click)="closeSettingsError()">
+        <i class="ri-close-line"></i>
+      </div>
+      <div class="error-description">Incorrect code</div>
+    </div>
   </div>
 </div>

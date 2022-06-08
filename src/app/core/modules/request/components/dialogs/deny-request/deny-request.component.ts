@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { take } from 'rxjs';
+import { RequestNotificationService } from '../../../services/request-notification.service';
 import { RequestService } from '../../../services/request.service';
 
 @Component({
@@ -12,7 +13,8 @@ export class DenyRequestComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<DenyRequestComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number,
-    private requestService: RequestService
+    private requestService: RequestService,
+    private requestNotifications: RequestNotificationService
   ) {}
 
   ngOnInit(): void {}
@@ -25,7 +27,7 @@ export class DenyRequestComponent implements OnInit {
       .deleteAccessRequest(this.data)
       .pipe(take(1))
       .subscribe(() => {
-        console.log('Request Access Denies');
+        this.requestNotifications.requestDeniedOn();
       });
     this.onNoClick();
   }
