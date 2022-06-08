@@ -46,6 +46,7 @@ export class SettingsComponent implements OnInit {
     if (this.user.role.id === 2) {
       this.admin = true;
     }
+    this.closeSettingsError();
   }
 
   openPassDialog(): void {
