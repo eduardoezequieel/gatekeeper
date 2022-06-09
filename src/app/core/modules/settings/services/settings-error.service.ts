@@ -24,10 +24,36 @@ export class SettingsErrorService {
   private passwordChanged = new BehaviorSubject(false);
   passwordChanged$ = this.passwordChanged.asObservable();
 
+  private logsCleared = new BehaviorSubject(false);
+  logsCleared$ = this.logsCleared.asObservable();
+
+  private noLogs = new BehaviorSubject(false);
+  noLogs$ = this.noLogs.asObservable();
+
   constructor() {}
 
   async delay(ms = 4000) {
     await new Promise<void>((resolve) => setTimeout(() => resolve(), ms));
+  }
+
+  noLogsOn() {
+    this.noLogs.next(true);
+    this.delay().then(() => {
+      this.noLogsOff();
+    });
+  }
+  noLogsOff() {
+    this.noLogs.next(false);
+  }
+
+  logsClearedOn() {
+    this.logsCleared.next(true);
+    this.delay().then(() => {
+      this.logsClearedOff();
+    });
+  }
+  logsClearedOff() {
+    this.logsCleared.next(false);
   }
 
   disableTwoStepSuccessOn() {
@@ -97,5 +123,7 @@ export class SettingsErrorService {
     this.wrongPassword.next(false);
     this.wrongCode.next(false);
     this.passwordChanged.next(false);
+    this.logsCleared.next(false);
+    this.noLogs.next(false);
   }
 }
