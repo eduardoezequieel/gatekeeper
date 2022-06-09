@@ -16,12 +16,9 @@ export class LoginChildrenGuard implements CanActivate {
     
     return this.loginService.guardCode$.pipe(map(
       code => {
-        // console.log(code)
-        if(code > 0 && code%3 == 0) {
-          // console.log('if')
+        if(code > 0 && code%3 == 0) {  // Here we should decodify de code
           return true
         } else {
-          // console.log('else')
           this.router.navigate(['/login/init'])
           return false
         }

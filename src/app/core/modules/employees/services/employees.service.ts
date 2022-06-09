@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { Employee, EmployeesResponse } from 'src/app/shared/interfaces/employeesResponse';
 import { environment } from 'src/environments/environment.prod';
 import { WarningsService } from './warnings.service';
@@ -27,9 +27,9 @@ export class EmployeesService {
   }
 
   changeRole(employeeId: number, roleId: number) {
-    return this.http.put(environment.url + `/api/v1/employees/${employeeId}/roles`, {
+    return this.http.put(environment.url + `/employees/${employeeId}/roles`, {
       "roleId": roleId
-    }).pipe(tap(resp => console.log(resp)))
+    })
   }
 
   removeMFA(employeeId: number) {

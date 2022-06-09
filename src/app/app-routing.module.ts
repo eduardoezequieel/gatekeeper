@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './shared/guard/auth-guard.guard';
+import { EmployeesGuard } from './shared/guard/employees.guard';
 import { LoginGuard } from './shared/guard/login.guard';
 
 const routes: Routes = [
@@ -40,7 +41,7 @@ const routes: Routes = [
       import('./core/modules/employees/employees.module').then(
         (m) => m.EmployeesModule
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, EmployeesGuard],
   },
   { path: '**', redirectTo: 'login/init' },
 ];

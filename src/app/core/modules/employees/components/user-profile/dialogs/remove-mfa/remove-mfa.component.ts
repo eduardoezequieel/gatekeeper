@@ -6,6 +6,7 @@ import {
 } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { EmployeesService } from '../../../../services/employees.service';
+import { WarningsService } from '../../../../services/warnings.service';
 
 @Component({
   selector: 'app-remove-mfa',
@@ -19,6 +20,7 @@ export class RemoveMfaComponent {
   constructor(
     public dialogRef: MatDialogRef<RemoveMfaComponent>,
     public dialog: MatDialog,
+    private warnings: WarningsService,
     private employeeService: EmployeesService,
     @Inject(MAT_DIALOG_DATA) public data: {employeeId: number}
   ) {}
@@ -28,19 +30,6 @@ export class RemoveMfaComponent {
   }
 
   confirm() {
-    this.subs = this.employeeService.removeMFA(this.data.employeeId).subscribe()
+    this.subs = this.employeeService.removeMFA(this.data.employeeId).subscribe( () => {}, () => this.warnings.noRootOn())
   }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
-  // goBackClick(): void {
-  //   this.dialogRef.close();
-  //   this.dialog.open(RecoveryKeysComponent, {
-  //     width: '846px',
-  //     height: '504px',
-  //     data: this.data,
-  //   });
-  // }
-
 }
