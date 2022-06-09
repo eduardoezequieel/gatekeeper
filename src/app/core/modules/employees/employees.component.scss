@@ -238,7 +238,7 @@ $cool-gray:#687177;
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   .main-container {
     .filter-by {
       margin-left: 0px;
@@ -251,6 +251,25 @@ $cool-gray:#687177;
     }
     .mat-progress-spinner {
       left: 23vw;
+    }
+  }
+  .panel-right {
+    .error, .success, .warning {
+      right: 10px;
+      bottom: 10px;
+      width: 300px;
+      height: 80px;
+      font-size: 13px;
+      z-index: 999;
+      .icon-container {
+        i {
+          font-size: 1rem;
+        }
+        .ri-close-line {
+          bottom: 15px;
+          left: 270px;         
+        }
+      }
     }
   }
 }

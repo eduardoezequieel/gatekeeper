@@ -48,3 +48,11 @@ $text:#011625;
     border: 2px solid #E2E2E2;
   }
 }
+
+@media (max-width: 600px){
+  .mat-dialog-actions{
+    & button{
+      width: 80px;
+    }
+  }
+}

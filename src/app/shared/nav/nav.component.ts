@@ -2,8 +2,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { BehaviorSubject, map, Observable, Subject, takeUntil } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { LoginService } from 'src/app/core/modules/login/services/login.service';
 import { UserService } from './services/user.service';
 
@@ -52,6 +52,7 @@ export class NavComponent implements OnInit, OnDestroy {
             let currentScreenSize = this.displayNameMap.get(query) ?? 'Unknown';
             if (currentScreenSize === 'XSmall') {
               this.responsive = true;
+              this.isExpanded = false;
             } else {
               this.responsive = false;
               this.isOpened = false;

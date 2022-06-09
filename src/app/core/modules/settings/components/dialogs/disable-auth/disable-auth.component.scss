@@ -52,10 +52,10 @@ $text:#011625;
   margin-top: 30px;
   width: 100%;
 }
-@media (max-width: 640px){
+@media (max-width: 600px){
   .mat-dialog-actions{
     & button{
-      width: 100px;
+      width: 80px;
     }
   }
 }

@@ -6,6 +6,7 @@ import { take } from 'rxjs';
 import { User } from 'src/app/shared/interfaces/loginResponse';
 import { WebHook } from 'src/app/shared/interfaces/webHookResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
+import { SettingsErrorService } from '../../services/settings-error.service';
 import { SettingsService } from '../../services/settings.service';
 import { ClearHooksComponent } from '../dialogs/clear-hooks/clear-hooks.component';
 import { DetailsComponent } from '../dialogs/details/details.component';
@@ -32,21 +33,29 @@ export class WebhooksComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private userService: UserService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    public settingMessages: SettingsErrorService
   ) {}
 
   ngOnInit(): void {
+    this.fillTable();
+    this.user = this.userService.getUser();
+    if (this.user.role.id === 2) {
+      this.admin = true;
+    }
+  }
+  fillTable() {
     this.settingsService
       .getWebHooks(1, 10)
       .pipe(take(1))
       .subscribe((res) => {
         this.length = res.pagination.totalItems;
+        console.log(this.length);
+        if (this.length == 0) {
+          this.settingMessages.noLogsOn();
+        }
         this.dataSource = new MatTableDataSource(res.data);
       });
-    this.user = this.userService.getUser();
-    if (this.user.role.id === 2) {
-      this.admin = true;
-    }
   }
 
   onPageChange(pageEvent: PageEvent) {
@@ -59,11 +68,18 @@ export class WebhooksComponent implements OnInit {
   }
 
   openDetailsDialog(detail: string): void {
-    let msg;
-    if (detail === 'null') {
-      msg = detail;
+    let msg = '';
+    const parsed = JSON.parse(detail);
+    if (parsed != null) {
+      if (parsed.errors) {
+        parsed.errors[0].description.forEach((element: any) => {
+          msg = msg + element + ', ';
+        });
+      } else if (parsed.error) {
+        msg = parsed.error.message;
+      }
     } else {
-      msg = JSON.parse(detail).error.message;
+      msg = 'No details found';
     }
     this.dialog.open(DetailsComponent, {
       width: '556px',
@@ -74,5 +90,12 @@ export class WebhooksComponent implements OnInit {
     this.dialog.open(ClearHooksComponent, {
       width: '556px',
     });
+    this.dialog.afterAllClosed.subscribe(() => {
+      this.fillTable();
+    });
+  }
+
+  closeSettingsError() {
+    this.settingMessages.turnErrorsOff();
   }
 }

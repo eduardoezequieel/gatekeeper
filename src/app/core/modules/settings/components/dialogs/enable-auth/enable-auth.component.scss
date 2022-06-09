@@ -81,11 +81,12 @@ $text:#011625;
 .full-width{
   width: 100%;
 }
-@media (max-width: 640px){
+@media (max-width: 600px){
   .dialog-head{
     &>h4{
-      font-size: 20px;
+      font-size: 18px;
       line-height: 32px;
+      margin-bottom: 2px;
     }
   }
   .mat-dialog-content{
@@ -99,6 +100,7 @@ $text:#011625;
     }
     & ul{
       font-size: 12px;
+      padding: 0;
     }
   }
   .mat-dialog-actions{
@@ -107,7 +109,7 @@ $text:#011625;
     justify-content: flex-end;
     & button{
       display: inline-block;
-      width: 100px;
+      width: 80px;
     }
     .primary-button{
       font-size: 14px;

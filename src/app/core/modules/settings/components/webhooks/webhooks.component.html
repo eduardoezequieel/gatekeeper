@@ -4,13 +4,13 @@
   </div>
   <div class="user">
     <img [src]="user.image" alt="" width="40px" height="40px" />
-    <span class="username">user.name</span>
+    <span class="username">{{ user.name }}</span>
   </div>
 </div>
 <div class="webhooks">
   <div class="content-head">
     <h4>WebHooks Logs</h4>
-    <div>
+    <div class="btn-content">
       <button class="clear-btn" (click)="openClearDialog()" mat-flat-button>
         Clear Logs
       </button>
@@ -65,5 +65,23 @@
       [pageSize]="10"
       (page)="onPageChange($event)"
     ></mat-paginator>
+  </div>
+</div>
+<div class="panel-right">
+  <div class="success" *ngIf="this.settingMessages.logsCleared$ | async">
+    <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
+    <div class="error-title">Success</div>
+    <div class="icon-container" (click)="closeSettingsError()">
+      <i class="ri-close-line"></i>
+    </div>
+    <div class="error-description">Logs cleared successfully.</div>
+  </div>
+  <div class="warning" *ngIf="this.settingMessages.noLogs$ | async">
+    <div class="icon-container"><i class="ri-checkbox-circle-line"></i></div>
+    <div class="error-title">Warning</div>
+    <div class="icon-container" (click)="closeSettingsError()">
+      <i class="ri-close-line"></i>
+    </div>
+    <div class="error-description">No logs at the moment.</div>
   </div>
 </div>
