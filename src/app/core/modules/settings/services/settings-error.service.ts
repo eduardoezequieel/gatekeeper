@@ -21,43 +21,70 @@ export class SettingsErrorService {
   private wrongCode = new BehaviorSubject(false);
   wrongCode$ = this.wrongCode.asObservable();
 
+  private passwordChanged = new BehaviorSubject(false);
+  passwordChanged$ = this.passwordChanged.asObservable();
+
   constructor() {}
 
+  async delay(ms = 4000) {
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), ms));
+  }
+
   disableTwoStepSuccessOn() {
-    this.turnErrorsOff();
     this.disableTwoStepSuccess.next(true);
+    this.delay().then(() => {
+      this.disableTwoStepSuccessOff();
+    });
   }
   disableTwoStepSuccessOff() {
     this.disableTwoStepSuccess.next(false);
   }
 
+  passwordChangedOn() {
+    this.passwordChanged.next(true);
+    this.delay().then(() => {
+      this.passwordChangedOff();
+    });
+  }
+  passwordChangedOff() {
+    this.passwordChanged.next(false);
+  }
+
   warningCodeErrorOn() {
-    this.turnErrorsOff();
     this.warningCodeError.next(true);
+    this.delay().then(() => {
+      this.warningCodeErrorOff();
+    });
   }
   warningCodeErrorOff() {
     this.warningCodeError.next(false);
   }
 
   enableTwoStepSuccessOn() {
-    this.turnErrorsOff();
     this.enableTwoStepSuccess.next(true);
+    this.delay().then(() => {
+      this.enableTwoStepSuccessOff();
+    });
   }
   enableTwoStepSuccessOff() {
     this.enableTwoStepSuccess.next(false);
   }
 
   wrongPasswordOn() {
-    this.turnErrorsOff();
     this.wrongPassword.next(true);
+    this.delay().then(() => {
+      this.wrongPasswordOff();
+    });
   }
   wrongPasswordOff() {
     this.wrongPassword.next(false);
   }
 
   wrongCodeOn() {
-    this.turnErrorsOff();
     this.wrongCode.next(true);
+    this.delay().then(() => {
+      this.wrongCodeOff();
+    });
   }
   wrongCodeOff() {
     this.wrongCode.next(false);
@@ -69,5 +96,6 @@ export class SettingsErrorService {
     this.enableTwoStepSuccess.next(false);
     this.wrongPassword.next(false);
     this.wrongCode.next(false);
+    this.passwordChanged.next(false);
   }
 }

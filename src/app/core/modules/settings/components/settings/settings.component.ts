@@ -52,7 +52,6 @@ export class SettingsComponent implements OnInit {
   openPassDialog(): void {
     this.dialog.open(ChangePassComponent, {
       width: '556px',
-      height: '480px',
     });
   }
 
@@ -69,7 +68,6 @@ export class SettingsComponent implements OnInit {
       case false:
         this.dialog.open(EnableAuthComponent, {
           width: '846px',
-          height: '490px',
         });
         break;
       case true:
@@ -78,7 +76,6 @@ export class SettingsComponent implements OnInit {
         });
         break;
       default:
-        console.log('wut');
     }
   }
 

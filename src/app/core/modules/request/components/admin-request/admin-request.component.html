@@ -1,24 +1,29 @@
 <div class="body">
   <div class="actions">
-    <mat-form-field class="search" floatLabel="never">
-      <mat-label>Search</mat-label>
-      <input
-        type="text"
-        matInput
-        [(ngModel)]="searchKey"
-        placeholder="search"
-        (keyup)="filterData()"
-      />
-    </mat-form-field>
+    <div class="inputsForms">
+      <mat-form-field class="search" floatLabel="never">
+        <mat-label>Search</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="searchKey"
+          placeholder="search"
+          (keyup)="filterData()"
+        />
+      </mat-form-field>
 
-    <mat-form-field appearance="standard" class="full-width">
-      <mat-label>Application name</mat-label>
-      <mat-select (selectionChange)="fillRequestTable($event)" id="appSelector">
-        <mat-option *ngFor="let app of applications" [value]="app.id">{{
-          app.name
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field appearance="standard" class="full-width">
+        <mat-label>Application name</mat-label>
+        <mat-select
+          (selectionChange)="fillRequestTable($event)"
+          id="appSelector"
+        >
+          <mat-option *ngFor="let app of applications" [value]="app.id">{{
+            app.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
     <div class="action-btn" *ngIf="requestSelected">
       <button

@@ -58,22 +58,21 @@ export class WebhooksComponent implements OnInit {
       });
   }
 
-  clickDetails(value: string) {
-    console.log(value);
-  }
-
   openDetailsDialog(detail: string): void {
-    console.log(detail);
+    let msg;
+    if (detail === 'null') {
+      msg = detail;
+    } else {
+      msg = JSON.parse(detail).error.message;
+    }
     this.dialog.open(DetailsComponent, {
       width: '556px',
-      height: '200px',
-      data: detail,
+      data: msg,
     });
   }
   openClearDialog(): void {
     this.dialog.open(ClearHooksComponent, {
       width: '556px',
-      height: '200px',
     });
   }
 }

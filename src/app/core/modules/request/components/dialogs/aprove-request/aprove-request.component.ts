@@ -31,7 +31,7 @@ export class AproveRequestComponent implements OnInit {
         });
 
         this.roles = res.data;
-        console.log(this.roles);
+
         if (this.roles.length < 1) {
           this.requestNotifications.noRolesAvailableOn();
         }
@@ -48,15 +48,12 @@ export class AproveRequestComponent implements OnInit {
         )
         .pipe(take(1))
         .subscribe(() => {
-          console.log('Access request aproved');
           this.requestNotifications.requestAprovedOn();
         });
       this.requestService
-        .deleteAccessRequest(this.data.employeeId)
+        .deleteAccessRequest(this.data.requestId)
         .pipe(take(1))
-        .subscribe(() => {
-          console.log('aproved and deleted');
-        });
+        .subscribe(() => {});
       this.onNoClick();
     } else {
       this.requestNotifications.selectRoleOn();
@@ -66,7 +63,6 @@ export class AproveRequestComponent implements OnInit {
   aproveManyRequest() {
     if (this.getRolesSelected().length > 0) {
       this.data.requestArr.forEach((req: ApplicationAccess) => {
-        console.log(req);
         this.requestService
           .aproveAccessRequest(
             this.data.applicationId,
@@ -75,16 +71,13 @@ export class AproveRequestComponent implements OnInit {
           )
           .pipe(take(1))
           .subscribe(() => {
-            console.log('Access request aproved');
             this.requestNotifications.requestAprovedOn();
           });
 
         this.requestService
           .deleteAccessRequest(req.id)
           .pipe(take(1))
-          .subscribe(() => {
-            console.log('aproved and deleted');
-          });
+          .subscribe(() => {});
         this.onNoClick();
       });
     } else {

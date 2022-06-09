@@ -82,3 +82,20 @@ footer{
     }
   }
 }
+@media (max-width: 600px){
+  .heading{
+    margin-left: 10px;
+  }
+  .body{
+    width: 90%;
+    margin: auto;
+    .logo{
+      display: flex;
+      justify-content: center;
+      margin-bottom: 100px;
+      img{
+        width: 300px;
+      }
+    }
+  }
+}

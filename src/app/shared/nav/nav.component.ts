@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, Subject, takeUntil } from 'rxjs';
 import { LoginService } from 'src/app/core/modules/login/services/login.service';
 import { UserService } from './services/user.service';
 
@@ -11,17 +12,24 @@ import { UserService } from './services/user.service';
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, OnDestroy {
   isExpanded: boolean = false;
+  isOpened: boolean = false;
   login: boolean = false;
-  loggedIn = new BehaviorSubject<boolean>(false);
+  destroyed = new Subject<void>();
+  responsive!: boolean;
   path: any;
+  displayNameMap = new Map([
+    [Breakpoints.XSmall, 'XSmall'],
+    [Breakpoints.Small, 'Small'],
+  ]);
   constructor(
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private router: Router,
     private userService: UserService,
-    public loginService: LoginService
+    public loginService: LoginService,
+    breakpointObserver: BreakpointObserver
   ) {
     this.matIconRegistry.addSvgIcon(
       `icon_request`,
@@ -35,6 +43,22 @@ export class NavComponent implements OnInit {
         '../../../assets/logos/Isotype.svg'
       )
     );
+    breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((result) => {
+        for (const query of Object.keys(result.breakpoints)) {
+          if (result.breakpoints[query]) {
+            let currentScreenSize = this.displayNameMap.get(query) ?? 'Unknown';
+            if (currentScreenSize === 'XSmall') {
+              this.responsive = true;
+            } else {
+              this.responsive = false;
+              this.isOpened = false;
+            }
+          }
+        }
+      });
   }
 
   ngOnInit(): void {
@@ -58,5 +82,10 @@ export class NavComponent implements OnInit {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
     this.router.navigate(['/login']);
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 }

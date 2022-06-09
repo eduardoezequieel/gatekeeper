@@ -65,7 +65,7 @@ export class ChangePassComponent implements OnInit {
       .pipe(take(1))
       .subscribe(
         () => {
-          console.log('pass changed succesfully');
+          this.settingMessages.passwordChangedOn();
           this.dialogRef.close();
         },
         () => {

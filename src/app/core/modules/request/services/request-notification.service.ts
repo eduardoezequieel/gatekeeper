@@ -26,59 +26,90 @@ export class RequestNotificationService {
   private enableTwoStep = new BehaviorSubject(false);
   enableTwoStep$ = this.enableTwoStep.asObservable();
 
+  private alreadyHaveAccess = new BehaviorSubject(false);
+  alreadyHaveAccess$ = this.alreadyHaveAccess.asObservable();
+
   constructor() {}
 
+  async delay(ms = 4000) {
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), ms));
+  }
+
+  alreadyHaveAccessOn() {
+    this.alreadyHaveAccess.next(true);
+    this.delay().then(() => {
+      this.alreadyHaveAccessOff();
+    });
+  }
+  alreadyHaveAccessOff() {
+    this.alreadyHaveAccess.next(false);
+  }
+
   enableTwoStepOn() {
-    this.turnErrorsOff();
     this.enableTwoStep.next(true);
+    this.delay().then(() => {
+      this.enableTwoStepOff();
+    });
   }
   enableTwoStepOff() {
     this.enableTwoStep.next(false);
   }
 
   requestAddedSuccessfullyOn() {
-    this.turnErrorsOff();
     this.requestAddedSuccessfully.next(true);
+    this.delay().then(() => {
+      this.requestAddedSuccessfullyOff();
+    });
   }
   requestAddedSuccessfullyOff() {
     this.requestAddedSuccessfully.next(false);
   }
 
   requestDeletedSuccessfullyOn() {
-    this.turnErrorsOff();
     this.requestDeletedSuccessfully.next(true);
+    this.delay().then(() => {
+      this.requestDeletedSuccessfullyOff();
+    });
   }
   requestDeletedSuccessfullyOff() {
     this.requestDeletedSuccessfully.next(false);
   }
 
   noRolesAvailableOn() {
-    this.turnErrorsOff();
     this.noRolesAvailable.next(true);
+    this.delay().then(() => {
+      this.noRolesAvailableOff();
+    });
   }
   noRolesAvailableOff() {
     this.noRolesAvailable.next(false);
   }
 
   selectRoleOn() {
-    this.turnErrorsOff();
     this.selectRole.next(true);
+    this.delay().then(() => {
+      this.selectRoleOff();
+    });
   }
   selectRoleOff() {
     this.selectRole.next(false);
   }
 
   requestAprovedOn() {
-    this.turnErrorsOff();
     this.requestAproved.next(true);
+    this.delay().then(() => {
+      this.requestAprovedOff();
+    });
   }
   requestAprovedOff() {
     this.requestAproved.next(false);
   }
 
   requestDeniedOn() {
-    this.turnErrorsOff();
     this.requestDenied.next(true);
+    this.delay().then(() => {
+      this.requestDeniedOff();
+    });
   }
 
   requestDeniedOff() {
@@ -93,5 +124,6 @@ export class RequestNotificationService {
     this.requestDeletedSuccessfully.next(false);
     this.requestDenied.next(false);
     this.enableTwoStep.next(false);
+    this.alreadyHaveAccess.next(false);
   }
 }

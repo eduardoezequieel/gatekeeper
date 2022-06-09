@@ -62,3 +62,10 @@ $text:#011625;
 .full-width{
   width: 100%;
 }
+@media (max-width: 600px){
+  .mat-dialog-actions{
+    & button{
+      width: 100px;
+    }
+  }
+}
