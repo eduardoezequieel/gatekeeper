@@ -1,14 +1,16 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   AllRequestsResponse,
   ApplicationAccess,
   AssignEmployeeResponse,
 } from 'src/app/shared/interfaces/allRequestsResponse';
-import { ApplicationsResponse } from 'src/app/shared/interfaces/applicationResponse';
+import {
+  Application,
+  ApplicationsResponse,
+} from 'src/app/shared/interfaces/applicationResponse';
 import { RolesResponse } from 'src/app/shared/interfaces/rolesResponse';
-import { UserService } from 'src/app/shared/nav/services/user.service';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
@@ -26,13 +28,18 @@ export class RequestService {
         `/employees/me/access-request?page=${page}&items=${items}`
     );
   }
-  getAllAplications(
-    page: number,
-    item: number
-  ): Observable<ApplicationsResponse> {
+  getOneAplications(): Observable<ApplicationsResponse> {
     return this.http.get<ApplicationsResponse>(
-      environment.url + `/applications?page=${page}&items=${item}`
+      environment.url + `/applications?page=1&items=1`
     );
+  }
+
+  getAllAplications(page: number, item: number): Observable<Application[]> {
+    return this.http
+      .get<ApplicationsResponse>(
+        environment.url + `/applications?page=${page}&items=${item}`
+      )
+      .pipe(map((response) => response.data));
   }
 
   requestAccess(

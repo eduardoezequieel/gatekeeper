@@ -5,16 +5,23 @@
   ></span>
 </div>
 <div mat-dialog-content>
-  <p>
-    Update {{data.userName}}'s roles for GateKeeper.
-  </p>
+  <p>Update {{ data.userName }}'s roles for GateKeeper.</p>
 
-  <mat-radio-group aria-label="Select an option" *ngIf="roles" [(ngModel)]="roleSelected">
-    <mat-radio-button *ngFor="let rol of roles" [value]="rol.roleId" [checked]="rol.isSelected">{{ rol.roleName }}</mat-radio-button>
+  <mat-radio-group
+    aria-label="Select an option"
+    *ngIf="roles"
+    [(ngModel)]="roleSelected"
+  >
+    <mat-radio-button
+      *ngFor="let rol of roles"
+      [value]="rol.roleId"
+      [checked]="rol.isSelected"
+      >{{ rol.roleName }}</mat-radio-button
+    >
   </mat-radio-group>
 </div>
 <div mat-dialog-actions>
-  <button mat-button class="secondary-button" (click)="continueClick()">
+  <button mat-button class="secondary-button" (click)="onNoClick()">
     Cancel
   </button>
   <button mat-button class="primary-button" (click)="continueClick()">

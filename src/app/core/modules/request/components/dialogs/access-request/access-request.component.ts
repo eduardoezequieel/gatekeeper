@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MAT_SELECT_CONFIG } from '@angular/material/select';
-import { take } from 'rxjs';
+import { map, Observable, switchMap, take } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { RequestNotificationService } from '../../../services/request-notification.service';
 import { RequestService } from '../../../services/request.service';
@@ -14,7 +14,8 @@ import { RequestService } from '../../../services/request.service';
 })
 export class AccessRequestComponent implements OnInit {
   form: FormGroup = new FormGroup({});
-  applications: Application[] = [];
+  applications!: Observable<Application[]>;
+  length!: number;
   constructor(
     public dialogRef: MatDialogRef<AccessRequestComponent>,
     private fb: FormBuilder,
@@ -24,14 +25,18 @@ export class AccessRequestComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.requestService
-      .getAllAplications(1, 84)
-      .pipe(take(1))
-      .subscribe((res) => {
-        this.applications = res.data
-          .filter((app) => app.enabled === true)
-          .filter((app) => !this.data.includes(app.id));
-      });
+    this.applications = this.requestService.getOneAplications().pipe(
+      switchMap((apps) => {
+        this.length = apps.pagination.totalItems;
+        return this.requestService.getAllAplications(1, this.length).pipe(
+          map((res) => {
+            return res
+              .filter((app) => app.enabled === true)
+              .filter((app) => !this.data.includes(app.id));
+          })
+        );
+      })
+    );
 
     this.form = this.fb.group({
       appName: ['', [Validators.required]],

@@ -18,9 +18,11 @@
           (selectionChange)="fillRequestTable($event)"
           id="appSelector"
         >
-          <mat-option *ngFor="let app of applications" [value]="app.id">{{
-            app.name
-          }}</mat-option>
+          <mat-option
+            *ngFor="let app of applications | async"
+            [value]="app.id"
+            >{{ app.name }}</mat-option
+          >
         </mat-select>
       </mat-form-field>
     </div>

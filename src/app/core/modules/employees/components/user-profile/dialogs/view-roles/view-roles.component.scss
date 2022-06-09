@@ -46,3 +46,14 @@ $text:#011625;
   @include secondary-button;
 }
 
+@media(max-width: 600px){
+  .mat-dialog-actions{  
+    & button{
+      display: inline-block;
+      padding: 0 !important;
+      width: 100px;
+
+    }
+  
+  }
+}

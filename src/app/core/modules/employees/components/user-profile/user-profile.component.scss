@@ -317,6 +317,7 @@ $cool-gray:#687177;
           }
         }
         .action-container {
+          margin-top: 10px;
           flex-direction: column;
           justify-content: center;
           align-items: center;
@@ -342,6 +343,25 @@ $cool-gray:#687177;
       margin-top: 25px;
       .application-container {
         width: 290px;
+      }
+    }
+  }
+  .panel-right {
+    .error, .success, .warning {
+      right: 10px;
+      bottom: 10px;
+      width: 300px;
+      height: 80px;
+      font-size: 13px;
+      z-index: 999;
+      .icon-container {
+        i {
+          font-size: 1rem;
+        }
+        .ri-close-line {
+          bottom: 15px;
+          left: 270px;         
+        }
       }
     }
   }
