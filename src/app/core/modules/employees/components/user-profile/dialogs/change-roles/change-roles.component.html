@@ -10,7 +10,7 @@
   </p>
 
   <mat-radio-group aria-label="Select an option" *ngIf="roles" [(ngModel)]="roleSelected">
-    <mat-radio-button *ngFor="let rol of roles; index as i" [value]=rol.roleId>{{ rol.roleName }}</mat-radio-button>
+    <mat-radio-button *ngFor="let rol of roles" [value]="rol.roleId" [checked]="rol.isSelected">{{ rol.roleName }}</mat-radio-button>
   </mat-radio-group>
 </div>
 <div mat-dialog-actions>

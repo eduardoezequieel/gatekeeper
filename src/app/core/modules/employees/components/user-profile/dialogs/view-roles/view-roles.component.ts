@@ -43,6 +43,6 @@ export class ViewRolesComponent implements OnInit {
   continueClick(): void {
     let roles = this.selection.selected.map( elem => elem.id)
     this.applicationService.updateRolesOfEmployeeInApp(this.data.app, this.data.userId, roles).pipe(take(1)).subscribe()
-    this.dialogRef.close();
+    this.dialogRef.close({ event: 'close', data: this.selection.selected.length });
   }
 }

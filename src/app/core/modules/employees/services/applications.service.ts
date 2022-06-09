@@ -34,8 +34,8 @@ export class ApplicationsService {
     )
   }
 
-  getAppsOfEmployee(employeeId: number): Observable<App[]> {
-    return this.http.get<AppsOfEmployeeResponse>(environment.url + `/employees/${employeeId}/applications?page=1&items=100`).pipe(
+  getAppsOfEmployee(employeeId: number, page: number = 0, items: number = 100): Observable<App[]> {
+    return this.http.get<AppsOfEmployeeResponse>(environment.url + `/employees/${employeeId}/applications?page=${page+1}&items=${items}`).pipe(
       map(resp => { return resp.data })
     )
   }

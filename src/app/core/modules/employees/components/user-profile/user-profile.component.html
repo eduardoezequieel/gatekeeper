@@ -25,7 +25,7 @@
           (click)="removeMFA()"
           class="secondary-button"
           mat-flat-button
-          *ngIf="employee.twoFactorEnabled && user.role.name == 'root'"
+          *ngIf="employee.twoFactorEnabled" 
         >
           Remove MFA
         </button>
@@ -39,8 +39,7 @@
         </button>
       </div>
     </div>
-  </div>
-  
+  </div>  
 
   <div class="auth-container">
     <div class="desc-container">
@@ -74,11 +73,27 @@
   </div>
 </div>
 <ng-template #elseBlock><mat-spinner></mat-spinner></ng-template>
+
+<div class="panel-right">
+  <div class="warning" *ngIf="this.warningService.noRoot$ | async">
+    <div class="icon-container"><i class="ri-information-line"></i></div>
+    <div class="error-title">Warning</div>
+    <div class="icon-container" (click)="removeNoRootWarning()">
+      <i class="ri-close-line"></i>
+    </div>
+    <div class="error-description">
+      You must be root to<br />
+      perform this action.
+    </div>
+  </div>
+</div>
+
 <div class="paginator">
-  <mat-paginator [length]="100"
-            [pageSize]="10"
+  <mat-paginator [length]="lenght"
+            [pageSize]="pageSize"
             [pageSizeOptions]="[5, 10, 25, 100]"
             aria-label="Select page"
-            class="pag">
+            class="pag"
+            (page)="getApps($event)">
   </mat-paginator>
 </div>

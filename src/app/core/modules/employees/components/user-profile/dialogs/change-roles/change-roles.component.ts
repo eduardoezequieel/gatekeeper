@@ -4,9 +4,10 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { take, tap } from 'rxjs';
+import { catchError, take, tap } from 'rxjs';
 import { ApplicationsService } from '../../../../services/applications.service';
 import { EmployeesService } from '../../../../services/employees.service';
+import { WarningsService } from '../../../../services/warnings.service';
 
 interface aux {roleName: string, roleId: number, isSelected: boolean}
 
@@ -15,7 +16,6 @@ interface aux {roleName: string, roleId: number, isSelected: boolean}
   templateUrl: './change-roles.component.html',
   styleUrls: ['./change-roles.component.scss']
 })
-
 
 export class ChangeRolesComponent implements OnInit {
   roles: aux[] = []
@@ -26,6 +26,7 @@ export class ChangeRolesComponent implements OnInit {
     private dialog: MatDialog,
     private applicationService: ApplicationsService,
     private employeeService: EmployeesService,
+    private warningService: WarningsService,
     @Inject(MAT_DIALOG_DATA) public data: {userName: string, userRole: string, userId: number}
   ) {}
 
@@ -39,7 +40,6 @@ export class ChangeRolesComponent implements OnInit {
             this.roles.push({roleName: rol.name, roleId: rol.id, isSelected: false})
           }
         })
-
       }),
       take(1),
       ).subscribe()
@@ -52,5 +52,8 @@ export class ChangeRolesComponent implements OnInit {
   continueClick(): void {
     this.dialogRef.close();
     this.employeeService.changeRole(this.data.userId, +this.roleSelected)
+      .subscribe(
+        () => {}, 
+        () => this.warningService.noRootOn())
   }
 }

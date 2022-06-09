@@ -117,7 +117,7 @@ export class EmployeesComponent implements OnInit {
 
       this.employees$ = this.applicationService.getEmployeesOfApp(appID).pipe(
         map( emp => emp.filter( e => {
-          return e.name.toLowerCase().includes(this.name!.toLowerCase()) && e.role.name.includes(this.rol!.toLowerCase())
+          return e.name.toLowerCase().includes(this.name!.trim().toLowerCase()) && e.role.name.includes(this.rol!.toLowerCase())
         })),
         tap( emp => {
           this.employeesAmount = emp.length;
@@ -150,5 +150,6 @@ export class EmployeesComponent implements OnInit {
   ngOnDestroy() {
     this.subs.unsubscribe();
     this.subs2.unsubscribe();
+    this.warnings.turnWarningsOff();
   }
 }
