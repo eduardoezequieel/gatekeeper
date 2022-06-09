@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { take } from 'rxjs';
+import { map, Observable, switchMap, take } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { RequestNotificationService } from '../../services/request-notification.service';
@@ -21,7 +21,7 @@ import { DenyRequestComponent } from '../dialogs/deny-request/deny-request.compo
 })
 export class AdminRequestComponent implements OnInit {
   form: FormGroup = new FormGroup({});
-  applications: Application[] = [];
+  applications!: Observable<Application[]>;
   currentApp!: any;
   noResults!: boolean;
   requestSelected: boolean = false;
@@ -48,18 +48,21 @@ export class AdminRequestComponent implements OnInit {
   ngOnInit(): void {
     this.twoFAuthEnabled = this.userService.getUser().twoFactorEnabled;
     this.closeRequestMessages();
-    this.requestService
-      .getAllAplications(1, 100)
-      .pipe(take(1))
-      .subscribe((res) => {
-        this.applications = res.data.filter((app) => app.enabled === true);
-        this.noResults = false;
-      });
+    this.requestService.getOneAplications().pipe(
+      switchMap((apps) => {
+        this.length = apps.pagination.totalItems;
+        return this.requestService.getAllAplications(1, this.length).pipe(
+          map((res) => {
+            return res.filter((app) => app.enabled === true);
+          })
+        );
+      })
+    );
+    this.noResults = false;
 
     if (!this.twoFAuthEnabled) {
       this.requestNotifications.enableTwoStepOn();
     }
-    //this.fillRequestTable();
   }
 
   get f() {

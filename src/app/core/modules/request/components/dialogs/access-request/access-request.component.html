@@ -9,7 +9,7 @@
     <mat-form-field appearance="standard" class="full-width">
       <mat-label>Application name</mat-label>
       <mat-select formControlName="appName" overlayPanelClass>
-        <mat-option *ngFor="let app of applications" [value]="app.id">{{
+        <mat-option *ngFor="let app of applications | async" [value]="app.id">{{
           app.name
         }}</mat-option>
       </mat-select>
