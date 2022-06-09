@@ -35,8 +35,10 @@ $cool-gray:#687177;
   }
 }
 .webhooks{
-  height: 75%;
-  padding: 30px;
+  height: 88%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 30px 0px 30px;
   .content-head{
     display: flex;
     flex-direction: row;
@@ -59,45 +61,170 @@ $cool-gray:#687177;
       color: $Applaudo-Red;
     }
   }
+  .webhooks-container{
+    table{
+      width: 100%;
+      th{
+        font-weight: 700;
+      }
+      input[type="checkbox"]{
+        accent-color: $Applaudo-Red;
+      }
+      .deleteBtn{
+        font-size: 20px;
+        color: $Applaudo-Red;
+        background: none;
+        border: none;
+        &:hover{
+          cursor: pointer;
+        } 
+      }
+      .hideRow{
+        display: none;
+      } 
+      mat-footer-row mat-footer-cell{
+        justify-content: center;
+        font-style: italic;
+      }
+      & .details-btn{
+        background-color: transparent;
+        border: none;
+        color: $Applaudo-Red;
+        font-weight: 700;
+        &:hover{
+          cursor: pointer;
+          color: #e53939;
+        }
+      }
+    }
+    .noResults{
+      margin-top: 40px;
+      text-align: center;
+    }
+  }
+  .pagination-container{
+    margin-top: auto;
+    border-top: 2px solid #E2E2E2;
+  }
 }
-table {
-  width: 100%;
-  & th{
-    font-family: 'Avenir Next LT Pro';
-    font-weight: 600;
-    font-size: 16px;
+
+@media (max-width: 640px){
+  .webhooks{
+    padding: 20px 5px 0px 5px;
+    .content-head{
+      display: flex;
+    flex-direction: column;
+      &>h4{
+        font-family: 'Avenir Next LT Pro';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 32px;
+        margin-bottom: 0;
+      }
+      & .clear-btn{
+        padding: 0 70px;
+        font-family: 'Avenir Next LT Pro';
+        border-radius: 0;
+        background-color:white;
+        border: 2px solid #E2E2E2;
+        color: $Applaudo-Red;
+      }
+    }
+    .webhooks-container{
+      
+      overflow-x: scroll;
+      table{
+        min-width: 100%;
+        .mat-cell, .mat-footer-cell{
+          font-size: 12px !important;
+        }
+        th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+          padding-left: 0px;
+        }
+      }
+      .noResults{
+        margin-top: 40px;
+        width: 100%;
+        text-align: center;
+        &>img{
+          width: 200px;
+        }
+      }
+    }
+    .pagination-container{
+      display: flex;
+      flex-direction: row;
+      font-size: 12px;
+    }
+  }
+  .primary-button {
+    height: 35px;
+    padding: 0 5px;
+    font-size: 12px;
     line-height: 24px;
-    align-items: center;
-    text-align: center;
-    color: #687177;
   }
-  & .column-id{
-    width: 10%;
+  .secondary-button {
+    height: 35px;
+    padding: 0 5px;
+    font-size: 12px;
+    line-height: 24px;
   }
-  & .column-url{
-    width: 40%;
-  }
-  & .column-event{
-    width: 25%;
-  }
-  & .column-code{
-    width: 15%;
-  }
-  & .column-response{
-    width: 10%;
-  }
-  & .details-btn{
-    background-color: transparent;
-    border: none;
-    color: $Applaudo-Red;
-    font-weight: 700;
-    &:hover{
-      cursor: pointer;
-      color: #e53939;
+  .panel-right {
+    .error, .success, .warning {
+      right: 10px;
+      bottom: 10px;
+      width: 300px;
+      height: 80px;
+      font-size: 13px;
+      .icon-container {
+        i {
+          font-size: 1rem;
+        }
+        .ri-close-line {
+          bottom: 15px;
+          left: 270px;         
+        }
+      }
     }
   }
 }
-.pagination-container{
-  margin-top: auto;
-  border-top: 2px solid #E2E2E2;
+
+@media (min-width: 768px) and (max-width: 950px) {
+  .webhooks{
+    .content-head{
+      &>h4{
+        font-family: 'Avenir Next LT Pro';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 32px;
+        margin-bottom: 0;
+      }
+      & .clear-btn{
+        padding: 0 70px;
+        font-family: 'Avenir Next LT Pro';
+        border-radius: 0;
+        background-color:white;
+        border: 2px solid #E2E2E2;
+        color: $Applaudo-Red;
+      }
+    }
+    .webhooks-container{
+      overflow-x: scroll;
+      table{
+        min-width: 100%;
+      }
+    }
+  }
+  .primary-button {
+    padding: 0 10px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .secondary-button {
+    padding: 0 10px;
+    font-size: 16px;
+    line-height: 24px;
+  }
 }

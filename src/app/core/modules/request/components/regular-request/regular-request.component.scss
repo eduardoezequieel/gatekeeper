@@ -81,141 +81,198 @@ $cool-gray:#687177;
   background-color: white;
 }
 .panel-right {
-    .error, .success, .warning {
+  .error, .success, .warning {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    justify-content: center;
+    right: 40px;
+    bottom: 40px;
+    width: 424px;
+    height: 104px;
+    background: #ffffff;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid #B80000;
+
+    .error-title, .error-description {
+      margin-left: 56px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .error-title {
+      color: #011625;
+      font-weight: 700;
+    }
+
+    .error-description {
+      color: $Applaudo-Navy;
+      font-weight: 400;
+    }
+
+    .icon-container {
       position: absolute;
+      i {
+        position: relative;
+        color: #B80000;
+        font-size: 1.2rem;
+      }
+      .ri-information-line{
+        top: -25px;
+        left: 32px;
+      }
+      .ri-checkbox-circle-line {
+        top: -16px;
+        left: 32px;
+      }
+      .ri-forbid-2-line{
+        top: -16px;
+        left: 32px;
+      }
+      .ri-close-line {
+        bottom: 22px;
+        left: 380px;     
+        cursor: pointer;     
+      }
+    }
+  }
+
+  .success {
+    border-left: 4px solid #1BCB80;
+    .icon-container {
+      i {
+        color: #1BCB80;
+      }
+    }
+  }
+  .warning{
+    border-left: 4px solid #FBB214;
+    .icon-container {
+      i {
+        color: #FBB214;
+      }
+    }
+  }
+}
+  
+@media (max-width: 640px){
+  .body{
+    height: 89%;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    .actions{
       display: flex;
       flex-direction: column;
-      justify-items: center;
-      justify-content: center;
-      right: 40px;
-      bottom: 40px;
-      width: 424px;
-      height: 104px;
-      background: #ffffff;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-      border-left: 4px solid #B80000;
-
-      .error-title, .error-description {
-        margin-left: 56px;
-        margin-top: 8px;
-        margin-bottom: 8px;
+      justify-content: space-between;
+      align-items: center;
+      .search{
+        width: 90%;
+        padding: 10px;
       }
+      .action-btn{
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 10px;
+        button{
+          width: 120px;
+        }
+      }
+    }
+    .table-container{
       
-      .error-title {
-        color: #011625;
-        font-weight: 700;
+      overflow-x: scroll;
+      table{
+        min-width: 100%;
+        .mat-cell, .mat-footer-cell{
+          font-size: 12px !important;
+        }
       }
-
-      .error-description {
-        color: $Applaudo-Navy;
-        font-weight: 400;
+      .noResults{
+        margin-top: 40px;
+        width: 100%;
+        text-align: center;
+        &>img{
+          width: 200px;
+        }
       }
-
+    }
+    .pagination-container{
+      display: flex;
+      flex-direction: row;
+      font-size: 12px;
+    }
+  }
+  .primary-button {
+    height: 35px;
+    padding: 0 5px;
+    font-size: 12px;
+    line-height: 24px;
+  }
+  .secondary-button {
+    height: 35px;
+    padding: 0 5px;
+    font-size: 12px;
+    line-height: 24px;
+  }
+  .panel-right {
+    .error, .success, .warning {
+      right: 10px;
+      bottom: 10px;
+      width: 300px;
+      height: 80px;
+      font-size: 13px;
       .icon-container {
-        position: absolute;
         i {
-          position: relative;
-          color: #B80000;
-          font-size: 1.2rem;
-        }
-        .ri-information-line{
-          top: -25px;
-          left: 32px;
-        }
-        .ri-checkbox-circle-line {
-          top: -16px;
-          left: 32px;
+          font-size: 1rem;
         }
         .ri-close-line {
-          bottom: 22px;
-          left: 380px;     
-          cursor: pointer;     
+          bottom: 15px;
+          left: 270px;         
         }
       }
     }
+  }
+}
 
-    .success {
-      border-left: 4px solid #1BCB80;
-      .icon-container {
-        i {
-          color: #1BCB80;
+@media (min-width: 768px) and (max-width: 950px) {
+  .body{
+    height: 89%;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    .actions{
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .search{
+        width: 50%
+      }
+      .action-btn{
+        flex-direction: row;
+        gap: 10px;
+        button{
+          width: 150px;
         }
       }
     }
-    .warning{
-      border-left: 4px solid #FBB214;
-      .icon-container {
-        i {
-          color: #FBB214;
-        }
+    .table-container{
+      overflow-x: scroll;
+      table{
+        min-width: 100%;
       }
     }
   }
-
-  @media (max-width: 640px){
-    .body{
-      height: 89%;
-      display: flex;
-      flex-direction: column;
-      padding: 5px;
-      .actions{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        .search{
-          width: 100%
-        }
-        .action-btn{
-          display: flex;
-          gap: 10px;
-          button{
-            width: 150px;
-          }
-          
-        }
-      }
-      .table-container{
-        
-        overflow-x: scroll;
-        table{
-          min-width: 400px;
-          th{
-            
-          }
-          input[type="checkbox"]{
-            
-          }
-          .deleteBtn{
-            
-          }
-          .hideRow{
-            
-          } 
-          mat-footer-row mat-footer-cell{
-            
-          }
-        }
-        .noResults{
-          
-        }
-      }
-      .pagination-container{
-    
-      }
-    }
-    .primary-button {
-      padding: 0 10px;
-      font-size: 16px;
-      line-height: 24px;
-    }
-    .secondary-button {
-      padding: 0 10px;
-      font-size: 16px;
-      line-height: 24px;
-    }
+  .primary-button {
+    padding: 0 10px;
+    font-size: 16px;
+    line-height: 24px;
   }
-  
-  @media (min-width: 768px) and (max-width: 950px) {
-  
+  .secondary-button {
+    padding: 0 10px;
+    font-size: 16px;
+    line-height: 24px;
   }
+}

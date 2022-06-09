@@ -30,7 +30,6 @@ export class RecoveryKeysComponent implements OnInit {
     this.dialogRef.close();
     this.dialog.open(ConfirmCloseComponent, {
       width: '556px',
-      height: '200px',
       data: this.data,
     });
   }

@@ -58,9 +58,14 @@ export class AccessRequestComponent implements OnInit {
     this.requestService
       .requestAccess(appId, message)
       .pipe(take(1))
-      .subscribe((res) => {
-        this.requestNotification.requestAddedSuccessfullyOn();
-        this.onNoClick();
-      });
+      .subscribe(
+        () => {
+          this.requestNotification.requestAddedSuccessfullyOn();
+          this.onNoClick();
+        },
+        () => {
+          this.requestNotification.alreadyHaveAccessOn();
+        }
+      );
   }
 }

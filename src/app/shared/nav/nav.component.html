@@ -5,7 +5,7 @@
     opened
     [position]="'start'"
     class="nav-sidenav"
-    [ngClass]="{ closing: !isExpanded }"
+    [ngClass]="{ closing: !isExpanded, opened: isOpened, hiden: responsive }"
     *ngIf="login"
   >
     <ul>
@@ -16,31 +16,55 @@
         </a>
       </li>
       <li *ngIf="(this.loginService.userRole$ | async) == 'admin'">
-        <a mat-button [routerLink]="['/employees']" routerLinkActive="active">
+        <a
+          mat-button
+          [routerLink]="['/employees']"
+          routerLinkActive="active"
+          (click)="this.isOpened = !this.isOpened"
+        >
           <i class="ri-group-line"></i>
           <span *ngIf="isExpanded">Employees</span>
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/request" routerLinkActive="active">
+        <a
+          mat-button
+          routerLink="/request"
+          routerLinkActive="active"
+          (click)="this.isOpened = !this.isOpened"
+        >
           <mat-icon svgIcon="icon_request"></mat-icon>
           <span *ngIf="isExpanded">Access Requests</span>
         </a>
       </li>
       <li *ngIf="(this.loginService.userRole$ | async) == 'admin'">
-        <a mat-button routerLinkActive="active">
+        <a
+          mat-button
+          routerLinkActive="active"
+          (click)="this.isOpened = !this.isOpened"
+        >
           <i class="ri-apps-line"></i>
           <span *ngIf="isExpanded">Applications</span>
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/setting" routerLinkActive="active">
+        <a
+          mat-button
+          routerLink="/setting"
+          routerLinkActive="active"
+          (click)="this.isOpened = !this.isOpened"
+        >
           <i class="ri-settings-4-line"></i>
           <span *ngIf="isExpanded">Settings</span>
         </a>
       </li>
       <li>
-        <a mat-button routerLink="/about" routerLinkActive="active">
+        <a
+          mat-button
+          routerLink="/about"
+          routerLinkActive="active"
+          (click)="this.isOpened = !this.isOpened"
+        >
           <i class="ri-information-line"></i>
           <span *ngIf="isExpanded">About</span>
         </a>
@@ -52,14 +76,29 @@
         </a>
       </li>
       <li>
-        <a mat-button (click)="isExpanded = !isExpanded">
+        <a mat-button (click)="isExpanded = !isExpanded" *ngIf="!responsive">
           <i *ngIf="!isExpanded" class="ri-arrow-right-line"></i>
           <i *ngIf="isExpanded" class="ri-arrow-left-line"></i>
+        </a>
+        <a
+          mat-button
+          (click)="this.isOpened = !this.isOpened"
+          *ngIf="responsive"
+        >
+          <i class="ri-arrow-left-line"></i>
         </a>
       </li>
     </ul>
   </mat-sidenav>
+
   <mat-sidenav-content [ngClass]="{ resizing: !isExpanded, offline: !login }">
+    <button
+      class="menubtn"
+      *ngIf="login && responsive"
+      (click)="this.isOpened = !this.isOpened"
+    >
+      <i class="ri-menu-line"></i>
+    </button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

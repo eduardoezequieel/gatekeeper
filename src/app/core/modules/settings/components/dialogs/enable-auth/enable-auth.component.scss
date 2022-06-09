@@ -81,3 +81,39 @@ $text:#011625;
 .full-width{
   width: 100%;
 }
+@media (max-width: 640px){
+  .dialog-head{
+    &>h4{
+      font-size: 20px;
+      line-height: 32px;
+    }
+  }
+  .mat-dialog-content{
+    & p{
+      font-size: 12px;
+    }
+    & .instructions{
+      & p{
+        display: none;
+      }
+    }
+    & ul{
+      font-size: 12px;
+    }
+  }
+  .mat-dialog-actions{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    & button{
+      display: inline-block;
+      width: 100px;
+    }
+    .primary-button{
+      font-size: 14px;
+    }
+    .secondary-button{
+      font-size: 14px;
+    }
+  }
+}

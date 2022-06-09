@@ -91,7 +91,7 @@ export class AdminRequestComponent implements OnInit {
   onPageChange(pageEvent: PageEvent) {
     this.requestService
       .appsAccessRequests(
-        this.currentApp,
+        this.currentApp.value,
         pageEvent.pageIndex + 1,
         pageEvent.pageSize
       )
@@ -109,7 +109,6 @@ export class AdminRequestComponent implements OnInit {
   openDenyManyDialog(): void {
     this.dialog.open(DeleteAllComponent, {
       width: '556px',
-      height: '200px',
       data: {
         title: 'Deny Access Requests',
         desc: 'Are you sure you want to deny the selected access requests?',
@@ -129,7 +128,6 @@ export class AdminRequestComponent implements OnInit {
     if (!isNaN(Number(requestId))) {
       this.dialog.open(DenyRequestComponent, {
         width: '556px',
-        height: '200px',
         data: Number(requestId),
       });
       this.dialog.afterAllClosed.subscribe(() => {
@@ -174,6 +172,8 @@ export class AdminRequestComponent implements OnInit {
     this.dataSource.filter = this.searchKey.trim().toLocaleLowerCase();
     if (this.dataSource.filteredData.length == 0) {
       this.noResults = false;
+    } else {
+      this.noResults = true;
     }
   }
 

@@ -133,4 +133,17 @@
     </div>
     <div class="error-description">Access requests deleted successfully.</div>
   </div>
+  <div
+    class="error"
+    *ngIf="this.requestNotifications.alreadyHaveAccess$ | async"
+  >
+    <div class="icon-container"><i class="ri-forbid-2-line"></i></div>
+    <div class="error-title">Error</div>
+    <div class="icon-container" (click)="closeRequestMessages()">
+      <i class="ri-close-line"></i>
+    </div>
+    <div class="error-description">
+      Employee is already assigned to the application.
+    </div>
+  </div>
 </div>

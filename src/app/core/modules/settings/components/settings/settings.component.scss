@@ -57,14 +57,14 @@ $cool-gray:#687177;
       align-items: flex-end;
       gap: 20px;
       button{
-        width: 250px
+        width: 230px
       }
     }
   }
 }
 .primary-button {
   border-radius: 0;
-  padding: 0 32px;
+  padding: 0 20px;
   height: 40px;
   font-weight: 600;
   font-size: 16px;
@@ -74,7 +74,7 @@ $cool-gray:#687177;
 }
 .secondary-button {
   border-radius: 0;
-  padding: 0 32px;
+  padding: 0 20px;
   height: 40px;
   font-weight: 600;
   font-size: 16px;
@@ -191,6 +191,10 @@ $cool-gray:#687177;
           top: -16px;
           left: 32px;
         }
+        .ri-forbid-2-line{
+          top: -16px;
+          left: 32px;
+        }
         .ri-close-line {
           bottom: 22px;
           left: 380px;     
@@ -216,3 +220,188 @@ $cool-gray:#687177;
       }
     }
   }
+
+@media (max-width: 600px){
+  .heading{
+    margin-left: 10px;
+  }
+  .user-settings{
+    padding: 0px 10px;
+  }
+  .user-info{
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 2px solid #E2E2E2;
+    .action-container{
+      margin-top: 30px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      .action-btn{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        gap: 20px;
+        button{
+          width: 200px
+        }
+      }
+    }
+  }
+  .primary-button {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+  .secondary-button {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+  .details{
+    flex-direction: column;
+    &>img{
+      border-radius: 50%;
+      margin: auto;
+      text-align: center;
+    }
+    .info{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      &>h4{
+        font-size: 20px;
+      }
+    }
+  }
+  .auth-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 30px 0;
+    .desc-container{
+      &>h4{
+        font-family: 'Avenir Next LT Pro';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 32px;
+        color: black;
+      }
+    }
+    .toggle-container{
+      span{
+        font-family: 'Avenir Next LT Pro';
+        font-size: 14px;
+        color: $cool-gray;
+      }
+    }
+  }
+  .panel-right {
+    .error, .success, .warning {
+      right: 10px;
+      bottom: 10px;
+      width: 300px;
+      height: 80px;
+      font-size: 13px;
+      .icon-container {
+        i {
+          font-size: 1rem;
+        }
+        .ri-close-line {
+          bottom: 15px;
+          left: 270px;         
+        }
+      }
+    }
+  }
+}
+  
+@media (min-width: 768px) and (max-width: 950px) {
+  .user-settings{
+    padding: 0px 10px;
+  }
+  .user-info{
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 2px solid #E2E2E2;
+    .action-container{
+      margin-top: 30px;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+      .action-btn{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 20px;
+        button{
+          width: 200px
+        }
+      }
+    }
+  }
+  .primary-button {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+  .secondary-button {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+  .details{
+    flex-direction: column;
+    &>img{
+      border-radius: 50%;
+    }
+    .info{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      &>h4{
+        font-size: 20px;
+      }
+    }
+  }
+  .auth-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 30px 0;
+    .desc-container{
+      &>h4{
+        font-family: 'Avenir Next LT Pro';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 32px;
+        color: black;
+      }
+    }
+    .toggle-container{
+      span{
+        font-family: 'Avenir Next LT Pro';
+        font-size: 14px;
+        color: $cool-gray;
+      }
+    }
+  }
+  .panel-right {
+    .error, .success, .warning {
+      right: 10px;
+      bottom: 10px;
+      width: 300px;
+      height: 80px;
+      font-size: 13px;
+      .icon-container {
+        i {
+          font-size: 1rem;
+        }
+        .ri-close-line {
+          bottom: 15px;
+          left: 270px;         
+        }
+      }
+    }
+  }
+}

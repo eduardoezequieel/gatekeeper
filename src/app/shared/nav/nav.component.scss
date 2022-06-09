@@ -20,6 +20,9 @@ mat-sidenav-content{
   &.offline{
     margin-left: 0px !important;
   }
+  .menubtn{
+    display: none;
+  }
 }
 .nav-sidenav{
   padding: 0;
@@ -27,6 +30,12 @@ mat-sidenav-content{
   transition: 300ms ease-in-out;
   width: 200px;
   &.closing{
+    width: 70px;
+  }
+  &.hiden{
+    width: 0px;
+  }
+  &.opened{
     width: 70px;
   }
   ul{
@@ -72,5 +81,23 @@ mat-sidenav-content{
   }
   .spacer {
     margin-top: auto;
+  }
+}
+@media (max-width: 599px){
+  mat-sidenav-content{
+    margin-left: 0px !important;
+    &.resizing{
+      margin-left: 0px !important;
+    }
+    .menubtn{
+      display: block;
+      position: absolute;
+      top: 15px;
+      left: 10px;
+      font-size: 20px;
+      border: none;
+      background-color:transparent;
+      color: $Applaudo-Red;
+    }
   }
 }

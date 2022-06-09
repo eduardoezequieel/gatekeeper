@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs';
+import { UserService } from 'src/app/shared/nav/services/user.service';
 import { RequestNotificationService } from '../../services/request-notification.service';
 import { RequestService } from '../../services/request.service';
 import { AccessRequestComponent } from '../dialogs/access-request/access-request.component';
@@ -33,7 +34,8 @@ export class RegularRequestComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private requestService: RequestService,
-    public requestNotifications: RequestNotificationService
+    public requestNotifications: RequestNotificationService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -87,7 +89,6 @@ export class RegularRequestComponent implements OnInit {
     if (!this.checkAll) {
       this.dialog.open(DeleteAllComponent, {
         width: '556px',
-        height: '200px',
         data: {
           title: 'Delete access requests',
           desc: 'Are you sure you want to delete the selected access requests?',
@@ -99,7 +100,6 @@ export class RegularRequestComponent implements OnInit {
     } else {
       this.dialog.open(DeleteAllComponent, {
         width: '556px',
-        height: '200px',
         data: {
           title: 'Delete all access requests',
           desc: 'Are you sure you want to delete all the access requests?',
@@ -120,14 +120,13 @@ export class RegularRequestComponent implements OnInit {
     if (!isNaN(Number(requestId))) {
       this.dialog.open(DeleteOneComponent, {
         width: '556px',
-        height: '200px',
         data: Number(requestId),
       });
       this.dialog.afterAllClosed.subscribe(() => {
         this.fillRequestTable();
+        this.checkAll = false;
+        this.requestSelected = false;
       });
-    } else {
-      console.log('Not a Number');
     }
   }
 
@@ -136,9 +135,9 @@ export class RegularRequestComponent implements OnInit {
     this.dataSource.data.forEach((req) => {
       alreadyRequested.push(req.application.id);
     });
+
     this.dialog.open(AccessRequestComponent, {
       width: '556px',
-      height: '432px',
       data: alreadyRequested,
     });
     this.dialog.afterAllClosed.subscribe(() => {

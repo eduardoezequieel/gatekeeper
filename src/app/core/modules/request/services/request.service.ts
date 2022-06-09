@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import {
   AllRequestsResponse,
   ApplicationAccess,
@@ -47,6 +47,7 @@ export class RequestService {
       }
     );
   }
+
   deleteAccessRequest(accessRequestId: number) {
     return this.http.delete(
       environment.url + `/access-request/${accessRequestId}`
