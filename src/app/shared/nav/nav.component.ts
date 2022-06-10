@@ -82,6 +82,7 @@ export class NavComponent implements OnInit, OnDestroy {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
+    this.isOpened = false;
     this.router.navigate(['/login']);
   }
 
