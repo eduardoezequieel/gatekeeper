@@ -49,8 +49,8 @@ export class AdminRequestComponent implements OnInit {
     this.closeRequestMessages();
     this.applications = this.requestService.getOneAplications().pipe(
       switchMap((apps) => {
-        this.length = apps.pagination.totalItems;
-        return this.requestService.getAllAplications(1, this.length).pipe(
+        const appNum = apps.pagination.totalItems;
+        return this.requestService.getAllAplications(1, appNum).pipe(
           map((res) => {
             return res.filter((app) => app.enabled === true);
           })
