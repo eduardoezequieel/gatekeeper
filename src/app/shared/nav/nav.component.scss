@@ -37,6 +37,9 @@ mat-sidenav-content{
   }
   &.opened{
     width: 70px;
+    box-shadow: 8px 0px 22px 7px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 8px 0px 22px 7px rgba(0,0,0,0.3);
+    -moz-box-shadow: 8px 0px 22px 7px rgba(0,0,0,0.3);
   }
   ul{
     padding: 0;
