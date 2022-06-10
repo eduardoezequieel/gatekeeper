@@ -1,17 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { map, Observable, switchMap, take } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { RequestNotificationService } from '../../services/request-notification.service';
 import { RequestService } from '../../services/request.service';
-import { AccessRequestComponent } from '../dialogs/access-request/access-request.component';
+
 import { AproveRequestComponent } from '../dialogs/aprove-request/aprove-request.component';
 import { DeleteAllComponent } from '../dialogs/delete-all/delete-all.component';
-import { DeleteOneComponent } from '../dialogs/delete-one/delete-one.component';
 import { DenyRequestComponent } from '../dialogs/deny-request/deny-request.component';
 
 @Component({
@@ -48,7 +47,7 @@ export class AdminRequestComponent implements OnInit {
   ngOnInit(): void {
     this.twoFAuthEnabled = this.userService.getUser().twoFactorEnabled;
     this.closeRequestMessages();
-    this.requestService.getOneAplications().pipe(
+    this.applications = this.requestService.getOneAplications().pipe(
       switchMap((apps) => {
         this.length = apps.pagination.totalItems;
         return this.requestService.getAllAplications(1, this.length).pipe(
