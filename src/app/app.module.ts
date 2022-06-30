@@ -1,17 +1,18 @@
+import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment.prod';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { appReducers } from './app.reducer';
 import { LoginService } from './core/modules/login/services/login.service';
 import { RefreshTokenInterceptor } from './shared/interceptors/refresh-token.interceptor';
 import { NavModule } from './shared/nav/nav.module';
-import { ShortNamesPipe } from './shared/short-names.pipe';
-
-
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,13 @@ import { ShortNamesPipe } from './shared/short-names.pipe';
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    StoreModule.forRoot(appReducers),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
+      autoPause: true,
+    }),
+    EffectsModule.forRoot(),
     NavModule,
   ],
   providers: [
