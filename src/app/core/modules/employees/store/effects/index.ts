@@ -1,2 +1,6 @@
 import { ApplicationsEffects } from './applications.effects';
-export const EffectsEmployeesModuleArray: any[] = [ApplicationsEffects];
+import { RolesEffects } from './roles.effects';
+export const EffectsEmployeesModuleArray: any[] = [
+  ApplicationsEffects,
+  RolesEffects,
+];

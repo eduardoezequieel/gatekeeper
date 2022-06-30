@@ -1,5 +1,6 @@
-import { Role } from '../../../../shared/interfaces/loginResponse';
+import { Roles } from 'src/app/shared/interfaces/rolesResponse';
 import * as applicationsActions from './actions/applications.actions';
+import * as rolesActions from './actions/roles.actions';
 import { createReducer, on } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
@@ -10,17 +11,20 @@ export interface EmployeesModuleState extends AppState {
 
 interface EmployeesModuleStateForReducer {
   applications: Application[];
-  role: Role[];
+  roles: Roles[];
 }
 
 export const initialState: EmployeesModuleStateForReducer = {
   applications: [],
-  role: [],
+  roles: [],
 };
 
 export const employeesModuleReducer = createReducer(
   initialState,
   on(applicationsActions.getApplicationsSuccess, (state, { applications }) => {
     return { ...state, applications };
+  }),
+  on(rolesActions.getRolesSuccess, (state, { roles }) => {
+    return { ...state, roles };
   })
 );

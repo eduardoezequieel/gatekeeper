@@ -5,17 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import {
-  catchError,
-  finalize,
-  map,
-  Observable,
-  of,
-  Subscription,
-  take,
-  tap,
-  throwError,
-} from 'rxjs';
+import { finalize, map, Observable, of, Subscription, tap } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { Employee } from 'src/app/shared/interfaces/employeesResponse';
 import { User } from 'src/app/shared/interfaces/loginResponse';
@@ -26,7 +16,8 @@ import { ApplicationsService } from './services/applications.service';
 import { EmployeesService } from './services/employees.service';
 import { WarningsService } from './services/warnings.service';
 import * as applicationsActions from './store/actions/applications.actions';
-import { applications } from './store/employees-module.selectors';
+import * as rolesActions from './store/actions/roles.actions';
+import * as employeesModuleSelectors from './store/employees-module.selectors';
 
 @Component({
   selector: 'app-employees',
@@ -39,7 +30,7 @@ export class EmployeesComponent implements OnInit {
   employeesAmount!: number;
   employeesAmountTotal!: number;
   applications$!: Observable<Application[]>;
-  roles$: Observable<Roles[]> = this.applicationService.getRoles();
+  roles$!: Observable<Roles[]>;
   actualPage!: PageEvent;
 
   arrEmployees: Employee[] = [];
@@ -76,8 +67,12 @@ export class EmployeesComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(applicationsActions.getApplications());
+    this.store.dispatch(rolesActions.getRoles());
 
-    this.applications$ = this.store.select(applications);
+    this.applications$ = this.store.select(
+      employeesModuleSelectors.applications
+    );
+    this.roles$ = this.store.select(employeesModuleSelectors.roles);
 
     this.user = this.userService.getUser();
 
