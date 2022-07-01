@@ -5,9 +5,7 @@ import { Employee, EmployeesResponse } from 'src/app/shared/interfaces/employees
 import { environment } from 'src/environments/environment.prod';
 import { WarningsService } from './warnings.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EmployeesService {
 
   employees$!: Observable<Employee[]>

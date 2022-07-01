@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class WarningsService {
   mfa = new BehaviorSubject(false);
   mfa$ = this.mfa.asObservable();

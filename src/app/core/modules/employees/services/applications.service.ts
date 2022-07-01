@@ -19,9 +19,7 @@ import { Roles, RolesResponse } from 'src/app/shared/interfaces/rolesResponse';
 import { environment } from 'src/environments/environment.prod';
 import { EmployeesService } from './employees.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ApplicationsService {
   apps$!: Observable<Application[]>;
 

@@ -1,3 +1,4 @@
+import { EmployeesService } from './services/employees.service';
 import { EffectsEmployeesModuleArray } from './store/effects/index';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
@@ -23,6 +24,8 @@ import { ViewRolesComponent } from './components/user-profile/dialogs/view-roles
 import { RemoveMfaComponent } from './components/user-profile/dialogs/remove-mfa/remove-mfa.component';
 import { employeesModuleReducer } from './store/employees-module.reducer';
 import { EffectsModule } from '@ngrx/effects';
+import { ApplicationsService } from './services/applications.service';
+import { WarningsService } from './services/warnings.service';
 
 @NgModule({
   declarations: [
@@ -50,5 +53,6 @@ import { EffectsModule } from '@ngrx/effects';
     MatCheckboxModule,
     MatProgressSpinnerModule,
   ],
+  providers: [ApplicationsService, EmployeesService, WarningsService],
 })
 export class EmployeesModule {}
