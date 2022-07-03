@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatIconRegistry } from '@angular/material/icon';
 import { PageEvent } from '@angular/material/paginator';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -16,16 +16,17 @@ import * as applicationsActions from './store/actions/applications.actions';
 import * as rolesActions from './store/actions/roles.actions';
 import * as employeesActions from './store/actions/employees.actions';
 import * as selectors from './store/employees-module.selectors';
-import { combineLatestWith, mergeWith, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-employees',
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.scss'],
 })
-export class EmployeesComponent implements OnInit {
+export class EmployeesComponent implements OnInit, OnDestroy {
   user!: User;
   employees!: Employee[];
+  employeesLength = 0;
   applications!: Application[];
   roles!: Roles[];
   pagination!: PageEvent;
@@ -38,7 +39,8 @@ export class EmployeesComponent implements OnInit {
     public warnings: WarningsService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private store: Store<EmployeesModuleState>
+    private store: Store<EmployeesModuleState>,
+    private fb: FormBuilder
   ) {
     this.matIconRegistry.addSvgIcon(
       `icon_user_link`,
@@ -47,10 +49,10 @@ export class EmployeesComponent implements OnInit {
       )
     );
 
-    this.form = new FormGroup({
-      byName: new FormControl(''),
-      byApp: new FormControl(''),
-      byRol: new FormControl(''),
+    this.form = this.fb.group({
+      byName: [''],
+      byApp: [''],
+      byRole: [''],
     });
   }
 
@@ -59,34 +61,27 @@ export class EmployeesComponent implements OnInit {
     this.store.dispatch(rolesActions.getRoles());
     this.store.dispatch(employeesActions.getEmployees());
 
-    const applications$ = this.store.select(selectors.applications);
-    const roles$ = this.store.select(selectors.roles);
-    const employees$ = this.store.select(selectors.employees);
-    const pagination$ = this.store.select(selectors.pagination);
-
-    employees$
-      .pipe(
-        takeUntil(this.unsubscribe$),
-        combineLatestWith(applications$, roles$, pagination$)
-      )
-      .subscribe((response) => {
-        this.employees = response[0];
-        this.applications = response[1];
-        this.roles = response[2];
-        this.pagination = response[3];
+    this.store
+      .pipe(select(selectors.getState), takeUntil(this.unsubscribe$))
+      .subscribe(({ applications, roles, employees }) => {
+        this.applications = applications;
+        this.roles = roles;
+        this.employees = employees.data;
+        this.pagination = employees.pagination;
+        this.employeesLength = employees.employeesLength;
       });
 
     this.user = this.userService.getUser();
   }
 
   get name() {
-    return this.form.get('byName')?.value;
+    return this.form.controls['byName'];
   }
   get app() {
-    return this.form.get('byApp')?.value ?? '';
+    return this.form.controls['byApp'];
   }
-  get rol() {
-    return this.form.get('byRol')?.value ?? '';
+  get role() {
+    return this.form.controls['byRole'];
   }
 
   onPageChange($event: PageEvent) {
@@ -94,7 +89,7 @@ export class EmployeesComponent implements OnInit {
       employeesActions.updatePagination({ pageEvent: $event })
     );
 
-    if (this.employees.length < this.pagination.length) {
+    if (this.employeesLength < this.pagination.length) {
       this.store.dispatch(employeesActions.getEmployees());
     }
   }

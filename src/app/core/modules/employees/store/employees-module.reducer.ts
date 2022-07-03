@@ -1,4 +1,3 @@
-import { pagination } from './employees-module.selectors';
 import { Employee } from './../../../../shared/interfaces/employeesResponse';
 import { Roles } from 'src/app/shared/interfaces/rolesResponse';
 import * as applicationsActions from './actions/applications.actions';
@@ -8,7 +7,6 @@ import { createReducer, on } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { PageEvent } from '@angular/material/paginator';
-import { act } from '@ngrx/effects';
 
 export interface EmployeesModuleState extends AppState {
   employeesModule: EmployeesModuleStateForReducer;
@@ -36,6 +34,24 @@ export const initialState: EmployeesModuleStateForReducer = {
   },
 };
 
+export const mergeEmployees = (
+  oldState: Employee[],
+  employeesToBeMerged: Employee[]
+) => {
+  const mergedEmployees: Employee[] = oldState.concat(employeesToBeMerged);
+  const employeesIds = new Set();
+  const filteredEmployees: Employee[] = [];
+
+  mergedEmployees.forEach((employee) => employeesIds.add(employee.id));
+
+  employeesIds.forEach((id) => {
+    let index = mergedEmployees.findIndex((employee) => employee.id == id);
+    filteredEmployees.push(mergedEmployees[index]);
+  });
+
+  return filteredEmployees;
+};
+
 export const employeesModuleReducer = createReducer(
   initialState,
   on(applicationsActions.getApplicationsSuccess, (state, { applications }) => {
@@ -45,31 +61,13 @@ export const employeesModuleReducer = createReducer(
     return { ...state, roles };
   }),
   on(employeesActions.getEmployeesSuccess, (state, { employees }) => {
-    const combinedEmployees: Employee[] = state.employees.data.concat(
-      employees.data
-    );
-    const employeesIds = new Set();
-    const filteredEmployees: Employee[] = [];
-
-    combinedEmployees.forEach((employee) => employeesIds.add(employee.id));
-
-    employeesIds.forEach((id) => {
-      let index = combinedEmployees.findIndex((employee) => employee.id == id);
-
-      filteredEmployees.push(combinedEmployees[index]);
-    });
-
     return {
       ...state,
       employees: {
-        data: filteredEmployees,
+        data: mergeEmployees(state.employees.data, employees.data),
         pagination: {
           ...state.employees.pagination,
           length: employees.pagination.totalItems,
-          previousPageIndex:
-            employees.pagination.previousPage == null
-              ? undefined
-              : employees.pagination.previousPage,
         },
       },
     };

@@ -1,7 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { EmployeesModuleState } from './employees-module.reducer';
 
-export const getEmployeesModuleState = (state: EmployeesModuleState) =>
+const getEmployeesModuleState = (state: EmployeesModuleState) =>
   state.employeesModule;
 
 export const applications = createSelector(
@@ -26,5 +26,29 @@ export const employees = createSelector(
     let end = start + employees.pagination.pageSize;
 
     return employees.data.slice(start, end);
+  }
+);
+
+export const employeesLength = createSelector(
+  getEmployeesModuleState,
+  ({ employees }) => employees.data.length
+);
+
+export const getState = createSelector(
+  applications,
+  roles,
+  pagination,
+  employees,
+  employeesLength,
+  (...stateSlices) => {
+    return {
+      applications: stateSlices[0],
+      roles: stateSlices[1],
+      employees: {
+        data: stateSlices[3],
+        pagination: stateSlices[2],
+        employeesLength: stateSlices[4],
+      },
+    };
   }
 );

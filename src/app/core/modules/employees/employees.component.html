@@ -35,10 +35,10 @@
     </mat-form-field>
     <mat-form-field appearance="standard" class="input-select b">
       <p>Role</p>
-      <mat-select #rolSelection formControlName="byRol">
+      <mat-select #rolSelection formControlName="byRole">
         <mat-option value="">All</mat-option>
-        <mat-option *ngFor="let rol of roles" value="{{ rol.name }}">
-          {{ rol.name | titlecase }}
+        <mat-option *ngFor="let role of roles" value="{{ role.name }}">
+          {{ role.name | titlecase }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -49,15 +49,12 @@
       *ngFor="let employee of employees"
       (click)="openUserProfile(employee.id)"
     >
-      <img
-        [src]="employee.image"
-        alt="user_img.jpg"
-        width="64px"
-        height="64px"
-      />
+      <div class="img-container">
+        <img [src]="employee.image" alt="user_img.jpg" />
+      </div>
       <div class="employee-info">
         <h4>{{ employee.name | shortNames }}</h4>
-        <div class="role">{{ employee.role.name }}</div>
+        <div class="role">{{ employee.developerType }}</div>
       </div>
     </div>
   </div>
