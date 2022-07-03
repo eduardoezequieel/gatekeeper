@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, mergeMap } from 'rxjs';
+import { catchError, map, mergeMap, of } from 'rxjs';
 import { ApplicationsService } from '../../services/applications.service';
 import * as rolesActions from '../actions/roles.actions';
 
@@ -20,7 +20,10 @@ export class RolesEffects {
             rolesActions.getRolesSuccess({
               roles: response,
             })
-          )
+          ),
+          catchError(() => {
+            throw of(rolesActions.getRolesError());
+          })
         )
       )
     )

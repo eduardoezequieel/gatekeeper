@@ -28,12 +28,10 @@ export class ApplicationsService {
     private employeesService: EmployeesService
   ) {}
 
-  getApplications(): Observable<Application[]> {
-    return this.http
-      .get<ApplicationsResponse>(
-        environment.url + '/applications?page=1&items=100'
-      )
-      .pipe(map((resp) => resp.data));
+  getApplications(items: number): Observable<any> {
+    return this.http.get<ApplicationsResponse>(
+      environment.url + `/applications?page=1&items=${items}`
+    );
   }
 
   getEmployeesOfApp(appID: number): Observable<Employee[]> {
