@@ -1,5 +1,7 @@
+import { Pagination } from './webHookResponse';
 export interface EmployeesResponse {
   data: Employee[];
+  pagination: Pagination
 }
 
 export interface Employee {

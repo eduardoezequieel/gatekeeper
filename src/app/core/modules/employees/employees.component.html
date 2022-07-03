@@ -1,4 +1,7 @@
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+<link
+  href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+  rel="stylesheet"
+/>
 
 <div class="heading">
   <div class="title">
@@ -13,52 +16,48 @@
 <div class="main-container">
   <div class="filter-by">
     <p>Filter by:</p>
-    <div class="link" (click)="resetFilters()">Clear all</div>
+    <div class="link">Clear all</div>
   </div>
   <form [formGroup]="form" class="filters">
-    <mat-form-field appearance="standard" class="input-search" >
+    <mat-form-field appearance="standard" class="input-search">
       <mat-label>Search</mat-label>
-      <input matInput formControlName="byName" (ngModelChange)="filter()">
+      <input matInput formControlName="byName" />
       <span matPrefix><i class="ri-search-line"></i></span>
     </mat-form-field>
-    <mat-form-field appearance="standard" class="input-select a" >
+    <mat-form-field appearance="standard" class="input-select a">
       <p>Application</p>
       <mat-select #appSelection formControlName="byApp">
-        <mat-option (click)="filter()" value="">All</mat-option>
-        <mat-option 
-          *ngFor="let app of (applications$ | async)" 
-          (click)="filter()" 
-          value={{app.name}}>
-            {{app.name}}
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let app of applications" value="{{ app.name }}">
+          {{ app.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field appearance="standard" class="input-select b" >
+    <mat-form-field appearance="standard" class="input-select b">
       <p>Role</p>
-      <mat-select #rolSelection formControlName="byRol">
-        <mat-option (click)="filter()" value="">All</mat-option>
-        <mat-option 
-          *ngFor="let rol of (roles$ | async)" 
-          (click)="filter()"
-          value={{rol.name}}>
-            {{rol.name}}
+      <mat-select #rolSelection formControlName="byRole">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let role of roles" value="{{ role.name }}">
+          {{ role.name | titlecase }}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </form>
-  <div class="employees-container" *ngIf="employees$ | async as emp; else elseBlock">
-    <div class="employee-container" *ngFor="let employee of emp" (click)="openUserProfile(employee.id)">
-      <img [src]="employee.image" alt="user_img.jpg" width="64px" height="64px" />
+  <div class="employees-container">
+    <div
+      class="employee-container"
+      *ngFor="let employee of employees"
+      (click)="openUserProfile(employee.id)"
+    >
+      <div class="img-container">
+        <img [src]="employee.image" alt="user_img.jpg" />
+      </div>
       <div class="employee-info">
-        <h4>{{employee.name | shortNames}}</h4>
-        <div class="role">{{employee.role.name}} </div>
+        <h4>{{ employee.name | shortNames }}</h4>
+        <div class="role">{{ employee.developerType }}</div>
       </div>
     </div>
   </div>
-  <div class="not-found" *ngIf="employeesAmount === 0">
-    <img src="../../../../assets/images/not-found.png" alt="">
-  </div>
-  <ng-template #elseBlock><mat-spinner></mat-spinner></ng-template>
 </div>
 
 <div class="panel-right">
@@ -76,11 +75,14 @@
 </div>
 
 <div class="paginator">
-  <mat-paginator [length]="employeesAmount"
-            [pageSize]="15"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            aria-label="Select page"
-            class="pag"
-            (page)="onPageChange($event)">
+  <mat-paginator
+    [length]="pagination.length"
+    [pageSize]="15"
+    [pageSizeOptions]="[5, 10, 25]"
+    [pageIndex]="pagination.pageIndex"
+    aria-label="Select page"
+    class="pag"
+    (page)="onPageChange($event)"
+  >
   </mat-paginator>
 </div>
