@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable, of, tap, switchMap } from 'rxjs';
 import { AppEmployeesResponse } from 'src/app/shared/interfaces/appEmployeesResponse';
 import {
   Application,
@@ -28,10 +28,20 @@ export class ApplicationsService {
     private employeesService: EmployeesService
   ) {}
 
-  getApplications(items: number): Observable<any> {
-    return this.http.get<ApplicationsResponse>(
-      environment.url + `/applications?page=1&items=${items}`
-    );
+  getApplications(items: number): Observable<ApplicationsResponse> {
+    return this.http
+      .get<ApplicationsResponse>(
+        environment.url + `/applications?page=1&items=${items}`
+      )
+      .pipe(
+        switchMap((response) => {
+          if (response.data.length < response.pagination.totalItems) {
+            return this.getApplications(response.pagination.totalItems);
+          } else {
+            return of(response);
+          }
+        })
+      );
   }
 
   // getEmployeesOfApp(appID: number): Observable<Employee[]> {

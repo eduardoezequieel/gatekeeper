@@ -22,12 +22,12 @@
         <h4>{{ employee.name }}</h4>
         <span class="job">{{ employee.developerType }}</span>
         <span class="email">{{ employee.email }}</span>
+        <span id="role-container">{{ employee.role.name | titlecase }}</span>
       </div>
     </div>
     <div class="action-container">
       <div class="action-btn">
         <button
-          
           class="secondary-button"
           mat-flat-button
           *ngIf="employee.twoFactorEnabled"
@@ -72,12 +72,7 @@
         </div>
       </div>
       <div class="button-container">
-        <button
-          mat-flat-button
-          class="secondary-button"
-        >
-          View role
-        </button>
+        <button mat-flat-button class="secondary-button">View role</button>
       </div>
     </div>
   </div>

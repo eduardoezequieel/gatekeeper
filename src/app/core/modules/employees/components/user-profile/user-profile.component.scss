@@ -84,6 +84,7 @@ $cool-gray: #687177;
     display: flex;
     flex-direction: column;
     justify-content: center;
+
     & > h4 {
       font-family: "Avenir Next LT Pro";
       font-style: normal;
@@ -107,6 +108,18 @@ $cool-gray: #687177;
       font-size: 16px;
       line-height: 24px;
       font-weight: 400;
+    }
+
+    #role-container {
+      margin-top: 5px;
+      background-color: #e2e2e2;
+      color: $cool-gray;
+      padding: 10px 15px 10px 15px;
+      width: min-content;
+      border-radius: 30px;
+      font-family: "Avenir Next LT Pro";
+      font-size: 16px;
+      font-weight: 600;
     }
   }
 }

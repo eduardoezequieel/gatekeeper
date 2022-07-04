@@ -1,8 +1,6 @@
 import { Employee } from './../../../../shared/interfaces/employeesResponse';
 import { Roles } from 'src/app/shared/interfaces/rolesResponse';
-import * as applicationsActions from './actions/applications.actions';
-import * as rolesActions from './actions/roles.actions';
-import * as employeesActions from './actions/employees.actions';
+import * as employeesActions from './employees.actions';
 import { createReducer, on } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
@@ -13,18 +11,17 @@ export interface EmployeesModuleState extends AppState {
 }
 
 interface EmployeesModuleStateForReducer {
-  applications: Application[];
-  roles: Roles[];
   employees: {
     data: Employee[];
     pagination: PageEvent;
-    employeeIdDetails?: number;
+  };
+  employeeDetails?: {
+    employeeIdDetails: number;
+    applicationsIds: number[];
   };
 }
 
 export const initialState: EmployeesModuleStateForReducer = {
-  applications: [],
-  roles: [],
   employees: {
     data: [],
     pagination: {
@@ -55,17 +52,10 @@ export const mergeEmployees = (
 
 export const employeesModuleReducer = createReducer(
   initialState,
-  on(applicationsActions.getApplicationsSuccess, (state, { applications }) => {
-    return { ...state, applications };
-  }),
-  on(rolesActions.getRolesSuccess, (state, { roles }) => {
-    return { ...state, roles };
-  }),
   on(employeesActions.getEmployeesSuccess, (state, { employees }) => {
     return {
       ...state,
       employees: {
-        ...state.employees,
         data: mergeEmployees(state.employees.data, employees.data),
         pagination: {
           ...state.employees.pagination,
@@ -91,9 +81,9 @@ export const employeesModuleReducer = createReducer(
   on(employeesActions.getEmployeeFromStore, (state, { id }) => {
     return {
       ...state,
-      employees: {
-        ...state.employees,
+      employeeDetails: {
         employeeIdDetails: id,
+        applicationsIds: [],
       },
     };
   }),
@@ -102,7 +92,7 @@ export const employeesModuleReducer = createReducer(
       ...state,
       employees: {
         ...state.employees,
-        data: [...state.employees.data].concat([employee]),
+        data: [...state.employees.data, employee],
       },
     };
   })

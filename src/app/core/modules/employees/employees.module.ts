@@ -1,5 +1,4 @@
 import { EmployeesService } from './services/employees.service';
-import { EffectsEmployeesModuleArray } from './store/effects/index';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -26,6 +25,7 @@ import { employeesModuleReducer } from './store/employees-module.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { ApplicationsService } from './services/applications.service';
 import { WarningsService } from './services/warnings.service';
+import { EmployeesEffects } from './store/employees.effects';
 
 @NgModule({
   declarations: [
@@ -42,7 +42,7 @@ import { WarningsService } from './services/warnings.service';
     FormsModule,
     ReactiveFormsModule,
     StoreModule.forFeature('employeesModule', employeesModuleReducer),
-    EffectsModule.forFeature(EffectsEmployeesModuleArray),
+    EffectsModule.forFeature([EmployeesEffects]),
     MatInputModule,
     MatSelectModule,
     MatPaginatorModule,

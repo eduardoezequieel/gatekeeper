@@ -1,7 +1,7 @@
 import {
   Employee,
   EmployeesResponse,
-} from './../../../../../shared/interfaces/employeesResponse';
+} from '../../../../shared/interfaces/employeesResponse';
 import { createAction, props } from '@ngrx/store';
 import { PageEvent } from '@angular/material/paginator';
 

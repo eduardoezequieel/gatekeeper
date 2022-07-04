@@ -1,4 +1,4 @@
-import * as employeesActions from './../../store/actions/employees.actions';
+import * as employeesActions from '../../store/employees.actions';
 import { EmployeesModuleState } from './../../store/employees-module.reducer';
 import {
   Component,
@@ -76,9 +76,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.userService.getUser();
-    if (this.user.role.id === 2) {
-      this.admin = true;
-    }
 
     let id = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!);
 
