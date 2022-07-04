@@ -18,6 +18,7 @@ interface EmployeesModuleStateForReducer {
   employees: {
     data: Employee[];
     pagination: PageEvent;
+    employeeIdDetails?: number;
   };
 }
 
@@ -64,6 +65,7 @@ export const employeesModuleReducer = createReducer(
     return {
       ...state,
       employees: {
+        ...state.employees,
         data: mergeEmployees(state.employees.data, employees.data),
         pagination: {
           ...state.employees.pagination,
@@ -83,6 +85,24 @@ export const employeesModuleReducer = createReducer(
           pageSize: pageEvent.pageSize,
           previousPageIndex: pageEvent.previousPageIndex,
         },
+      },
+    };
+  }),
+  on(employeesActions.getEmployeeFromStore, (state, { id }) => {
+    return {
+      ...state,
+      employees: {
+        ...state.employees,
+        employeeIdDetails: id,
+      },
+    };
+  }),
+  on(employeesActions.getEmployeeSuccess, (state, { employee }) => {
+    return {
+      ...state,
+      employees: {
+        ...state.employees,
+        data: [...state.employees.data].concat([employee]),
       },
     };
   })

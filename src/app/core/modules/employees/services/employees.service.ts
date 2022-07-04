@@ -14,13 +14,13 @@ export class EmployeesService {
 
   constructor(private http: HttpClient, private warnings: WarningsService) {}
 
-  getAllEmployees(): Observable<Employee[]> {
-    return this.http
-      .get<EmployeesResponse>(environment.url + '/employees?page=1&items=100')
-      .pipe(map((resp) => resp.data));
+  getEmployees(page: number, items: number): Observable<EmployeesResponse> {
+    return this.http.get<EmployeesResponse>(
+      environment.url + `/employees?page=${page}&items=${items}`
+    );
   }
 
-  getEmployee(employeeId: string): Observable<Employee> {
+  getEmployee(employeeId: number): Observable<Employee> {
     return this.http
       .get<{ data: Employee }>(environment.url + `/employees/${employeeId}`)
       .pipe(map((resp) => resp.data));
@@ -36,12 +36,6 @@ export class EmployeesService {
     return this.http.post(
       environment.url + `/two-factor/recover/employees/${employeeId}`,
       {}
-    );
-  }
-
-  getEmployees(page: number, items: number): Observable<EmployeesResponse> {
-    return this.http.get<EmployeesResponse>(
-      environment.url + `/employees?page=${page}&items=${items}`
     );
   }
 }

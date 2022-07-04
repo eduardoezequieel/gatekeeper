@@ -30,4 +30,19 @@ export class EmployeesEffects {
       )
     )
   );
+
+  getEmployee = createEffect(() =>
+    this.actions$.pipe(
+      ofType(employeesActions.getEmployee),
+      mergeMap(({ id }) =>
+        this.employeesService
+          .getEmployee(id)
+          .pipe(
+            map((response) =>
+              employeesActions.getEmployeeSuccess({ employee: response })
+            )
+          )
+      )
+    )
+  );
 }

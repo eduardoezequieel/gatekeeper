@@ -52,3 +52,11 @@ export const getState = createSelector(
     };
   }
 );
+
+export const employeeDetails = createSelector(
+  getEmployeesModuleState,
+  (state) => {
+    let id = state.employees.employeeIdDetails;
+    return state.employees.data.find((employee) => employee.id == id);
+  }
+);

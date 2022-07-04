@@ -15,3 +15,18 @@ export const updatePagination = createAction(
   '[Employees Module] Update pagination',
   props<{ pageEvent: PageEvent }>()
 );
+
+export const getEmployee = createAction(
+  '[Employees Module] Get employee',
+  props<{ id: number }>()
+);
+
+export const getEmployeeSuccess = createAction(
+  '[Employees Module] Gotten employee',
+  props<{ employee: Employee }>()
+);
+
+export const getEmployeeFromStore = createAction(
+  '[Employees Module] Saved id of the selected employee',
+  props<{ id: number }>()
+);

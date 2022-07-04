@@ -34,20 +34,20 @@ export class ApplicationsService {
     );
   }
 
-  getEmployeesOfApp(appID: number): Observable<Employee[]> {
-    if (appID === -1) {
-      return this.employeesService.getAllEmployees();
-    }
-    return this.http
-      .get<AppEmployeesResponse>(
-        environment.url + `/applications/${appID}/employees?page=1&items=100`
-      )
-      .pipe(
-        map((resp) => {
-          return resp.data;
-        })
-      );
-  }
+  // getEmployeesOfApp(appID: number): Observable<Employee[]> {
+  //   if (appID === -1) {
+  //     return this.employeesService.getAllEmployees();
+  //   }
+  //   return this.http
+  //     .get<AppEmployeesResponse>(
+  //       environment.url + `/applications/${appID}/employees?page=1&items=100`
+  //     )
+  //     .pipe(
+  //       map((resp) => {
+  //         return resp.data;
+  //       })
+  //     );
+  // }
 
   getAppsOfEmployee(
     employeeId: number,

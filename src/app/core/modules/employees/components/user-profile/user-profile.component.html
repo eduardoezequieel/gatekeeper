@@ -1,4 +1,7 @@
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+<link
+  href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+  rel="stylesheet"
+/>
 <div class="heading">
   <div class="title">
     <h2>User Profile</h2>
@@ -10,9 +13,11 @@
 </div>
 
 <div class="user-settings" *ngIf="employee; else elseBlock">
-  <div class="user-info" >
+  <div class="user-info">
     <div class="details">
-      <img [src]="employee.image" alt="user_img.jpg" width="121px" height="121px" />
+      <div class="img-container">
+        <img [src]="employee.image" alt="user_img.jpg" />
+      </div>
       <div class="info">
         <h4>{{ employee.name }}</h4>
         <span class="job">{{ employee.developerType }}</span>
@@ -22,10 +27,10 @@
     <div class="action-container">
       <div class="action-btn">
         <button
-          (click)="removeMFA()"
+          
           class="secondary-button"
           mat-flat-button
-          *ngIf="employee.twoFactorEnabled" 
+          *ngIf="employee.twoFactorEnabled"
         >
           Remove MFA
         </button>
@@ -39,7 +44,7 @@
         </button>
       </div>
     </div>
-  </div>  
+  </div>
 
   <div class="auth-container">
     <div class="desc-container">
@@ -50,7 +55,7 @@
   <div class="buttons-container">
     <mat-form-field appearance="standard" class="input-search">
       <mat-label>Search</mat-label>
-      <input matInput #appName (change)="filterApps(appName.value)" >
+      <input matInput #appName />
       <span matPrefix><i class="ri-search-line"></i></span>
     </mat-form-field>
     <button mat-flat-button class="secondary-button">Search</button>
@@ -60,14 +65,19 @@
   <div class="applications-container">
     <div class="application-container" *ngFor="let app of apps$ | async">
       <div class="application">
-        <img [src]="app.image" alt="">
+        <img [src]="app.image" alt="" />
         <div class="app-content">
-          <h4>{{app.name}}</h4>
-          <div class="app-description">{{app.description}}</div>
+          <h4>{{ app.name }}</h4>
+          <div class="app-description">{{ app.description }}</div>
         </div>
       </div>
       <div class="button-container">
-        <button mat-flat-button class="secondary-button" (click)="viewRoles(app.id)">View role</button>
+        <button
+          mat-flat-button
+          class="secondary-button"
+        >
+          View role
+        </button>
       </div>
     </div>
   </div>
@@ -89,11 +99,13 @@
 </div>
 
 <div class="paginator">
-  <mat-paginator [length]="lenght"
-            [pageSize]="pageSize"
-            [pageSizeOptions]="[5, 10, 25, 100]"
-            aria-label="Select page"
-            class="pag"
-            (page)="getApps($event)">
+  <mat-paginator
+    [length]="lenght"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page"
+    class="pag"
+    (page)="getApps($event)"
+  >
   </mat-paginator>
 </div>
