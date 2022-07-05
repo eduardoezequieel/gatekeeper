@@ -55,11 +55,23 @@
   <div class="buttons-container">
     <mat-form-field appearance="standard" class="input-search">
       <mat-label>Search</mat-label>
-      <input matInput #appName />
+      <input
+        matInput
+        (keyup.enter)="search()"
+        [formControl]="searchInput"
+        maxlength="50"
+      />
       <span matPrefix><i class="ri-search-line"></i></span>
     </mat-form-field>
-    <button mat-flat-button class="secondary-button">Search</button>
-    <button mat-flat-button class="secondary-button">+ Assign new</button>
+    <div id="buttons">
+      <button (click)="search()" mat-flat-button class="secondary-button">
+        Search
+      </button>
+      <button (click)="clearFilters()" mat-flat-button class="secondary-button">
+        Clear filters
+      </button>
+      <button mat-flat-button class="secondary-button">+ Assign new</button>
+    </div>
   </div>
 
   <div class="applications-container">
@@ -95,12 +107,12 @@
 
 <div class="paginator">
   <mat-paginator
-    [length]="lenght"
-    [pageSize]="pageSize"
+    [length]="pagination.length"
+    [pageSize]="pagination.pageSize"
+    [pageIndex]="pagination.pageIndex"
     [pageSizeOptions]="[5, 10, 25, 100]"
     aria-label="Select page"
-    class="pag"
-    (page)="getApps($event)"
+    (page)="onPageChange($event)"
   >
   </mat-paginator>
 </div>

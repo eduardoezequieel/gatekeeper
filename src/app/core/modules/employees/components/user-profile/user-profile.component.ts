@@ -11,27 +11,31 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { PageEvent } from '@angular/material/paginator';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import {
-  map,
+  combineLatestWith,
   Observable,
-  Subscription,
-  switchMap,
   Subject,
   takeUntil,
+  Subscription,
 } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { Employee } from 'src/app/shared/interfaces/employeesResponse';
 import { User } from 'src/app/shared/interfaces/loginResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
-import { ApplicationsService } from '../../services/applications.service';
-import { EmployeesService } from '../../services/employees.service';
 import { WarningsService } from '../../services/warnings.service';
 import { ChangeRolesComponent } from './dialogs/change-roles/change-roles.component';
-import { RemoveMfaComponent } from './dialogs/remove-mfa/remove-mfa.component';
-import { ViewRolesComponent } from './dialogs/view-roles/view-roles.component';
-import { employeeDetails } from '../../store/employees-module.selectors';
+import {
+  employeeApplications,
+  employeeDetails,
+  employeeDetailsPagination,
+  filteredAppsLength,
+  filteredEmployeeApplications,
+} from '../../store/employees-module.selectors';
+import { Actions, ofType } from '@ngrx/effects';
+import { ApplicationsService } from '../../services/applications.service';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-user-profile',
@@ -42,13 +46,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   disabled = false;
   user!: User;
   employee?: Employee;
-  admin = false;
   apps$!: Observable<Application[]>;
-  subs!: Subscription;
-
-  pageSize = 10;
-  pageIndex = 0;
-  lenght = 100;
+  appsLength = 0;
+  pagination!: PageEvent;
+  searchInput = this.fb.control('');
+  filtersOn = false;
 
   @ViewChild('dialogRef')
   dialogRef!: TemplateRef<any>;
@@ -57,14 +59,16 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
-    private appService: ApplicationsService,
+    private applicationsService: ApplicationsService,
     public warningService: WarningsService,
-    private employeeService: EmployeesService,
     private activatedRoute: ActivatedRoute,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private dialog: MatDialog,
-    private store: Store<EmployeesModuleState>
+    private store: Store<EmployeesModuleState>,
+    private actions$: Actions,
+    private route: Router,
+    private fb: FormBuilder
   ) {
     this.matIconRegistry.addSvgIcon(
       `icon_user_link`,
@@ -75,38 +79,112 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.user = this.userService.getUser();
-
     let id = parseInt(this.activatedRoute.snapshot.paramMap.get('id')!);
 
     this.store.dispatch(employeesActions.getEmployeeFromStore({ id }));
+    this.store.dispatch(employeesActions.getAppsOfEmployee({ id }));
+    this.user = this.userService.getUser();
 
     this.store
       .pipe(select(employeeDetails), takeUntil(this.unsubscribe$))
-      .subscribe((employee) => (this.employee = employee));
+      .subscribe((response) => (this.employee = response));
 
     if (!this.employee) {
       this.store.dispatch(employeesActions.getEmployee({ id }));
     }
-  }
 
-  getApps($event: PageEvent) {
-    let id = this.activatedRoute.snapshot.paramMap.get('id')!;
-    this.subs = this.employeeService
-      .getEmployee(parseInt(id))
-      .subscribe((empl) => {
-        this.employee = empl;
-        this.apps$ = this.appService.getAppsOfEmployee(empl.id).pipe(
-          switchMap((apps) => {
-            this.lenght = apps.length;
-            if (this.lenght) {
-              return this.appService.getAppsOfEmployee(empl.id, 0, this.lenght);
-            }
-            return [];
-          })
-        );
+    this.getApps();
+    this.getEmployeeError();
+
+    this.searchInput.valueChanges
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response: string) => {
+        if (this.searchInput.dirty && response.length == 0) {
+          this.clearFilters();
+        }
       });
   }
+
+  getApps(): void {
+    this.apps$ = this.store.pipe(select(employeeApplications));
+
+    this.store
+      .pipe(select(employeeDetailsPagination), takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.pagination = response.pagination;
+        this.appsLength = response.applicationsLength;
+      });
+  }
+
+  getEmployeeError(): void {
+    this.actions$
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        ofType(employeesActions.getEmployeeError)
+      )
+      .subscribe(() => this.route.navigateByUrl('/employees'));
+  }
+
+  onPageChange($event: PageEvent) {
+    this.store.dispatch(
+      employeesActions.updatePaginationEmployeeDetails({ pageEvent: $event })
+    );
+
+    if (this.appsLength < this.pagination.length) {
+      this.store.dispatch(
+        employeesActions.getAppsOfEmployee({ id: this.employee?.id! })
+      );
+    }
+  }
+
+  search(): void {
+    if ((this.searchInput.value as string).length != 0) {
+      this.filtersOn = true;
+
+      this.store.dispatch(
+        employeesActions.searchAppsOfEmployee({
+          id: this.employee?.id!,
+          search: this.searchInput.value,
+        })
+      );
+
+      this.store
+        .pipe(select(filteredAppsLength), takeUntil(this.unsubscribe$))
+        .subscribe((response) => {
+          if (response != 0) {
+            this.apps$ = this.store.pipe(select(filteredEmployeeApplications));
+          }
+        });
+    }
+  }
+
+  clearFilters(): void {
+    this.apps$ = this.store.pipe(select(employeeApplications));
+
+    this.searchInput.reset('');
+
+    this.store.dispatch(
+      employeesActions.clearFiltersFromEmployeesDetailsPagination()
+    );
+  }
+
+  // getApps($event: PageEvent) {
+  //   let id = this.activatedRoute.snapshot.paramMap.get('id')!;
+  //   this.subs = this.employeeService
+  //     .getEmployee(parseInt(id))
+  //     .subscribe((empl) => {
+  //       this.employee = empl;
+  //       this.apps$ = this.appService.getAppsOfEmployee(empl.id).pipe(
+  //         switchMap((apps) => {
+  //           this.lenght = apps.length;
+  //           if (this.lenght) {
+  //             return this.appService.getAppsOfEmployee(empl.id, 0, this.lenght);
+  //           }
+  //           return [];
+  //         })
+  //       );
+  //     });
+  // }
 
   changeRoles(): void {
     this.dialog.open(ChangeRolesComponent, {

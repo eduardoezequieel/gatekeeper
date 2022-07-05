@@ -21,8 +21,6 @@ import { EmployeesService } from './employees.service';
 
 @Injectable()
 export class ApplicationsService {
-  apps$!: Observable<Application[]>;
-
   constructor(
     private http: HttpClient,
     private employeesService: EmployeesService
@@ -60,20 +58,40 @@ export class ApplicationsService {
   // }
 
   getAppsOfEmployee(
-    employeeId: number,
-    page: number = 0,
-    items: number = 100
-  ): Observable<App[]> {
+    id: number,
+    page: number,
+    items: number
+  ): Observable<AppsOfEmployeeResponse> {
+    return this.http.get<AppsOfEmployeeResponse>(
+      environment.url +
+        `/employees/${id}/applications?page=${page}&items=${items}`
+    );
+  }
+
+  searchAppsOfEmployee(
+    id: number,
+    search: string,
+    items: number
+  ): Observable<Application[]> {
     return this.http
       .get<AppsOfEmployeeResponse>(
-        environment.url +
-          `/employees/${employeeId}/applications?page=${
-            page + 1
-          }&items=${items}`
+        environment.url + `/employees/${id}/applications?page=1&items=${items}`
       )
       .pipe(
-        map((resp) => {
-          return resp.data;
+        switchMap((response) => {
+          if (items < response.pagination.totalItems) {
+            return this.searchAppsOfEmployee(
+              id,
+              search,
+              response.pagination.totalItems
+            );
+          } else {
+            return of(
+              response.data.filter((element) =>
+                element.name.toLowerCase().includes(search.toLowerCase())
+              )
+            );
+          }
         })
       );
   }
