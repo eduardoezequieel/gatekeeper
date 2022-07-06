@@ -16,6 +16,10 @@ export const getEmployeesSuccess = createAction(
   props<{ employees: EmployeesResponse }>()
 );
 
+export const getEmployeesError = createAction(
+  '[Employees Module] Could not get employees'
+);
+
 export const updatePagination = createAction(
   '[Employees Module] Update pagination',
   props<{ pageEvent: PageEvent }>()
@@ -66,5 +70,19 @@ export const searchAppsOfEmployeeSuccess = createAction(
 );
 
 export const clearFiltersFromEmployeesDetailsPagination = createAction(
-  '[Employees Module] Clear filters from pagination'
+  '[Employees Module] Clear filters from pagination (employees details)'
+);
+
+export const getFilteredEmployees = createAction(
+  '[Employees Module] Get filtered employees',
+  props<{ name: string; applicationId: number; role: string }>()
+);
+
+export const getFilteredEmployeesSuccess = createAction(
+  '[Employees Module] Gotten filtered employees',
+  props<{ employees: Employee[] }>()
+);
+
+export const clearFiltersFromEmployeesPagination = createAction(
+  '[Employees Module] Clear filters from pagination (employees)'
 );

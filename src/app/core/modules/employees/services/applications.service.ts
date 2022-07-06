@@ -42,20 +42,56 @@ export class ApplicationsService {
       );
   }
 
-  // getEmployeesOfApp(appID: number): Observable<Employee[]> {
-  //   if (appID === -1) {
-  //     return this.employeesService.getAllEmployees();
-  //   }
-  //   return this.http
-  //     .get<AppEmployeesResponse>(
-  //       environment.url + `/applications/${appID}/employees?page=1&items=100`
-  //     )
-  //     .pipe(
-  //       map((resp) => {
-  //         return resp.data;
-  //       })
-  //     );
-  // }
+  getEmployeesOfApp(
+    name: string,
+    role: string,
+    appID: number,
+    items: number
+  ): Observable<Employee[]> {
+    if (appID === -1) {
+      return this.employeesService
+        .getAllEmployees(1)
+        .pipe(
+          map((response) =>
+            response.filter(
+              (employee) =>
+                employee.name.toLowerCase().includes(name.toLowerCase()) &&
+                employee.role.name.toLowerCase().includes(role.toLowerCase())
+            )
+          )
+        );
+    } else {
+      return this.http
+        .get<AppEmployeesResponse>(
+          environment.url +
+            `/applications/${appID}/employees?page=1&items=${items}`
+        )
+        .pipe(
+          switchMap((response) => {
+            if (items < response.pagination.totalItems) {
+              return this.getEmployeesOfApp(
+                name,
+                role,
+                appID,
+                response.pagination.totalItems
+              );
+            } else {
+              return of(
+                response.data.filter(
+                  (employee) =>
+                    employee.name
+                      .toLowerCase()
+                      .includes(name.trim().toLowerCase()) &&
+                    employee.role.name
+                      .toLowerCase()
+                      .includes(role.trim().toLowerCase())
+                )
+              );
+            }
+          })
+        );
+    }
+  }
 
   getAppsOfEmployee(
     id: number,

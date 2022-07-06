@@ -1,5 +1,4 @@
-import { Employee } from './../../../../shared/interfaces/employeesResponse';
-import { Roles } from 'src/app/shared/interfaces/rolesResponse';
+import { Employee } from '../../../../shared/interfaces/employeesResponse';
 import * as employeesActions from './employees.actions';
 import { createReducer, on } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
@@ -14,6 +13,8 @@ interface EmployeesModuleStateForReducer {
   employees: {
     data: Employee[];
     pagination: PageEvent;
+    totalEmployees: number;
+    filteredEmployeesIds: number[];
   };
   employeeDetails: {
     employeeIdDetails?: number;
@@ -34,6 +35,8 @@ export const initialState: EmployeesModuleStateForReducer = {
       pageSize: 15,
       length: 0,
     },
+    totalEmployees: 0,
+    filteredEmployeesIds: [],
   },
   employeeDetails: {
     employeeIdDetails: undefined,
@@ -76,6 +79,8 @@ export const employeesModuleReducer = createReducer(
           ...state.employees.pagination,
           length: employees.pagination.totalItems,
         },
+        totalEmployees: employees.pagination.totalItems,
+        filteredEmployeesIds: [],
       },
     };
   }),
@@ -159,6 +164,57 @@ export const employeesModuleReducer = createReducer(
       },
     };
   }),
+  on(employeesActions.getFilteredEmployeesSuccess, (state, { employees }) => {
+    if (employees.length > 0) {
+      const ids: number[] = [];
+      employees.forEach((employee) => ids.push(employee.id));
+
+      return {
+        ...state,
+        employees: {
+          ...state.employees,
+          data: mergeArrays(state.employees.data, employees),
+          pagination: {
+            pageIndex: 0,
+            pageSize: 15,
+            length: employees.length,
+          },
+          filteredEmployeesIds: ids,
+        },
+      };
+    } else {
+      return state;
+    }
+  }),
+  on(employeesActions.clearFiltersFromEmployeesPagination, (state) => {
+    return {
+      ...state,
+      employees: {
+        ...state.employees,
+        pagination: {
+          pageIndex: 0,
+          pageSize: 15,
+          length: state.employees.totalEmployees,
+        },
+      },
+    };
+  }),
+  on(employeesActions.clearFiltersFromEmployeesDetailsPagination, (state) => {
+    return {
+      ...state,
+      employeeDetails: {
+        ...state.employeeDetails,
+        applications: {
+          ...state.employeeDetails.applications,
+          pagination: {
+            pageIndex: 0,
+            pageSize: 15,
+            length: state.employeeDetails.applications.totalApps,
+          },
+        },
+      },
+    };
+  }),
   on(employeesActions.searchAppsOfEmployee, (state) => {
     return {
       ...state,
@@ -198,21 +254,5 @@ export const employeesModuleReducer = createReducer(
         return state;
       }
     }
-  ),
-  on(employeesActions.clearFiltersFromEmployeesDetailsPagination, (state) => {
-    return {
-      ...state,
-      employeeDetails: {
-        ...state.employeeDetails,
-        applications: {
-          ...state.employeeDetails.applications,
-          pagination: {
-            pageIndex: 0,
-            pageSize: 15,
-            length: state.employeeDetails.applications.totalApps,
-          },
-        },
-      },
-    };
-  })
+  )
 );

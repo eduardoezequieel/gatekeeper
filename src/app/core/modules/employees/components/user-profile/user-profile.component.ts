@@ -1,5 +1,5 @@
 import * as employeesActions from '../../store/employees.actions';
-import { EmployeesModuleState } from './../../store/employees-module.reducer';
+import { EmployeesModuleState } from '../../store/employees.reducer';
 import {
   Component,
   OnDestroy,
@@ -26,7 +26,7 @@ import {
   employeeDetailsPagination,
   filteredAppsLength,
   filteredEmployeeApplications,
-} from '../../store/employees-module.selectors';
+} from '../../store/employees.selectors';
 import { Actions, ofType } from '@ngrx/effects';
 import { ApplicationsService } from '../../services/applications.service';
 import { FormBuilder } from '@angular/forms';

@@ -16,7 +16,7 @@
 <div class="main-container">
   <div class="filter-by">
     <p>Filter by:</p>
-    <div class="link">Clear all</div>
+    <div (click)="clearFilters()" class="link">Clear all</div>
   </div>
   <form [formGroup]="form" class="filters">
     <mat-form-field appearance="standard" class="input-search">

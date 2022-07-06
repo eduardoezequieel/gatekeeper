@@ -1,5 +1,6 @@
+import { Employee } from 'src/app/shared/interfaces/employeesResponse';
 import { createSelector } from '@ngrx/store';
-import { EmployeesModuleState } from './employees-module.reducer';
+import { EmployeesModuleState } from './employees.reducer';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 
 const getEmployeesModuleState = (state: EmployeesModuleState) =>
@@ -52,6 +53,33 @@ export const employeeDetailsPagination = createSelector(
       pagination: employeeDetails.applications.pagination,
       applicationsLength: employeeDetails.applications.data.length,
     };
+  }
+);
+
+export const filteredEmployeesLength = createSelector(
+  getEmployeesModuleState,
+  ({ employees }) => employees.filteredEmployeesIds.length
+);
+
+export const filteredEmployees = createSelector(
+  getEmployeesModuleState,
+  ({ employees }) => {
+    const filteredEmployees: Employee[] = [];
+
+    employees.filteredEmployeesIds.forEach((id) => {
+      let index = employees.data.findIndex(
+        (employee) => employee.id == id
+      );
+
+      filteredEmployees.push(employees.data[index]);
+    });
+
+    let start =
+      employees.pagination.pageIndex *
+      employees.pagination.pageSize;
+    let end = start + employees.pagination.pageSize;
+
+    return filteredEmployees.slice(start, end);
   }
 );
 
