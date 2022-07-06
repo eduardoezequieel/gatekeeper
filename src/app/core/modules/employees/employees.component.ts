@@ -21,6 +21,7 @@ import {
   combineLatestWith,
   debounceTime,
   distinctUntilChanged,
+  distinctUntilKeyChanged,
 } from 'rxjs';
 import { ApplicationsService } from './services/applications.service';
 import { Actions, ofType } from '@ngrx/effects';
@@ -112,7 +113,17 @@ export class EmployeesComponent implements OnInit, OnDestroy {
 
   filters(): void {
     this.form.valueChanges
-      .pipe(takeUntil(this.unsubscribe$), debounceTime(700))
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        debounceTime(700),
+        distinctUntilChanged((prev, curr) => {
+          return (
+            prev.byName == curr.byName &&
+            prev.byApp == curr.byApp &&
+            prev.byRole == curr.byRole
+          );
+        })
+      )
       .subscribe((response) => {
         if (
           response.byName == '' &&

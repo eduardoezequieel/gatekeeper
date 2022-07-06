@@ -60,9 +60,10 @@
   </div>
   <div class="pagination-container">
     <mat-paginator
-      [length]="length"
+      [length]="pagination.length"
       [pageSizeOptions]="[5, 10, 15]"
-      [pageSize]="10"
+      [pageSize]="pagination.pageSize"
+      [pageIndex]="pagination.pageIndex"
       (page)="onPageChange($event)"
     ></mat-paginator>
   </div>

@@ -19,6 +19,10 @@ import { DisableAuthComponent } from './components/dialogs/disable-auth/disable-
 import { EnableAuthComponent } from './components/dialogs/enable-auth/enable-auth.component';
 import { ConfirmCloseComponent } from './components/dialogs/confirm-close/confirm-close.component';
 import { RecoveryKeysComponent } from './components/dialogs/recovery-keys/recovery-keys.component';
+import { settingsModuleReducer } from './store/settings.reducer';
+import { StoreModule } from '@ngrx/store';
+import { SettingsEffects } from './store/settings.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -39,6 +43,8 @@ import { RecoveryKeysComponent } from './components/dialogs/recovery-keys/recove
     MatSlideToggleModule,
     MatDialogModule,
     FormsModule,
+    StoreModule.forFeature('settingsModule', settingsModuleReducer),
+    EffectsModule.forFeature([SettingsEffects]),
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,

@@ -4,13 +4,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  catchError,
-  Observable,
-  ReplaySubject,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Activate2FaResponse } from 'src/app/shared/interfaces/activate2faResponse';
 import { Generate2FA } from 'src/app/shared/interfaces/generate2-fa';
 import { UpdatePass } from 'src/app/shared/interfaces/loginResponse';
