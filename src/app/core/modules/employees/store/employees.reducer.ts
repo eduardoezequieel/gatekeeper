@@ -53,7 +53,7 @@ export const initialState: EmployeesModuleStateForReducer = {
   },
 };
 
-const mergeArrays = (oldState: any[], newState: any[]) => {
+export const mergeArrays = (oldState: any[], newState: any[]) => {
   const mergedArray: any[] = oldState.concat(newState);
   const arrayIds = new Set();
   const filteredArray: any[] = [];
@@ -85,6 +85,7 @@ export const employeesModuleReducer = createReducer(
     };
   }),
   on(employeesActions.updatePagination, (state, { pageEvent }) => {
+    debugger;
     return {
       ...state,
       employees: {
@@ -93,7 +94,6 @@ export const employeesModuleReducer = createReducer(
           ...state.employees.pagination,
           pageIndex: pageEvent.pageIndex,
           pageSize: pageEvent.pageSize,
-          previousPageIndex: pageEvent.previousPageIndex,
         },
       },
     };
@@ -111,7 +111,6 @@ export const employeesModuleReducer = createReducer(
               ...state.employeeDetails.applications.pagination,
               pageIndex: pageEvent.pageIndex,
               pageSize: pageEvent.pageSize,
-              previousPageIndex: pageEvent.previousPageIndex,
             },
           },
         },
