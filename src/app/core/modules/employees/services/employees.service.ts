@@ -1,18 +1,33 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 import {
   Employee,
   EmployeesResponse,
 } from 'src/app/shared/interfaces/employeesResponse';
 import { environment } from 'src/environments/environment.prod';
-import { WarningsService } from './warnings.service';
 
 @Injectable()
 export class EmployeesService {
   employees$!: Observable<Employee[]>;
 
-  constructor(private http: HttpClient, private warnings: WarningsService) {}
+  constructor(private http: HttpClient) {}
+
+  getAllEmployees(items: number): Observable<Employee[]> {
+    return this.http
+      .get<EmployeesResponse>(
+        environment.url + `/employees?page=1&items=${items}`
+      )
+      .pipe(
+        switchMap((response) => {
+          if (items < response.pagination.totalItems) {
+            return this.getAllEmployees(response.pagination.totalItems);
+          } else {
+            return of(response.data);
+          }
+        })
+      );
+  }
 
   getEmployees(page: number, items: number): Observable<EmployeesResponse> {
     return this.http.get<EmployeesResponse>(
