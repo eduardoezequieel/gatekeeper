@@ -21,7 +21,7 @@ import { ChangeRolesComponent } from './components/user-profile/dialogs/change-r
 import { ShortNamesPipe } from 'src/app/shared/short-names.pipe';
 import { ViewRolesComponent } from './components/user-profile/dialogs/view-roles/view-roles.component';
 import { RemoveMfaComponent } from './components/user-profile/dialogs/remove-mfa/remove-mfa.component';
-import { employeesModuleReducer } from './store/employees-module.reducer';
+import { employeesModuleReducer } from './store/employees.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { ApplicationsService } from './services/applications.service';
 import { WarningsService } from './services/warnings.service';

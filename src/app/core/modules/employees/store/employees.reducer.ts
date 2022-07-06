@@ -1,4 +1,4 @@
-import { Employee } from './../../../../shared/interfaces/employeesResponse';
+import { Employee } from '../../../../shared/interfaces/employeesResponse';
 import { Roles } from 'src/app/shared/interfaces/rolesResponse';
 import * as employeesActions from './employees.actions';
 import { createReducer, on } from '@ngrx/store';

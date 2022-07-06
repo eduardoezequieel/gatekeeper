@@ -1,4 +1,4 @@
-import { EmployeesModuleState } from './employees-module.reducer';
+import { EmployeesModuleState } from './employees.reducer';
 import * as employeesActions from './employees.actions';
 import { Injectable } from '@angular/core';
 import { Actions } from '@ngrx/effects';
@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import {
   pagination,
   employeeDetailsPagination,
-} from './employees-module.selectors';
+} from './employees.selectors';
 import { ApplicationsService } from '../services/applications.service';
 @Injectable()
 export class EmployeesEffects {

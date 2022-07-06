@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { EmployeesModuleState } from './employees-module.reducer';
+import { EmployeesModuleState } from './employees.reducer';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 
 const getEmployeesModuleState = (state: EmployeesModuleState) =>

@@ -10,10 +10,10 @@ import { Employee } from 'src/app/shared/interfaces/employeesResponse';
 import { User } from 'src/app/shared/interfaces/loginResponse';
 import { Roles } from 'src/app/shared/interfaces/rolesResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
-import { EmployeesModuleState } from './store/employees-module.reducer';
+import { EmployeesModuleState } from './store/employees.reducer';
 import { WarningsService } from './services/warnings.service';
 import * as employeesActions from './store/employees.actions';
-import * as selectors from './store/employees-module.selectors';
+import * as selectors from './store/employees.selectors';
 import {
   of,
   Subject,
