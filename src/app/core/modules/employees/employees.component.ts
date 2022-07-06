@@ -12,11 +12,17 @@ import { Roles } from 'src/app/shared/interfaces/rolesResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { EmployeesModuleState } from './store/employees-module.reducer';
 import { WarningsService } from './services/warnings.service';
-import * as applicationsActions from './store/actions/applications.actions';
-import * as rolesActions from './store/actions/roles.actions';
-import * as employeesActions from './store/actions/employees.actions';
+import * as employeesActions from './store/employees.actions';
 import * as selectors from './store/employees-module.selectors';
-import { Subject, takeUntil } from 'rxjs';
+import {
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  Observable,
+  combineLatestWith,
+} from 'rxjs';
+import { ApplicationsService } from './services/applications.service';
 
 @Component({
   selector: 'app-employees',
@@ -25,7 +31,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class EmployeesComponent implements OnInit, OnDestroy {
   user!: User;
-  employees!: Employee[];
+  employees$!: Observable<Employee[]>;
   employeesLength = 0;
   applications!: Application[];
   roles!: Roles[];
@@ -35,6 +41,7 @@ export class EmployeesComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
+    private applicationsService: ApplicationsService,
     private router: Router,
     public warnings: WarningsService,
     private matIconRegistry: MatIconRegistry,
@@ -57,18 +64,23 @@ export class EmployeesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(applicationsActions.getApplications({ items: 12 }));
-    this.store.dispatch(rolesActions.getRoles());
+    this.applicationsService
+      .getApplications(12)
+      .pipe(combineLatestWith(this.applicationsService.getRoles()))
+      .subscribe((response) => {
+        this.applications = response[0].data;
+        this.roles = response[1];
+      });
+
     this.store.dispatch(employeesActions.getEmployees());
 
+    this.employees$ = this.store.pipe(select(selectors.employees));
+
     this.store
-      .pipe(select(selectors.getState), takeUntil(this.unsubscribe$))
-      .subscribe(({ applications, roles, employees }) => {
-        this.applications = applications;
-        this.roles = roles;
-        this.employees = employees.data;
-        this.pagination = employees.pagination;
-        this.employeesLength = employees.employeesLength;
+      .pipe(select(selectors.pagination), takeUntil(this.unsubscribe$))
+      .subscribe(({ pagination, employeesLength }) => {
+        this.pagination = pagination;
+        this.employeesLength = employeesLength;
       });
 
     this.user = this.userService.getUser();

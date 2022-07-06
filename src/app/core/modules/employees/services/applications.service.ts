@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable, of, tap, switchMap } from 'rxjs';
 import { AppEmployeesResponse } from 'src/app/shared/interfaces/appEmployeesResponse';
 import {
   Application,
@@ -21,49 +21,77 @@ import { EmployeesService } from './employees.service';
 
 @Injectable()
 export class ApplicationsService {
-  apps$!: Observable<Application[]>;
-
   constructor(
     private http: HttpClient,
     private employeesService: EmployeesService
   ) {}
 
-  getApplications(items: number): Observable<any> {
-    return this.http.get<ApplicationsResponse>(
-      environment.url + `/applications?page=1&items=${items}`
-    );
-  }
-
-  getEmployeesOfApp(appID: number): Observable<Employee[]> {
-    if (appID === -1) {
-      return this.employeesService.getAllEmployees();
-    }
+  getApplications(items: number): Observable<ApplicationsResponse> {
     return this.http
-      .get<AppEmployeesResponse>(
-        environment.url + `/applications/${appID}/employees?page=1&items=100`
+      .get<ApplicationsResponse>(
+        environment.url + `/applications?page=1&items=${items}`
       )
       .pipe(
-        map((resp) => {
-          return resp.data;
+        switchMap((response) => {
+          if (response.data.length < response.pagination.totalItems) {
+            return this.getApplications(response.pagination.totalItems);
+          } else {
+            return of(response);
+          }
         })
       );
   }
 
+  // getEmployeesOfApp(appID: number): Observable<Employee[]> {
+  //   if (appID === -1) {
+  //     return this.employeesService.getAllEmployees();
+  //   }
+  //   return this.http
+  //     .get<AppEmployeesResponse>(
+  //       environment.url + `/applications/${appID}/employees?page=1&items=100`
+  //     )
+  //     .pipe(
+  //       map((resp) => {
+  //         return resp.data;
+  //       })
+  //     );
+  // }
+
   getAppsOfEmployee(
-    employeeId: number,
-    page: number = 0,
-    items: number = 100
-  ): Observable<App[]> {
+    id: number,
+    page: number,
+    items: number
+  ): Observable<AppsOfEmployeeResponse> {
+    return this.http.get<AppsOfEmployeeResponse>(
+      environment.url +
+        `/employees/${id}/applications?page=${page}&items=${items}`
+    );
+  }
+
+  searchAppsOfEmployee(
+    id: number,
+    search: string,
+    items: number
+  ): Observable<Application[]> {
     return this.http
       .get<AppsOfEmployeeResponse>(
-        environment.url +
-          `/employees/${employeeId}/applications?page=${
-            page + 1
-          }&items=${items}`
+        environment.url + `/employees/${id}/applications?page=1&items=${items}`
       )
       .pipe(
-        map((resp) => {
-          return resp.data;
+        switchMap((response) => {
+          if (items < response.pagination.totalItems) {
+            return this.searchAppsOfEmployee(
+              id,
+              search,
+              response.pagination.totalItems
+            );
+          } else {
+            return of(
+              response.data.filter((element) =>
+                element.name.toLowerCase().includes(search.toLowerCase())
+              )
+            );
+          }
         })
       );
   }

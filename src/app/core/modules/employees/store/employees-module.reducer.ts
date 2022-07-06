@@ -1,8 +1,6 @@
 import { Employee } from './../../../../shared/interfaces/employeesResponse';
 import { Roles } from 'src/app/shared/interfaces/rolesResponse';
-import * as applicationsActions from './actions/applications.actions';
-import * as rolesActions from './actions/roles.actions';
-import * as employeesActions from './actions/employees.actions';
+import * as employeesActions from './employees.actions';
 import { createReducer, on } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
@@ -13,17 +11,22 @@ export interface EmployeesModuleState extends AppState {
 }
 
 interface EmployeesModuleStateForReducer {
-  applications: Application[];
-  roles: Roles[];
   employees: {
     data: Employee[];
     pagination: PageEvent;
   };
+  employeeDetails: {
+    employeeIdDetails?: number;
+    applications: {
+      data: Application[];
+      pagination: PageEvent;
+      totalApps: number;
+    };
+    filteredApplicationsIds: number[];
+  };
 }
 
 export const initialState: EmployeesModuleStateForReducer = {
-  applications: [],
-  roles: [],
   employees: {
     data: [],
     pagination: {
@@ -32,39 +35,43 @@ export const initialState: EmployeesModuleStateForReducer = {
       length: 0,
     },
   },
+  employeeDetails: {
+    employeeIdDetails: undefined,
+    applications: {
+      data: [],
+      pagination: {
+        pageIndex: 0,
+        pageSize: 15,
+        length: 0,
+      },
+      totalApps: 0,
+    },
+    filteredApplicationsIds: [],
+  },
 };
 
-export const mergeEmployees = (
-  oldState: Employee[],
-  employeesToBeMerged: Employee[]
-) => {
-  const mergedEmployees: Employee[] = oldState.concat(employeesToBeMerged);
-  const employeesIds = new Set();
-  const filteredEmployees: Employee[] = [];
+const mergeArrays = (oldState: any[], newState: any[]) => {
+  const mergedArray: any[] = oldState.concat(newState);
+  const arrayIds = new Set();
+  const filteredArray: any[] = [];
 
-  mergedEmployees.forEach((employee) => employeesIds.add(employee.id));
+  mergedArray.forEach((element) => arrayIds.add(element.id));
 
-  employeesIds.forEach((id) => {
-    let index = mergedEmployees.findIndex((employee) => employee.id == id);
-    filteredEmployees.push(mergedEmployees[index]);
+  arrayIds.forEach((id) => {
+    let index = mergedArray.findIndex((element) => element.id == id);
+    filteredArray.push(mergedArray[index]);
   });
 
-  return filteredEmployees;
+  return filteredArray;
 };
 
 export const employeesModuleReducer = createReducer(
   initialState,
-  on(applicationsActions.getApplicationsSuccess, (state, { applications }) => {
-    return { ...state, applications };
-  }),
-  on(rolesActions.getRolesSuccess, (state, { roles }) => {
-    return { ...state, roles };
-  }),
   on(employeesActions.getEmployeesSuccess, (state, { employees }) => {
     return {
       ...state,
       employees: {
-        data: mergeEmployees(state.employees.data, employees.data),
+        data: mergeArrays(state.employees.data, employees.data),
         pagination: {
           ...state.employees.pagination,
           length: employees.pagination.totalItems,
@@ -82,6 +89,128 @@ export const employeesModuleReducer = createReducer(
           pageIndex: pageEvent.pageIndex,
           pageSize: pageEvent.pageSize,
           previousPageIndex: pageEvent.previousPageIndex,
+        },
+      },
+    };
+  }),
+  on(
+    employeesActions.updatePaginationEmployeeDetails,
+    (state, { pageEvent }) => {
+      return {
+        ...state,
+        employeeDetails: {
+          ...state.employeeDetails,
+          applications: {
+            ...state.employeeDetails.applications,
+            pagination: {
+              ...state.employeeDetails.applications.pagination,
+              pageIndex: pageEvent.pageIndex,
+              pageSize: pageEvent.pageSize,
+              previousPageIndex: pageEvent.previousPageIndex,
+            },
+          },
+        },
+      };
+    }
+  ),
+  on(employeesActions.getEmployeeFromStore, (state, { id }) => {
+    return {
+      ...state,
+      employeeDetails: {
+        employeeIdDetails: id,
+        applications: {
+          data: [],
+          pagination: {
+            pageIndex: 0,
+            pageSize: 15,
+            length: 0,
+          },
+          totalApps: 0,
+        },
+        filteredApplicationsIds: [],
+      },
+    };
+  }),
+  on(employeesActions.getEmployeeSuccess, (state, { employee }) => {
+    return {
+      ...state,
+      employees: {
+        ...state.employees,
+        data: [...state.employees.data, employee],
+      },
+    };
+  }),
+  on(employeesActions.getAppsOfEmployeeSuccess, (state, { applications }) => {
+    return {
+      ...state,
+      employeeDetails: {
+        ...state.employeeDetails,
+        applications: {
+          data: mergeArrays(
+            state.employeeDetails.applications.data,
+            applications.data
+          ),
+          pagination: {
+            ...state.employeeDetails.applications.pagination,
+            length: applications.pagination.totalItems,
+          },
+          totalApps: applications.pagination.totalItems,
+        },
+      },
+    };
+  }),
+  on(employeesActions.searchAppsOfEmployee, (state) => {
+    return {
+      ...state,
+      employeeDetails: {
+        ...state.employeeDetails,
+        filteredApplicationsIds: [],
+      },
+    };
+  }),
+  on(
+    employeesActions.searchAppsOfEmployeeSuccess,
+    (state, { applications }) => {
+      if (applications.length > 0) {
+        const ids: number[] = [];
+        applications.forEach((app) => ids.push(app.id));
+
+        return {
+          ...state,
+          employeeDetails: {
+            ...state.employeeDetails,
+            applications: {
+              ...state.employeeDetails.applications,
+              data: mergeArrays(
+                state.employeeDetails.applications.data,
+                applications
+              ),
+              pagination: {
+                pageIndex: 0,
+                pageSize: 15,
+                length: ids.length,
+              },
+            },
+            filteredApplicationsIds: ids,
+          },
+        };
+      } else {
+        return state;
+      }
+    }
+  ),
+  on(employeesActions.clearFiltersFromEmployeesDetailsPagination, (state) => {
+    return {
+      ...state,
+      employeeDetails: {
+        ...state.employeeDetails,
+        applications: {
+          ...state.employeeDetails.applications,
+          pagination: {
+            pageIndex: 0,
+            pageSize: 15,
+            length: state.employeeDetails.applications.totalApps,
+          },
         },
       },
     };
