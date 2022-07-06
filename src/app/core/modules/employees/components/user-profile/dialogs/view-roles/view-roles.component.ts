@@ -12,28 +12,31 @@ import { ApplicationsService } from '../../../../services/applications.service';
 @Component({
   selector: 'app-view-roles',
   templateUrl: './view-roles.component.html',
-  styleUrls: ['./view-roles.component.scss']
+  styleUrls: ['./view-roles.component.scss'],
 })
 export class ViewRolesComponent implements OnInit {
-
   roles$!: Observable<AppsRoles[]>;
   selection = new SelectionModel<AppsRoles>(true, []);
 
   constructor(
     private dialogRef: MatDialogRef<ViewRolesComponent>,
-    private dialog: MatDialog,
     private applicationService: ApplicationsService,
-    @Inject(MAT_DIALOG_DATA) public data: {user: string, app: number, userId: number},
-    ) {}
-    
+    @Inject(MAT_DIALOG_DATA)
+    public data: { user: string; app: number; userId: number }
+  ) {}
+
   ngOnInit(): void {
-    this.roles$ = this.applicationService.getRolesOfEmployeeInApp(this.data.app, this.data.userId).pipe(
-      tap(resp => resp.forEach(rol => {
-        if(rol.assigned) {
-          this.selection.toggle(rol)
-        }
-      })
-    ))
+    this.roles$ = this.applicationService
+      .getRolesOfEmployeeInApp(this.data.app, this.data.userId)
+      .pipe(
+        tap((resp) =>
+          resp.forEach((rol) => {
+            if (rol.assigned) {
+              this.selection.toggle(rol);
+            }
+          })
+        )
+      );
   }
 
   onNoClick(): void {
@@ -41,8 +44,14 @@ export class ViewRolesComponent implements OnInit {
   }
 
   continueClick(): void {
-    let roles = this.selection.selected.map( elem => elem.id)
-    this.applicationService.updateRolesOfEmployeeInApp(this.data.app, this.data.userId, roles).pipe(take(1)).subscribe()
-    this.dialogRef.close({ event: 'close', data: this.selection.selected.length });
+    let roles = this.selection.selected.map((elem) => elem.id);
+    this.applicationService
+      .updateRolesOfEmployeeInApp(this.data.app, this.data.userId, roles)
+      .pipe(take(1))
+      .subscribe();
+    this.dialogRef.close({
+      event: 'close',
+      data: this.selection.selected.length,
+    });
   }
 }

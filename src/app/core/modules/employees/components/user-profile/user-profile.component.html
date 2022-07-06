@@ -31,6 +31,7 @@
           class="secondary-button"
           mat-flat-button
           *ngIf="employee.twoFactorEnabled"
+          (click)="removeMFA()"
         >
           Remove MFA
         </button>
@@ -84,7 +85,13 @@
         </div>
       </div>
       <div class="button-container">
-        <button mat-flat-button class="secondary-button">View role</button>
+        <button
+          mat-flat-button
+          class="secondary-button"
+          (click)="viewRoles(app.id)"
+        >
+          View role
+        </button>
       </div>
     </div>
   </div>

@@ -13,13 +13,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import {
-  combineLatestWith,
-  Observable,
-  Subject,
-  takeUntil,
-  Subscription,
-} from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { Employee } from 'src/app/shared/interfaces/employeesResponse';
 import { User } from 'src/app/shared/interfaces/loginResponse';
@@ -36,6 +30,8 @@ import {
 import { Actions, ofType } from '@ngrx/effects';
 import { ApplicationsService } from '../../services/applications.service';
 import { FormBuilder } from '@angular/forms';
+import { ViewRolesComponent } from './dialogs/view-roles/view-roles.component';
+import { RemoveMfaComponent } from './dialogs/remove-mfa/remove-mfa.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -59,7 +55,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
-    private applicationsService: ApplicationsService,
     public warningService: WarningsService,
     private activatedRoute: ActivatedRoute,
     private matIconRegistry: MatIconRegistry,
@@ -168,24 +163,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     );
   }
 
-  // getApps($event: PageEvent) {
-  //   let id = this.activatedRoute.snapshot.paramMap.get('id')!;
-  //   this.subs = this.employeeService
-  //     .getEmployee(parseInt(id))
-  //     .subscribe((empl) => {
-  //       this.employee = empl;
-  //       this.apps$ = this.appService.getAppsOfEmployee(empl.id).pipe(
-  //         switchMap((apps) => {
-  //           this.lenght = apps.length;
-  //           if (this.lenght) {
-  //             return this.appService.getAppsOfEmployee(empl.id, 0, this.lenght);
-  //           }
-  //           return [];
-  //         })
-  //       );
-  //     });
-  // }
-
   changeRoles(): void {
     this.dialog.open(ChangeRolesComponent, {
       width: '556px',
@@ -197,39 +174,23 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  // viewRoles(appId: number) {
-  //   const DialogRef = this.dialog.open(ViewRolesComponent, {
-  //     width: '556px',
-  //     data: { user: this.employee.name, app: appId, userId: this.employee.id },
-  //   });
-  //   DialogRef.afterClosed().subscribe((resp) => {
-  //     if (resp.data == 0)
-  //       this.getApps({
-  //         pageIndex: 0,
-  //         pageSize: this.pageSize,
-  //         length: this.lenght,
-  //       });
-  //   });
-  // }
+  viewRoles(appId: number) {
+    this.dialog.open(ViewRolesComponent, {
+      width: '556px',
+      data: {
+        user: this.employee?.name,
+        app: appId,
+        userId: this.employee?.id,
+      },
+    });
+  }
 
-  // filterApps(filterName: string) {
-  //   this.apps$ = this.appService
-  //     .getAppsOfEmployee(this.employee.id)
-  //     .pipe(
-  //       map((emps) =>
-  //         emps.filter((emp) =>
-  //           emp.name.toLowerCase().includes(filterName.trim().toLowerCase())
-  //         )
-  //       )
-  //     );
-  // }
-
-  // removeMFA() {
-  //   this.dialog.open(RemoveMfaComponent, {
-  //     width: '556px',
-  //     data: { employeeId: this.employee.id },
-  //   });
-  // }
+  removeMFA() {
+    this.dialog.open(RemoveMfaComponent, {
+      width: '556px',
+      data: { employeeId: this.employee?.id },
+    });
+  }
 
   removeNoRootWarning() {
     this.warningService.noRootOff();
