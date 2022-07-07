@@ -19,6 +19,10 @@ import { AproveRequestComponent } from './components/dialogs/aprove-request/apro
 import { MatSelectModule } from '@angular/material/select';
 import { AdminRequestComponent } from './components/admin-request/admin-request.component';
 import { RegularRequestComponent } from './components/regular-request/regular-request.component';
+import { StoreModule } from '@ngrx/store';
+import { requestsModuleReducer } from './store/requests.reducer';
+import { RequestsEffects } from './store/requests.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -39,6 +43,8 @@ import { RegularRequestComponent } from './components/regular-request/regular-re
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
+    StoreModule.forFeature('requestsModule', requestsModuleReducer),
+    EffectsModule.forFeature([RequestsEffects]),
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
