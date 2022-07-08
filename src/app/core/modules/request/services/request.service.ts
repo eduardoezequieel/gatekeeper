@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 import {
   AllRequestsResponse,
   ApplicationAccess,
@@ -70,6 +70,41 @@ export class RequestService {
       environment.url +
         `/applications/${appId}/access-request?page=${page}&items=${items}`
     );
+  }
+
+  searchAppsAccessRequests(
+    appId: number,
+    search: string,
+    items: number
+  ): Observable<ApplicationAccess[]> {
+    return this.http
+      .get<AllRequestsResponse>(
+        environment.url +
+          `/applications/${appId}/access-request?page=1&items=${items}`
+      )
+      .pipe(
+        switchMap((response) => {
+          if (items < response.pagination.totalItems) {
+            return this.searchAppsAccessRequests(
+              appId,
+              search,
+              response.pagination.totalItems
+            );
+          } else {
+            return of(
+              response.data.filter((element) => {
+                return (
+                  element.message
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                  element.employee.name.toLowerCase().includes(search) ||
+                  element.application.name.toLowerCase().includes(search)
+                );
+              })
+            );
+          }
+        })
+      );
   }
 
   aproveAccessRequest(

@@ -1,32 +1,52 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { searchAppsOfEmployee } from './../../../employees/store/employees.actions';
+import { filteredRequests, requests } from './../../store/requests.selectors';
+import {
+  getAppsRequests,
+  getAppsRequestsSuccess,
+  updatePagination,
+} from './../../store/requests.actions';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { map, Observable, switchMap, take } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Observable,
+  Subject,
+  switchMap,
+  take,
+  takeUntil,
+} from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { RequestNotificationService } from '../../services/request-notification.service';
 import { RequestService } from '../../services/request.service';
+import { RequestsModuleState } from '../../store/requests.reducer';
 
 import { AproveRequestComponent } from '../dialogs/aprove-request/aprove-request.component';
 import { DeleteAllComponent } from '../dialogs/delete-all/delete-all.component';
 import { DenyRequestComponent } from '../dialogs/deny-request/deny-request.component';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
+import { Actions, ofType } from '@ngrx/effects';
+import { pagination } from '../../store/requests.selectors';
 
 @Component({
   selector: 'app-admin-request',
   templateUrl: './admin-request.component.html',
   styleUrls: ['./admin-request.component.scss'],
 })
-export class AdminRequestComponent implements OnInit {
-  form: FormGroup = new FormGroup({});
+export class AdminRequestComponent implements OnInit, OnDestroy {
+  searchInput = new FormControl('');
   applications!: Observable<Application[]>;
-  currentApp!: any;
-  noResults!: boolean;
-  requestSelected: boolean = false;
+  currentAppId!: number;
+  noResults = true;
+  requestSelected = false;
   twoFAuthEnabled = false;
   checkAll = false;
-  length!: number;
   displayedColumns: string[] = [
     'check',
     'No.',
@@ -36,12 +56,21 @@ export class AdminRequestComponent implements OnInit {
     'status',
   ];
   dataSource!: MatTableDataSource<any>;
-  searchKey!: string;
+  unsubscribe$ = new Subject();
+  pagination: PageEvent = {
+    pageIndex: 0,
+    pageSize: 10,
+    length: 0,
+  };
+  totalRequests = 0;
+
   constructor(
     private dialog: MatDialog,
     private requestService: RequestService,
     public requestNotifications: RequestNotificationService,
-    private userService: UserService
+    private userService: UserService,
+    private store: Store<RequestsModuleState>,
+    private actions$: Actions
   ) {}
 
   ngOnInit(): void {
@@ -57,56 +86,68 @@ export class AdminRequestComponent implements OnInit {
         );
       })
     );
-    this.noResults = false;
 
     if (!this.twoFAuthEnabled) {
       this.requestNotifications.enableTwoStepOn();
     }
+
+    // this.searchInput.valueChanges
+    //   .pipe(
+    //     debounceTime(700),
+    //     distinctUntilChanged(),
+    //     takeUntil(this.unsubscribe$)
+    //   )
+    //   .subscribe((response) => {
+    //     if (this.currentAppId) {
+    //       if ((response as string).length == 0) {
+    //       } else {
+    //         this.store.dispatch(
+    //           searchAppsOfEmployee({ id: this.currentAppId, search: response })
+    //         );
+
+    //         this.store
+    //           .pipe(select(filteredRequests), takeUntil(this.unsubscribe$))
+    //           .subscribe((response) => {
+    //             this.dataSource = new MatTableDataSource(response);
+    //           });
+    //       }
+    //     }
+    //   });
   }
 
-  get f() {
-    return this.form.controls;
-  }
+  fillRequestTable(id: number) {
+    this.store.dispatch(getAppsRequests({ id }));
 
-  fillRequestTable(event: any) {
-    this.currentApp = event;
-    this.requestService
-      .appsAccessRequests(event.value, 1, 10)
-      .pipe(take(1))
-      .subscribe((res) => {
-        this.length = res.pagination.totalItems;
-        if (this.length < 1) {
-          this.noResults = false;
-        } else {
+    this.store
+      .pipe(select(pagination), takeUntil(this.unsubscribe$))
+      .subscribe(({ pagination, selectedAppId, totalRequests }) => {
+        this.pagination = pagination;
+        this.currentAppId = selectedAppId;
+        this.totalRequests = totalRequests;
+      });
+
+    this.actions$
+      .pipe(ofType(getAppsRequestsSuccess), takeUntil(this.unsubscribe$))
+      .subscribe(() => {
+        if (this.totalRequests < 1) {
           this.noResults = true;
+        } else {
+          this.noResults = false;
         }
-        res.data.forEach((request) => {
-          request.isSelected = false;
-        });
+      });
 
-        this.dataSource = new MatTableDataSource(res.data);
-        this.dataSource.filterPredicate = (data, filter) => {
-          return data.application.name.toLocaleLowerCase().includes(filter);
-        };
+    this.store
+      .pipe(select(requests), takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.dataSource = new MatTableDataSource(response);
       });
   }
   onPageChange(pageEvent: PageEvent) {
-    this.requestService
-      .appsAccessRequests(
-        this.currentApp.value,
-        pageEvent.pageIndex + 1,
-        pageEvent.pageSize
-      )
-      .pipe(take(1))
-      .subscribe((res) => {
-        res.data.forEach((request) => {
-          request.isSelected = false;
-        });
-        this.dataSource = new MatTableDataSource(res.data);
-        this.dataSource.filterPredicate = (data, filter) => {
-          return data.application.name.toLocaleLowerCase().includes(filter);
-        };
-      });
+    this.store.dispatch(updatePagination({ pageEvent }));
+
+    if (this.totalRequests < this.pagination.length) {
+      this.store.dispatch(getAppsRequests({ id: this.currentAppId }));
+    }
   }
   openDenyManyDialog(): void {
     this.dialog.open(DeleteAllComponent, {
@@ -120,7 +161,7 @@ export class AdminRequestComponent implements OnInit {
       },
     });
     this.dialog.afterAllClosed.subscribe(() => {
-      this.fillRequestTable(this.currentApp);
+      this.fillRequestTable(this.currentAppId);
       this.checkAll = false;
       this.requestSelected = false;
     });
@@ -133,7 +174,7 @@ export class AdminRequestComponent implements OnInit {
         data: Number(requestId),
       });
       this.dialog.afterAllClosed.subscribe(() => {
-        this.fillRequestTable(this.currentApp);
+        this.fillRequestTable(this.currentAppId);
       });
     } else {
       console.log('Not a Number');
@@ -151,7 +192,7 @@ export class AdminRequestComponent implements OnInit {
       },
     });
     this.dialog.afterAllClosed.subscribe(() => {
-      this.fillRequestTable(this.currentApp);
+      this.fillRequestTable(this.currentAppId);
     });
   }
   openAproveManyAccess(): void {
@@ -159,24 +200,15 @@ export class AdminRequestComponent implements OnInit {
     this.dialog.open(AproveRequestComponent, {
       width: '556px',
       data: {
-        applicationId: this.currentApp.value,
+        applicationId: this.currentAppId,
         requestArr: request,
       },
     });
     this.dialog.afterAllClosed.subscribe(() => {
-      this.fillRequestTable(this.currentApp);
+      this.fillRequestTable(this.currentAppId);
       this.checkAll = false;
       this.requestSelected = false;
     });
-  }
-
-  filterData() {
-    this.dataSource.filter = this.searchKey.trim().toLocaleLowerCase();
-    if (this.dataSource.filteredData.length == 0) {
-      this.noResults = false;
-    } else {
-      this.noResults = true;
-    }
   }
 
   selectedRequests() {
@@ -214,5 +246,10 @@ export class AdminRequestComponent implements OnInit {
 
   closeRequestMessages() {
     this.requestNotifications.turnErrorsOff();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete();
   }
 }
