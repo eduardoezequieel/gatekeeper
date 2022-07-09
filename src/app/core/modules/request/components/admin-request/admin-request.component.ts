@@ -1,14 +1,14 @@
 import {
-  filteredRequests,
-  filteredRequestsLength,
-  requests,
+  filteredAppsRequests,
+  filteredAppsRequestsLength,
+  appsRequests,
 } from './../../store/requests.selectors';
 import {
-  clearFiltersFromRequests,
+  clearFiltersFromRequestsAdmin,
   getAppsRequests,
   getAppsRequestsSuccess,
   searchAppsRequests,
-  updatePagination,
+  updatePaginationAdmin,
 } from './../../store/requests.actions';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -36,7 +36,7 @@ import { AproveRequestComponent } from '../dialogs/aprove-request/aprove-request
 import { DeleteAllComponent } from '../dialogs/delete-all/delete-all.component';
 import { DenyRequestComponent } from '../dialogs/deny-request/deny-request.component';
 import { Actions, ofType } from '@ngrx/effects';
-import { pagination } from '../../store/requests.selectors';
+import { adminPagination } from '../../store/requests.selectors';
 
 @Component({
   selector: 'app-admin-request',
@@ -115,14 +115,14 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
             );
 
             this.store
-              .pipe(select(filteredRequests), take(1))
+              .pipe(select(filteredAppsRequests), take(1))
               .subscribe((response) => {
                 this.dataSource = new MatTableDataSource(response);
               });
 
             this.store
               .pipe(
-                select(filteredRequestsLength),
+                select(filteredAppsRequestsLength),
                 takeUntil(this.unsubscribe$)
               )
               .subscribe((response) => {
@@ -132,7 +132,7 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
                   this.noResults = false;
                   this.store
                     .pipe(
-                      select(filteredRequests),
+                      select(filteredAppsRequests),
                       takeUntil(this.unsubscribe$)
                     )
                     .subscribe((response) => {
@@ -147,16 +147,16 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
 
   clearFilters(): void {
     this.fillRequestTable(this.currentAppId);
-    this.searchInput.reset();
-    this.store.dispatch(clearFiltersFromRequests());
+    this.searchInput.setValue('');
+    this.store.dispatch(clearFiltersFromRequestsAdmin());
   }
 
   fillRequestTable(id: number) {
-    this.searchInput.reset();
+    this.searchInput.setValue('');
     this.store.dispatch(getAppsRequests({ id }));
 
     this.store
-      .pipe(select(pagination), takeUntil(this.unsubscribe$))
+      .pipe(select(adminPagination), takeUntil(this.unsubscribe$))
       .subscribe(({ pagination, selectedAppId, requestsLength }) => {
         this.pagination = pagination;
         this.currentAppId = selectedAppId;
@@ -174,13 +174,13 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
       });
 
     this.store
-      .pipe(select(requests), takeUntil(this.unsubscribe$))
+      .pipe(select(appsRequests), takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         this.dataSource = new MatTableDataSource(response);
       });
   }
   onPageChange(pageEvent: PageEvent) {
-    this.store.dispatch(updatePagination({ pageEvent }));
+    this.store.dispatch(updatePaginationAdmin({ pageEvent }));
 
     if (this.requestsLength < this.pagination.length) {
       this.store.dispatch(getAppsRequests({ id: this.currentAppId }));

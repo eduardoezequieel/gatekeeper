@@ -5,7 +5,7 @@ import { map, mergeMap, withLatestFrom } from 'rxjs';
 import { RequestService } from '../services/request.service';
 import * as requestsActions from './requests.actions';
 import { RequestsModuleState } from './requests.reducer';
-import { pagination } from './requests.selectors';
+import { adminPagination, regularPagination } from './requests.selectors';
 
 @Injectable()
 export class RequestsEffects {
@@ -18,7 +18,7 @@ export class RequestsEffects {
   getAppsRequests = createEffect(() =>
     this.actions$.pipe(
       ofType(requestsActions.getAppsRequests),
-      withLatestFrom(this.store.pipe(select(pagination))),
+      withLatestFrom(this.store.pipe(select(adminPagination))),
       mergeMap(([{ id }, { pagination }]) =>
         this.requestService
           .appsAccessRequests(id, pagination.pageIndex + 1, pagination.pageSize)
@@ -40,6 +40,37 @@ export class RequestsEffects {
           .pipe(
             map((response) =>
               requestsActions.searchAppsRequestsSuccess({ response, id })
+            )
+          )
+      )
+    )
+  );
+
+  getUserRequests = createEffect(() =>
+    this.actions$.pipe(
+      ofType(requestsActions.getUserRequests),
+      withLatestFrom(this.store.pipe(select(regularPagination))),
+      mergeMap(([action, { pagination }]) =>
+        this.requestService
+          .getUserRequests(pagination.pageIndex + 1, pagination.pageSize)
+          .pipe(
+            map((response) =>
+              requestsActions.getUserRequestsSuccess({ response })
+            )
+          )
+      )
+    )
+  );
+
+  searchUserRequests = createEffect(() =>
+    this.actions$.pipe(
+      ofType(requestsActions.searchUserRequests),
+      mergeMap(({ search }) =>
+        this.requestService
+          .searchUserRequests(search, 1)
+          .pipe(
+            map((response) =>
+              requestsActions.searchUserRequestsSuccess({ response })
             )
           )
       )

@@ -10,52 +10,81 @@ export interface RequestsModuleState extends AppState {
 }
 
 interface RequestsModuleStateForReducer {
-  request: ApplicationAccess[];
-  pagination: PageEvent;
-  selectedAppId: number;
-  totalRequests: number;
-  filteredRequestsIds: number[];
+  admin: {
+    request: ApplicationAccess[];
+    pagination: PageEvent;
+    selectedAppId: number;
+    totalRequests: number;
+    filteredRequestsIds: number[];
+  };
+  regular: {
+    request: ApplicationAccess[];
+    pagination: PageEvent;
+    totalRequests: number;
+    filteredRequestsIds: number[];
+  };
 }
 
 export const initialState: RequestsModuleStateForReducer = {
-  request: [],
-  pagination: {
-    pageIndex: 0,
-    pageSize: 10,
-    length: 0,
+  admin: {
+    request: [],
+    pagination: {
+      pageIndex: 0,
+      pageSize: 10,
+      length: 0,
+    },
+    selectedAppId: -1,
+    totalRequests: 0,
+    filteredRequestsIds: [],
   },
-  selectedAppId: -1,
-  totalRequests: 0,
-  filteredRequestsIds: [],
+  regular: {
+    request: [],
+    pagination: {
+      pageIndex: 0,
+      pageSize: 10,
+      length: 0,
+    },
+    totalRequests: 0,
+    filteredRequestsIds: [],
+  },
 };
 
 export const requestsModuleReducer = createReducer(
   initialState,
   on(requestActions.getAppsRequestsSuccess, (state, { response, id }) => {
-    if (id != state.selectedAppId) {
+    if (id != state.admin.selectedAppId) {
       return {
         ...state,
-        request: response.data,
-        pagination: {
-          pageIndex: 0,
-          pageSize: 10,
-          length: response.pagination.totalItems,
+        admin: {
+          ...state.admin,
+          request: response.data,
+          pagination: {
+            pageIndex: 0,
+            pageSize: 10,
+            length: response.pagination.totalItems,
+          },
+          selectedAppId: id,
+          totalRequests: response.pagination.totalItems,
         },
-        selectedAppId: id,
-        totalRequests: response.pagination.totalItems,
       };
     } else {
-      if (response.data.length < state.request.length) {
+      if (response.data.length < state.admin.request.length) {
         return {
           ...state,
-          request: response.data,
-          totalRequests: response.pagination.totalItems,
+          admin: {
+            ...state.admin,
+            request: response.data,
+            totalRequests: response.pagination.totalItems,
+          },
         };
       } else {
         return {
           ...state,
-          request: mergeArrays(state.request, response.data),
-          totalRequests: response.pagination.totalItems,
+          admin: {
+            ...state.admin,
+            request: mergeArrays(state.admin.request, response.data),
+            totalRequests: response.pagination.totalItems,
+          },
         };
       }
     }
@@ -66,34 +95,102 @@ export const requestsModuleReducer = createReducer(
 
     return {
       ...state,
-      request: mergeArrays(state.request, response),
-      pagination: {
-        pageIndex: 0,
-        pageSize: 10,
-        length: ids.length,
-      },
-      filteredRequestsIds: ids,
-    };
-  }),
-  on(requestActions.clearFiltersFromRequests, (state) => {
-    return {
-      ...state,
-      pagination: {
-        ...state.pagination,
-        pageIndex: 0,
-        pageSize: 10,
-        length: state.totalRequests,
+      admin: {
+        ...state.admin,
+        request: mergeArrays(state.admin.request, response),
+        pagination: {
+          pageIndex: 0,
+          pageSize: 10,
+          length: ids.length,
+        },
+        filteredRequestsIds: ids,
       },
     };
   }),
-  on(requestActions.updatePagination, (state, { pageEvent }) => {
+  on(requestActions.clearFiltersFromRequestsAdmin, (state) => {
     return {
       ...state,
-      pagination: {
-        ...state.pagination,
-        pageIndex: pageEvent.pageIndex,
-        pageSize: pageEvent.pageSize,
+      admin: {
+        ...state.admin,
+        pagination: {
+          ...state.admin.pagination,
+          pageIndex: 0,
+          pageSize: 10,
+          length: state.admin.totalRequests,
+        },
       },
     };
-  })
+  }),
+  on(requestActions.updatePaginationAdmin, (state, { pageEvent }) => {
+    return {
+      ...state,
+      admin: {
+        ...state.admin,
+        pagination: {
+          ...state.admin.pagination,
+          pageIndex: pageEvent.pageIndex,
+          pageSize: pageEvent.pageSize,
+        },
+      },
+    };
+  }),
+  on(requestActions.getUserRequestsSuccess, (state, { response }) => {
+    return {
+      ...state,
+      regular: {
+        ...state.regular,
+        request: mergeArrays(state.regular.request, response.data),
+        pagination: {
+          ...state.regular.pagination,
+          length: response.pagination.totalItems,
+        },
+        totalRequests: response.pagination.totalItems,
+      },
+    };
+  }),
+  on(requestActions.updatePaginationRegular, (state, { pageEvent }) => {
+    return {
+      ...state,
+      regular: {
+        ...state.regular,
+        pagination: {
+          ...state.regular.pagination,
+          pageIndex: pageEvent.pageIndex,
+          pageSize: pageEvent.pageSize,
+        },
+      },
+    };
+  }),
+  on(requestActions.searchUserRequestsSuccess, (state, { response }) => {
+    const ids: number[] = [];
+    response.forEach((element) => ids.push(element.id));
+
+    return {
+      ...state,
+      regular: {
+        ...state.regular,
+        request: mergeArrays(state.regular.request, response),
+        pagination: {
+          pageIndex: 0,
+          pageSize: 10,
+          length: ids.length,
+        },
+        filteredRequestsIds: ids,
+      },
+    };
+  }),
+  on(requestActions.clearFiltersFromRequestsRegular, (state) => {
+    return {
+      ...state,
+      regular: {
+        ...state.regular,
+        pagination: {
+          ...state.regular.pagination,
+          pageIndex: 0,
+          pageSize: 10,
+          length: state.regular.totalRequests,
+        },
+      },
+    };
+  }),
 );
