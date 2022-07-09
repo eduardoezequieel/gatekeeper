@@ -30,3 +30,7 @@ export const searchAppsRequestsSuccess = createAction(
   '[Requests Module] Gotten filtered requests',
   props<{ response: ApplicationAccess[]; id: number }>()
 );
+
+export const clearFiltersFromRequests = createAction(
+  '[Requests Module] Clear filters from requests pagination'
+);

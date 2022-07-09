@@ -124,7 +124,7 @@ export class ApplicationsService {
           } else {
             return of(
               response.data.filter((element) =>
-                element.name.toLowerCase().includes(search.toLowerCase())
+                element.name.toLowerCase().includes(search.toLowerCase().trim())
               )
             );
           }

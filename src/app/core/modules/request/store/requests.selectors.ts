@@ -7,11 +7,11 @@ const getRequestsModuleState = (state: RequestsModuleState) =>
 
 export const pagination = createSelector(
   getRequestsModuleState,
-  ({ pagination, selectedAppId, totalRequests }) => {
+  ({ pagination, selectedAppId, request }) => {
     return {
       pagination,
       selectedAppId,
-      totalRequests,
+      requestsLength: request.length,
     };
   }
 );

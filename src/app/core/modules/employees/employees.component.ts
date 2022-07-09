@@ -21,7 +21,6 @@ import {
   combineLatestWith,
   debounceTime,
   distinctUntilChanged,
-  distinctUntilKeyChanged,
 } from 'rxjs';
 import { ApplicationsService } from './services/applications.service';
 import { Actions, ofType } from '@ngrx/effects';

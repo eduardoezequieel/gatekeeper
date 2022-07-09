@@ -38,46 +38,53 @@ export const requestsModuleReducer = createReducer(
         request: response.data,
         pagination: {
           pageIndex: 0,
-          pageSize: 10,
+          pageSize: 1,
           length: response.pagination.totalItems,
         },
         selectedAppId: id,
-        totalRequests: response.data.length,
+        totalRequests: response.pagination.totalItems,
       };
     } else {
       if (response.data.length < state.request.length) {
         return {
           ...state,
           request: response.data,
-          totalRequests: response.data.length,
+          totalRequests: response.pagination.totalItems,
         };
       } else {
         return {
           ...state,
           request: mergeArrays(state.request, response.data),
-          totalRequests: state.request.length + response.data.length,
+          totalRequests: response.pagination.totalItems,
         };
       }
     }
   }),
   on(requestActions.searchAppsRequestsSuccess, (state, { response }) => {
-    if (response.length > 0) {
-      const ids: number[] = [];
-      response.forEach((element) => ids.push(element.id));
+    const ids: number[] = [];
+    response.forEach((element) => ids.push(element.id));
 
-      return {
-        ...state,
-        request: mergeArrays(state.request, response),
-        pagination: {
-          pageIndex: 0,
-          pageSize: 10,
-          length: ids.length,
-        },
-        filteredRequestsIds: ids,
-      };
-    } else {
-      return state;
-    }
+    return {
+      ...state,
+      request: mergeArrays(state.request, response),
+      pagination: {
+        pageIndex: 0,
+        pageSize: 1,
+        length: ids.length,
+      },
+      filteredRequestsIds: ids,
+    };
+  }),
+  on(requestActions.clearFiltersFromRequests, (state) => {
+    return {
+      ...state,
+      pagination: {
+        ...state.pagination,
+        pageIndex: 0,
+        pageSize: 1,
+        length: state.totalRequests,
+      },
+    };
   }),
   on(requestActions.updatePagination, (state, { pageEvent }) => {
     return {

@@ -1,8 +1,13 @@
-import { searchAppsOfEmployee } from './../../../employees/store/employees.actions';
-import { filteredRequests, requests } from './../../store/requests.selectors';
 import {
+  filteredRequests,
+  filteredRequestsLength,
+  requests,
+} from './../../store/requests.selectors';
+import {
+  clearFiltersFromRequests,
   getAppsRequests,
   getAppsRequestsSuccess,
+  searchAppsRequests,
   updatePagination,
 } from './../../store/requests.actions';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -30,7 +35,6 @@ import { RequestsModuleState } from '../../store/requests.reducer';
 import { AproveRequestComponent } from '../dialogs/aprove-request/aprove-request.component';
 import { DeleteAllComponent } from '../dialogs/delete-all/delete-all.component';
 import { DenyRequestComponent } from '../dialogs/deny-request/deny-request.component';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { Actions, ofType } from '@ngrx/effects';
 import { pagination } from '../../store/requests.selectors';
 
@@ -62,7 +66,7 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
     pageSize: 10,
     length: 0,
   };
-  totalRequests = 0;
+  requestsLength = 0;
 
   constructor(
     private dialog: MatDialog,
@@ -91,45 +95,78 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
       this.requestNotifications.enableTwoStepOn();
     }
 
-    // this.searchInput.valueChanges
-    //   .pipe(
-    //     debounceTime(700),
-    //     distinctUntilChanged(),
-    //     takeUntil(this.unsubscribe$)
-    //   )
-    //   .subscribe((response) => {
-    //     if (this.currentAppId) {
-    //       if ((response as string).length == 0) {
-    //       } else {
-    //         this.store.dispatch(
-    //           searchAppsOfEmployee({ id: this.currentAppId, search: response })
-    //         );
+    this.filter();
+  }
 
-    //         this.store
-    //           .pipe(select(filteredRequests), takeUntil(this.unsubscribe$))
-    //           .subscribe((response) => {
-    //             this.dataSource = new MatTableDataSource(response);
-    //           });
-    //       }
-    //     }
-    //   });
+  filter(): void {
+    this.searchInput.valueChanges
+      .pipe(
+        debounceTime(700),
+        distinctUntilChanged(),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((response) => {
+        if (this.currentAppId) {
+          if ((response as string).length == 0) {
+            this.clearFilters();
+          } else {
+            this.store.dispatch(
+              searchAppsRequests({ id: this.currentAppId, search: response })
+            );
+
+            this.store
+              .pipe(select(filteredRequests), take(1))
+              .subscribe((response) => {
+                this.dataSource = new MatTableDataSource(response);
+              });
+
+            this.store
+              .pipe(
+                select(filteredRequestsLength),
+                takeUntil(this.unsubscribe$)
+              )
+              .subscribe((response) => {
+                if (response < 1) {
+                  this.noResults = true;
+                } else {
+                  this.noResults = false;
+                  this.store
+                    .pipe(
+                      select(filteredRequests),
+                      takeUntil(this.unsubscribe$)
+                    )
+                    .subscribe((response) => {
+                      this.dataSource = new MatTableDataSource(response);
+                    });
+                }
+              });
+          }
+        }
+      });
+  }
+
+  clearFilters(): void {
+    this.fillRequestTable(this.currentAppId);
+    this.searchInput.reset();
+    this.store.dispatch(clearFiltersFromRequests());
   }
 
   fillRequestTable(id: number) {
+    this.searchInput.reset();
     this.store.dispatch(getAppsRequests({ id }));
 
     this.store
       .pipe(select(pagination), takeUntil(this.unsubscribe$))
-      .subscribe(({ pagination, selectedAppId, totalRequests }) => {
+      .subscribe(({ pagination, selectedAppId, requestsLength }) => {
         this.pagination = pagination;
         this.currentAppId = selectedAppId;
-        this.totalRequests = totalRequests;
+        this.requestsLength = requestsLength;
       });
 
     this.actions$
       .pipe(ofType(getAppsRequestsSuccess), takeUntil(this.unsubscribe$))
       .subscribe(() => {
-        if (this.totalRequests < 1) {
+        if (this.requestsLength < 1) {
           this.noResults = true;
         } else {
           this.noResults = false;
@@ -145,7 +182,7 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
   onPageChange(pageEvent: PageEvent) {
     this.store.dispatch(updatePagination({ pageEvent }));
 
-    if (this.totalRequests < this.pagination.length) {
+    if (this.requestsLength < this.pagination.length) {
       this.store.dispatch(getAppsRequests({ id: this.currentAppId }));
     }
   }
