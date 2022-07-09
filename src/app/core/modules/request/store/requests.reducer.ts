@@ -45,11 +45,19 @@ export const requestsModuleReducer = createReducer(
         totalRequests: response.data.length,
       };
     } else {
-      return {
-        ...state,
-        request: mergeArrays(state.request, response.data),
-        totalRequests: state.request.length + response.data.length,
-      };
+      if (response.data.length < state.request.length) {
+        return {
+          ...state,
+          request: response.data,
+          totalRequests: response.data.length,
+        };
+      } else {
+        return {
+          ...state,
+          request: mergeArrays(state.request, response.data),
+          totalRequests: state.request.length + response.data.length,
+        };
+      }
     }
   }),
   on(requestActions.searchAppsRequestsSuccess, (state, { response }) => {
