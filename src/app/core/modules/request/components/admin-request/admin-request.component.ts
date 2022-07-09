@@ -160,7 +160,7 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
         toBeDeleted: this.selectedRequests(),
       },
     });
-    this.dialog.afterAllClosed.subscribe(() => {
+    this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
       this.fillRequestTable(this.currentAppId);
       this.checkAll = false;
       this.requestSelected = false;
@@ -173,7 +173,7 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
         width: '556px',
         data: Number(requestId),
       });
-      this.dialog.afterAllClosed.subscribe(() => {
+      this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
         this.fillRequestTable(this.currentAppId);
       });
     } else {
@@ -191,7 +191,7 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
         requestId: request.id,
       },
     });
-    this.dialog.afterAllClosed.subscribe(() => {
+    this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
       this.fillRequestTable(this.currentAppId);
     });
   }
@@ -204,7 +204,7 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
         requestArr: request,
       },
     });
-    this.dialog.afterAllClosed.subscribe(() => {
+    this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
       this.fillRequestTable(this.currentAppId);
       this.checkAll = false;
       this.requestSelected = false;

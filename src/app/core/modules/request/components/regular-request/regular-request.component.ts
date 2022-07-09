@@ -109,7 +109,7 @@ export class RegularRequestComponent implements OnInit {
         },
       });
     }
-    this.dialog.afterAllClosed.subscribe(() => {
+    this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
       this.fillRequestTable();
       this.checkAll = false;
       this.requestSelected = false;
@@ -122,7 +122,7 @@ export class RegularRequestComponent implements OnInit {
         width: '556px',
         data: Number(requestId),
       });
-      this.dialog.afterAllClosed.subscribe(() => {
+      this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
         this.fillRequestTable();
         this.checkAll = false;
         this.requestSelected = false;
@@ -140,7 +140,7 @@ export class RegularRequestComponent implements OnInit {
       width: '556px',
       data: alreadyRequested,
     });
-    this.dialog.afterAllClosed.subscribe(() => {
+    this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
       this.fillRequestTable();
     });
   }

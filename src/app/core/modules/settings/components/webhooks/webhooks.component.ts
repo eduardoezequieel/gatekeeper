@@ -124,7 +124,7 @@ export class WebhooksComponent implements OnInit, OnDestroy {
     this.dialog.open(ClearHooksComponent, {
       width: '556px',
     });
-    this.dialog.afterAllClosed.subscribe(() => {
+    this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
       this.fillTable();
     });
   }
