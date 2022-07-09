@@ -38,7 +38,7 @@ export const requestsModuleReducer = createReducer(
         request: response.data,
         pagination: {
           pageIndex: 0,
-          pageSize: 1,
+          pageSize: 10,
           length: response.pagination.totalItems,
         },
         selectedAppId: id,
@@ -69,7 +69,7 @@ export const requestsModuleReducer = createReducer(
       request: mergeArrays(state.request, response),
       pagination: {
         pageIndex: 0,
-        pageSize: 1,
+        pageSize: 10,
         length: ids.length,
       },
       filteredRequestsIds: ids,
@@ -81,7 +81,7 @@ export const requestsModuleReducer = createReducer(
       pagination: {
         ...state.pagination,
         pageIndex: 0,
-        pageSize: 1,
+        pageSize: 10,
         length: state.totalRequests,
       },
     };

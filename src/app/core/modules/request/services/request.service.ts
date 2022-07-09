@@ -97,8 +97,9 @@ export class RequestService {
                   element.message
                     .toLowerCase()
                     .includes(search.toLowerCase().trim()) ||
-                  element.employee.name.toLowerCase().includes(search.toLowerCase().trim()) ||
-                  element.application.name.toLowerCase().includes(search.toLowerCase().trim())
+                  element.employee.name
+                    .toLowerCase()
+                    .includes(search.toLowerCase().trim())
                 );
               })
             );
