@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 import {
   AllRequestsResponse,
   ApplicationAccess,
@@ -28,6 +28,40 @@ export class RequestService {
         `/employees/me/access-request?page=${page}&items=${items}`
     );
   }
+
+  searchUserRequests(
+    search: string,
+    items: number
+  ): Observable<ApplicationAccess[]> {
+    return this.http
+      .get<AllRequestsResponse>(
+        environment.url + `/employees/me/access-request?page=1&items=${items}`
+      )
+      .pipe(
+        switchMap((response) => {
+          if (items < response.pagination.totalItems) {
+            return this.searchUserRequests(
+              search,
+              response.pagination.totalItems
+            );
+          } else {
+            return of(
+              response.data.filter((element) => {
+                return (
+                  element.application.name
+                    .toLowerCase()
+                    .includes(search.toLowerCase().trim()) ||
+                  element.message
+                    .toLowerCase()
+                    .includes(search.toLowerCase().trim())
+                );
+              })
+            );
+          }
+        })
+      );
+  }
+
   getOneAplications(): Observable<ApplicationsResponse> {
     return this.http.get<ApplicationsResponse>(
       environment.url + `/applications?page=1&items=1`
@@ -70,6 +104,42 @@ export class RequestService {
       environment.url +
         `/applications/${appId}/access-request?page=${page}&items=${items}`
     );
+  }
+
+  searchAppsAccessRequests(
+    appId: number,
+    search: string,
+    items: number
+  ): Observable<ApplicationAccess[]> {
+    return this.http
+      .get<AllRequestsResponse>(
+        environment.url +
+          `/applications/${appId}/access-request?page=1&items=${items}`
+      )
+      .pipe(
+        switchMap((response) => {
+          if (items < response.pagination.totalItems) {
+            return this.searchAppsAccessRequests(
+              appId,
+              search,
+              response.pagination.totalItems
+            );
+          } else {
+            return of(
+              response.data.filter((element) => {
+                return (
+                  element.message
+                    .toLowerCase()
+                    .includes(search.toLowerCase().trim()) ||
+                  element.employee.name
+                    .toLowerCase()
+                    .includes(search.toLowerCase().trim())
+                );
+              })
+            );
+          }
+        })
+      );
   }
 
   aproveAccessRequest(

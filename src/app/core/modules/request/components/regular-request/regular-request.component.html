@@ -5,9 +5,9 @@
       <input
         type="text"
         matInput
-        [(ngModel)]="searchKey"
+        [formControl]="searchInput"
         placeholder="Search"
-        (keyup)="filterData()"
+        maxlength="50"
       />
     </mat-form-field>
 
@@ -97,15 +97,16 @@
         [ngClass]="{ hideRow: dataSource != null }"
       ></mat-footer-row>
     </table>
-    <div *ngIf="!noResults" class="noResults">
+    <div *ngIf="noResults" class="noResults">
       <img src="../../../../../../assets/images/not-found.png" alt="" />
     </div>
   </div>
   <div class="pagination-container">
     <mat-paginator
-      [length]="length"
+      [length]="pagination.length"
       [pageSizeOptions]="[5, 10, 15]"
-      [pageSize]="10"
+      [pageIndex]="pagination.pageIndex"
+      [pageSize]="pagination.pageSize"
       (page)="onPageChange($event)"
     ></mat-paginator>
   </div>

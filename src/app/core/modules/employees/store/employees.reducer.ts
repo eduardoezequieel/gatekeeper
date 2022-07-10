@@ -85,7 +85,6 @@ export const employeesModuleReducer = createReducer(
     };
   }),
   on(employeesActions.updatePagination, (state, { pageEvent }) => {
-    debugger;
     return {
       ...state,
       employees: {

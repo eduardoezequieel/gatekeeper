@@ -6,16 +6,16 @@
         <input
           type="text"
           matInput
-          [(ngModel)]="searchKey"
           placeholder="search"
-          (keyup)="filterData()"
+          [formControl]="searchInput"
+          maxlength="50"
         />
       </mat-form-field>
 
       <mat-form-field appearance="standard" class="full-width">
         <mat-label>Application name</mat-label>
         <mat-select
-          (selectionChange)="fillRequestTable($event)"
+          (selectionChange)="fillRequestTable($event.value)"
           id="appSelector"
         >
           <mat-option
@@ -117,15 +117,16 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <div *ngIf="!noResults" class="noResults">
+    <div *ngIf="noResults" class="noResults">
       <img src="../../../../../../assets/images/not-found.png" alt="" />
     </div>
   </div>
   <div class="pagination-container">
     <mat-paginator
-      [length]="length"
+      [length]="pagination.length"
+      [pageIndex]="pagination.pageIndex"
       [pageSizeOptions]="[5, 10, 15]"
-      [pageSize]="10"
+      [pageSize]="pagination.pageSize"
       (page)="onPageChange($event)"
     ></mat-paginator>
   </div>

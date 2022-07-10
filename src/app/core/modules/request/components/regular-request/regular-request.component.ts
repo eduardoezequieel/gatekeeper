@@ -1,27 +1,51 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import {
+  filteredUserRequests,
+  filteredUserRequestsLength,
+} from './../../store/requests.selectors';
+import {
+  updatePaginationRegular,
+  searchUserRequests,
+  clearFiltersFromRequestsRegular,
+} from './../../store/requests.actions';
+import { RequestsModuleState } from './../../store/requests.reducer';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { take } from 'rxjs';
-import { UserService } from 'src/app/shared/nav/services/user.service';
+import { select, Store } from '@ngrx/store';
+import {
+  take,
+  Subject,
+  takeUntil,
+  debounceTime,
+  distinctUntilChanged,
+} from 'rxjs';
 import { RequestNotificationService } from '../../services/request-notification.service';
 import { RequestService } from '../../services/request.service';
 import { AccessRequestComponent } from '../dialogs/access-request/access-request.component';
 import { DeleteAllComponent } from '../dialogs/delete-all/delete-all.component';
 import { DeleteOneComponent } from '../dialogs/delete-one/delete-one.component';
+import {
+  regularPagination,
+  userRequests,
+} from '../../store/requests.selectors';
+import {
+  getUserRequests,
+  getUserRequestsSuccess,
+} from '../../store/requests.actions';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-regular-request',
   templateUrl: './regular-request.component.html',
   styleUrls: ['./regular-request.component.scss'],
 })
-export class RegularRequestComponent implements OnInit {
+export class RegularRequestComponent implements OnInit, OnDestroy {
   form: FormGroup = new FormGroup({});
   requestSelected: boolean = false;
-  noResults!: boolean;
+  noResults = false;
   checkAll = false;
-  length!: number;
   displayedColumns: string[] = [
     'check',
     'No.',
@@ -30,58 +54,92 @@ export class RegularRequestComponent implements OnInit {
     'Delete',
   ];
   dataSource!: MatTableDataSource<any>;
-  searchKey!: string;
+  searchInput = new FormControl('');
+  unsubscribe$ = new Subject();
+  pagination!: PageEvent;
+  requestsLength = 0;
+
   constructor(
     private dialog: MatDialog,
     private requestService: RequestService,
     public requestNotifications: RequestNotificationService,
-    private userService: UserService
+    private store: Store<RequestsModuleState>,
+    private actions$: Actions
   ) {}
 
   ngOnInit(): void {
     this.closeRequestMessages();
     this.fillRequestTable();
-  }
-
-  get f() {
-    return this.form.controls;
+    this.filter();
   }
 
   fillRequestTable() {
-    this.requestService
-      .getUserRequests(1, 10)
-      .pipe(take(1))
-      .subscribe((res) => {
-        this.length = res.pagination.totalItems;
-        if (this.length < 1) {
-          this.noResults = false;
-        } else {
-          this.noResults = true;
-        }
-        res.data.forEach((request) => {
-          request.isSelected = false;
-        });
-        this.dataSource = new MatTableDataSource(res.data);
+    this.store.dispatch(getUserRequests());
 
-        this.dataSource.filterPredicate = (data, filter) => {
-          return data.application.name.toLocaleLowerCase().includes(filter);
-        };
+    this.store
+      .pipe(select(regularPagination), takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.pagination = response.pagination;
+        this.requestsLength = response.requestsLength;
+      });
+
+    this.actions$
+      .pipe(ofType(getUserRequestsSuccess), takeUntil(this.unsubscribe$))
+      .subscribe(() => {
+        if (this.requestsLength < 1) {
+          this.noResults = true;
+        } else {
+          this.noResults = false;
+        }
+      });
+
+    this.store
+      .pipe(select(userRequests), takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.dataSource = new MatTableDataSource(response);
       });
   }
 
-  onPageChange(pageEvent: PageEvent) {
-    this.requestService
-      .getUserRequests(pageEvent.pageIndex + 1, pageEvent.pageSize)
-      .pipe(take(1))
-      .subscribe((res) => {
-        res.data.forEach((request) => {
-          request.isSelected = false;
-        });
-        this.dataSource = new MatTableDataSource(res.data);
-        this.dataSource.filterPredicate = (data, filter) => {
-          return data.application.name.toLocaleLowerCase().includes(filter);
-        };
+  filter(): void {
+    this.searchInput.valueChanges
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        debounceTime(700),
+        distinctUntilChanged()
+      )
+      .subscribe((response) => {
+        if ((response as string).length == 0) {
+          this.clearFilters();
+        } else {
+          this.store.dispatch(searchUserRequests({ search: response }));
+
+          this.store
+            .pipe(takeUntil(this.unsubscribe$), select(filteredUserRequests))
+            .subscribe((response) => {
+              this.dataSource = new MatTableDataSource(response);
+
+              if (response.length < 1) {
+                this.noResults = true;
+              } else {
+                this.noResults = false;
+              }
+            });
+        }
       });
+  }
+
+  clearFilters(): void {
+    this.fillRequestTable();
+    this.searchInput.setValue('');
+    this.store.dispatch(clearFiltersFromRequestsRegular());
+  }
+
+  onPageChange(pageEvent: PageEvent) {
+    this.store.dispatch(updatePaginationRegular({ pageEvent }));
+
+    if (this.requestsLength < this.pagination.length) {
+      this.store.dispatch(getUserRequests());
+    }
   }
 
   openDeleteAllDialog(): void {
@@ -109,7 +167,7 @@ export class RegularRequestComponent implements OnInit {
         },
       });
     }
-    this.dialog.afterAllClosed.subscribe(() => {
+    this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
       this.fillRequestTable();
       this.checkAll = false;
       this.requestSelected = false;
@@ -122,7 +180,7 @@ export class RegularRequestComponent implements OnInit {
         width: '556px',
         data: Number(requestId),
       });
-      this.dialog.afterAllClosed.subscribe(() => {
+      this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
         this.fillRequestTable();
         this.checkAll = false;
         this.requestSelected = false;
@@ -140,18 +198,9 @@ export class RegularRequestComponent implements OnInit {
       width: '556px',
       data: alreadyRequested,
     });
-    this.dialog.afterAllClosed.subscribe(() => {
+    this.dialog.afterAllClosed.pipe(take(1)).subscribe(() => {
       this.fillRequestTable();
     });
-  }
-
-  filterData() {
-    this.dataSource.filter = this.searchKey.trim().toLocaleLowerCase();
-    if (this.dataSource.filteredData.length == 0) {
-      this.noResults = false;
-    } else {
-      this.noResults = true;
-    }
   }
 
   deleteChecks() {
@@ -189,5 +238,10 @@ export class RegularRequestComponent implements OnInit {
 
   closeRequestMessages() {
     this.requestNotifications.turnErrorsOff();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete();
   }
 }
