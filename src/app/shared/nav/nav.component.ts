@@ -17,7 +17,7 @@ export class NavComponent implements OnInit, OnDestroy {
   isOpened: boolean = false;
   login: boolean = false;
   destroyed = new Subject<void>();
-  responsive!: boolean;
+  responsive = false;
   path: any;
   displayNameMap = new Map([
     [Breakpoints.XSmall, 'XSmall'],
@@ -76,6 +76,12 @@ export class NavComponent implements OnInit, OnDestroy {
         }
       }
     });
+  }
+
+  hideSidebarOnResponsive(): void {
+    if (this.responsive) {
+      this.isOpened = !this.isOpened;
+    }
   }
 
   logOut() {

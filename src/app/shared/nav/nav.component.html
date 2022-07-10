@@ -20,7 +20,7 @@
           mat-button
           [routerLink]="['/employees']"
           routerLinkActive="active"
-          (click)="this.isOpened = !this.isOpened"
+          (click)="hideSidebarOnResponsive()"
         >
           <i class="ri-group-line"></i>
           <span *ngIf="isExpanded">Employees</span>
@@ -31,7 +31,7 @@
           mat-button
           routerLink="/request"
           routerLinkActive="active"
-          (click)="this.isOpened = !this.isOpened"
+          (click)="hideSidebarOnResponsive()"
         >
           <mat-icon svgIcon="icon_request"></mat-icon>
           <span *ngIf="isExpanded">Access Requests</span>
@@ -41,7 +41,7 @@
         <a
           mat-button
           routerLinkActive="active"
-          (click)="this.isOpened = !this.isOpened"
+          (click)="hideSidebarOnResponsive()"
         >
           <i class="ri-apps-line"></i>
           <span *ngIf="isExpanded">Applications</span>
@@ -52,7 +52,7 @@
           mat-button
           routerLink="/setting"
           routerLinkActive="active"
-          (click)="this.isOpened = !this.isOpened"
+          (click)="hideSidebarOnResponsive()"
         >
           <i class="ri-settings-4-line"></i>
           <span *ngIf="isExpanded">Settings</span>
@@ -63,7 +63,7 @@
           mat-button
           routerLink="/about"
           routerLinkActive="active"
-          (click)="this.isOpened = !this.isOpened"
+          (click)="hideSidebarOnResponsive()"
         >
           <i class="ri-information-line"></i>
           <span *ngIf="isExpanded">About</span>
