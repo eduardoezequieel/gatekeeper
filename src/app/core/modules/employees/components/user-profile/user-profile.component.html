@@ -68,9 +68,6 @@
       <button (click)="search()" mat-flat-button class="secondary-button">
         Search
       </button>
-      <button (click)="clearFilters()" mat-flat-button class="secondary-button">
-        Clear filters
-      </button>
       <button mat-flat-button class="secondary-button">+ Assign new</button>
     </div>
   </div>
@@ -93,6 +90,9 @@
           View role
         </button>
       </div>
+    </div>
+    <div *ngIf="noResults" class="noResults">
+      <img src="../../../../../../assets/images/not-found.png" alt="" />
     </div>
   </div>
 </div>

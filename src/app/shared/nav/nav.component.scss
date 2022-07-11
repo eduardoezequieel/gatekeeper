@@ -1,84 +1,82 @@
-$Applaudo-Red: #FF4040;
-$Applaudo-Navy:#011625;
-$light-grey:#F6F6F6;
-$white: #FFFFFF;
-$charcoal:#36434E;
-.container{
+$Applaudo-Red: #ff4040;
+$Applaudo-Navy: #011625;
+$light-grey: #f6f6f6;
+$white: #ffffff;
+$charcoal: #36434e;
+.container {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
 }
-mat-sidenav-content{
+mat-sidenav-content {
   background-color: white;
   transition: 300ms ease-in-out;
   margin-left: 200px !important;
-  &.resizing{
+  &.resizing {
     margin-left: 70px !important;
   }
-  &.offline{
+  &.offline {
     margin-left: 0px !important;
   }
-  .menubtn{
+  .menubtn {
     display: none;
   }
 }
-.nav-sidenav{
+.nav-sidenav {
   padding: 0;
   background-color: $Applaudo-Navy;
   transition: 300ms ease-in-out;
   width: 200px;
-  &.closing{
+  &.closing {
     width: 70px;
   }
-  &.hiden{
+  &.hiden {
     width: 0px;
   }
-  &.opened{
+  &.opened {
     width: 70px;
-    box-shadow: 8px 0px 22px 7px rgba(0,0,0,0.3);
-    -webkit-box-shadow: 8px 0px 22px 7px rgba(0,0,0,0.3);
-    -moz-box-shadow: 8px 0px 22px 7px rgba(0,0,0,0.3);
+    //
   }
-  ul{
+  ul {
     padding: 0;
     margin: 0;
     height: inherit;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    & li:last-child{
+    & li:last-child {
       border-top: 2px solid $charcoal;
-    
     }
-   }
-  a{
+  }
+  a {
     padding: 8px 16px;
     display: block;
     height: 53px;
     color: $white;
     width: 100%;
     text-align: left;
-    border-left:3px solid $Applaudo-Navy;
-    &.active{
-      border-left:3px solid $white;
+    border-left: 3px solid $Applaudo-Navy;
+    &.active {
+      border-left: 3px solid $white;
       border-radius: 0;
     }
-    &:hover{
+    &:hover {
       cursor: pointer;
-      border-left:3px solid $white;
+      border-left: 3px solid $white;
       border-radius: 0;
     }
-    & i{
+    & i {
       font-size: 24px;
     }
-    & .ri-arrow-right-line, & .ri-arrow-left-line{
+    & .ri-arrow-right-line,
+    & .ri-arrow-left-line {
       color: $Applaudo-Red;
       font-size: 32;
     }
   }
-  span{
+  span {
     margin-left: 20px;
     padding: 0;
   }
@@ -86,20 +84,20 @@ mat-sidenav-content{
     margin-top: auto;
   }
 }
-@media (max-width: 599px){
-  mat-sidenav-content{
+@media (max-width: 599px) {
+  mat-sidenav-content {
     margin-left: 0px !important;
-    &.resizing{
+    &.resizing {
       margin-left: 0px !important;
     }
-    .menubtn{
+    .menubtn {
       display: block;
       position: absolute;
       top: 15px;
       left: 10px;
       font-size: 20px;
       border: none;
-      background-color:transparent;
+      background-color: transparent;
       color: $Applaudo-Red;
     }
   }

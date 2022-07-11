@@ -17,10 +17,10 @@ import * as selectors from './store/employees.selectors';
 import {
   Subject,
   takeUntil,
-  Observable,
   combineLatestWith,
   debounceTime,
   distinctUntilChanged,
+  take,
 } from 'rxjs';
 import { ApplicationsService } from './services/applications.service';
 import { Actions, ofType } from '@ngrx/effects';
@@ -32,13 +32,14 @@ import { Actions, ofType } from '@ngrx/effects';
 })
 export class EmployeesComponent implements OnInit, OnDestroy {
   user!: User;
-  employees$!: Observable<Employee[]>;
+  employees!: Employee[];
   employeesLength = 0;
   applications!: Application[];
   roles!: Roles[];
   pagination!: PageEvent;
   unsubscribe$ = new Subject();
   form!: FormGroup;
+  noResults = false;
 
   constructor(
     private userService: UserService,
@@ -76,7 +77,9 @@ export class EmployeesComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(employeesActions.getEmployees());
 
-    this.employees$ = this.store.pipe(select(selectors.employees));
+    this.store
+      .pipe(select(selectors.employees), takeUntil(this.unsubscribe$))
+      .subscribe((response) => (this.employees = response));
 
     this.store
       .pipe(select(selectors.pagination), takeUntil(this.unsubscribe$))
@@ -148,15 +151,18 @@ export class EmployeesComponent implements OnInit, OnDestroy {
           );
 
           this.store
-            .pipe(
-              select(selectors.filteredEmployeesLength),
-              takeUntil(this.unsubscribe$)
-            )
+            .pipe(select(selectors.filteredEmployees), take(2))
             .subscribe((response) => {
-              if (response > 0) {
-                this.employees$ = this.store.pipe(
-                  select(selectors.filteredEmployees)
-                );
+              this.employees = response;
+            });
+
+          this.actions$
+            .pipe(take(1), ofType(employeesActions.getFilteredEmployeesSuccess))
+            .subscribe(() => {
+              if (this.employees.length == 0) {
+                this.noResults = true;
+              } else {
+                this.noResults = false;
               }
             });
         }
@@ -164,11 +170,15 @@ export class EmployeesComponent implements OnInit, OnDestroy {
   }
 
   clearFilters(): void {
-    this.employees$ = this.store.pipe(select(selectors.employees));
+    this.store
+      .pipe(select(selectors.employees), takeUntil(this.unsubscribe$))
+      .subscribe((response) => (this.employees = response));
     this.form.controls['byName'].setValue('');
     this.form.controls['byApp'].setValue('');
     this.form.controls['byRole'].setValue('');
     this.store.dispatch(employeesActions.clearFiltersFromEmployeesPagination());
+
+    this.noResults = false;
   }
 
   openUserProfile(name: number) {

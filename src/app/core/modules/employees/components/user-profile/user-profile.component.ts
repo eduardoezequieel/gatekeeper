@@ -13,7 +13,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil, take } from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { Employee } from 'src/app/shared/interfaces/employeesResponse';
 import { User } from 'src/app/shared/interfaces/loginResponse';
@@ -24,11 +24,9 @@ import {
   employeeApplications,
   employeeDetails,
   employeeDetailsPagination,
-  filteredAppsLength,
   filteredEmployeeApplications,
 } from '../../store/employees.selectors';
 import { Actions, ofType } from '@ngrx/effects';
-import { ApplicationsService } from '../../services/applications.service';
 import { FormBuilder } from '@angular/forms';
 import { ViewRolesComponent } from './dialogs/view-roles/view-roles.component';
 import { RemoveMfaComponent } from './dialogs/remove-mfa/remove-mfa.component';
@@ -47,6 +45,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   pagination!: PageEvent;
   searchInput = this.fb.control('');
   filtersOn = false;
+  noResults = false;
 
   @ViewChild('dialogRef')
   dialogRef!: TemplateRef<any>;
@@ -143,17 +142,24 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         })
       );
 
-      this.store
-        .pipe(select(filteredAppsLength), takeUntil(this.unsubscribe$))
-        .subscribe((response) => {
-          if (response != 0) {
-            this.apps$ = this.store.pipe(select(filteredEmployeeApplications));
-          }
+      this.apps$ = this.store.pipe(select(filteredEmployeeApplications));
+
+      this.actions$
+        .pipe(take(1), ofType(employeesActions.searchAppsOfEmployeeSuccess))
+        .subscribe(() => {
+          this.apps$.pipe(take(1)).subscribe((response) => {
+            if (response.length < 1) {
+              this.noResults = true;
+            } else {
+              this.noResults = false;
+            }
+          });
         });
     }
   }
 
   clearFilters(): void {
+    this.noResults = false;
     this.apps$ = this.store.pipe(select(employeeApplications));
 
     this.searchInput.reset('');
