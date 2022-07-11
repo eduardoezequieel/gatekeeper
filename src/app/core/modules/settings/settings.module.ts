@@ -23,6 +23,8 @@ import { settingsModuleReducer } from './store/settings.reducer';
 import { StoreModule } from '@ngrx/store';
 import { SettingsEffects } from './store/settings.effects';
 import { EffectsModule } from '@ngrx/effects';
+import { SettingsErrorService } from './services/settings-error.service';
+import { SettingsService } from './services/settings.service';
 
 @NgModule({
   declarations: [
@@ -53,5 +55,6 @@ import { EffectsModule } from '@ngrx/effects';
     ReactiveFormsModule,
     MatIconModule,
   ],
+  providers: [SettingsErrorService, SettingsService],
 })
 export class SettingsModule {}
