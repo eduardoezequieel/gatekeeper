@@ -43,10 +43,10 @@
       </mat-select>
     </mat-form-field>
   </form>
-  <div class="employees-container" *ngIf="employees$ | async as emp">
+  <div class="employees-container" *ngIf="employees">
     <div
       class="employee-container"
-      *ngFor="let employee of emp"
+      *ngFor="let employee of employees"
       (click)="openUserProfile(employee.id)"
     >
       <div class="img-container">
@@ -56,6 +56,9 @@
         <h4>{{ employee.name | shortNames }}</h4>
         <div class="role">{{ employee.designation }}</div>
       </div>
+    </div>
+    <div *ngIf="noResults" class="noResults">
+      <img src="../../../../assets/images/not-found.png" alt="" />
     </div>
   </div>
 </div>
