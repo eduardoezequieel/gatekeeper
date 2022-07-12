@@ -1,11 +1,10 @@
 import {
-  filteredUserRequests,
-  filteredUserRequestsLength,
+  filteredUserRequests, pagination,
 } from './../../store/requests.selectors';
 import {
-  updatePaginationRegular,
+  updatePagination,
   searchUserRequests,
-  clearFiltersFromRequestsRegular,
+  clearFiltersFromRequests,
 } from './../../store/requests.actions';
 import { RequestsModuleState } from './../../store/requests.reducer';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -27,7 +26,6 @@ import { AccessRequestComponent } from '../dialogs/access-request/access-request
 import { DeleteAllComponent } from '../dialogs/delete-all/delete-all.component';
 import { DeleteOneComponent } from '../dialogs/delete-one/delete-one.component';
 import {
-  regularPagination,
   userRequests,
 } from '../../store/requests.selectors';
 import {
@@ -77,10 +75,10 @@ export class RegularRequestComponent implements OnInit, OnDestroy {
     this.store.dispatch(getUserRequests());
 
     this.store
-      .pipe(select(regularPagination), takeUntil(this.unsubscribe$))
+      .pipe(select(pagination), takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         this.pagination = response.pagination;
-        this.requestsLength = response.requestsLength;
+        this.requestsLength = response.regularRequestsLength;
       });
 
     this.actions$
@@ -131,11 +129,11 @@ export class RegularRequestComponent implements OnInit, OnDestroy {
   clearFilters(): void {
     this.fillRequestTable();
     this.searchInput.setValue('');
-    this.store.dispatch(clearFiltersFromRequestsRegular());
+    this.store.dispatch(clearFiltersFromRequests());
   }
 
   onPageChange(pageEvent: PageEvent) {
-    this.store.dispatch(updatePaginationRegular({ pageEvent }));
+    this.store.dispatch(updatePagination({ pageEvent }));
 
     if (this.requestsLength < this.pagination.length) {
       this.store.dispatch(getUserRequests());

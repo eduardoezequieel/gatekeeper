@@ -25,13 +25,8 @@ export const getUserRequestsSuccess = createAction(
   props<{ response: AllRequestsResponse }>()
 );
 
-export const updatePaginationAdmin = createAction(
-  '[Requests Module] Update pagination (admin)',
-  props<{ pageEvent: PageEvent }>()
-);
-
-export const updatePaginationRegular = createAction(
-  '[Requests Module] Update pagination (regular)',
+export const updatePagination = createAction(
+  '[Requests Module] Update pagination',
   props<{ pageEvent: PageEvent }>()
 );
 
@@ -55,10 +50,6 @@ export const searchUserRequestsSuccess = createAction(
   props<{ response: ApplicationAccess[] }>()
 );
 
-export const clearFiltersFromRequestsAdmin = createAction(
-  '[Requests Module] Clear filters from requests pagination (admin)'
-);
-
-export const clearFiltersFromRequestsRegular = createAction(
-  '[Requests Module] Clear filters from requests pagination (regular)'
+export const clearFiltersFromRequests = createAction(
+  '[Requests Module] Clear filters from requests pagination'
 );

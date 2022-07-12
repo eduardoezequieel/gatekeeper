@@ -5,7 +5,7 @@ import { map, mergeMap, withLatestFrom } from 'rxjs';
 import { RequestService } from '../services/request.service';
 import * as requestsActions from './requests.actions';
 import { RequestsModuleState } from './requests.reducer';
-import { adminPagination, regularPagination } from './requests.selectors';
+import { pagination } from './requests.selectors';
 
 @Injectable()
 export class RequestsEffects {
@@ -18,7 +18,7 @@ export class RequestsEffects {
   getAppsRequests = createEffect(() =>
     this.actions$.pipe(
       ofType(requestsActions.getAppsRequests),
-      withLatestFrom(this.store.pipe(select(adminPagination))),
+      withLatestFrom(this.store.pipe(select(pagination))),
       mergeMap(([{ id }, { pagination }]) =>
         this.requestService
           .appsAccessRequests(id, pagination.pageIndex + 1, pagination.pageSize)
@@ -49,7 +49,7 @@ export class RequestsEffects {
   getUserRequests = createEffect(() =>
     this.actions$.pipe(
       ofType(requestsActions.getUserRequests),
-      withLatestFrom(this.store.pipe(select(regularPagination))),
+      withLatestFrom(this.store.pipe(select(pagination))),
       mergeMap(([action, { pagination }]) =>
         this.requestService
           .getUserRequests(pagination.pageIndex + 1, pagination.pageSize)
