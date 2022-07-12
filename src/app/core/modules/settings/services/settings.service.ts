@@ -12,9 +12,7 @@ import { WebHookResponse } from 'src/app/shared/interfaces/webHookResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { environment } from 'src/environments/environment.prod';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SettingsService {
   private enabled = new BehaviorSubject<boolean>(
     this.userService.getUser().twoFactorEnabled

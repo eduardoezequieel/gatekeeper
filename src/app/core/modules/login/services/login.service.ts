@@ -6,9 +6,7 @@ import { RefreshTokenResponse } from 'src/app/shared/interfaces/refreshTokenResp
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import { environment } from 'src/environments/environment.prod';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class LoginService {
   private user = new BehaviorSubject({ email: '', password: '' });
   user$ = this.user.asObservable();

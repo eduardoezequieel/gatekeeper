@@ -2,9 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, throwError } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SettingsErrorService {
   private disableTwoStepSuccess = new BehaviorSubject(false);
   disableTwoStepSuccess$ = this.disableTwoStepSuccess.asObservable();

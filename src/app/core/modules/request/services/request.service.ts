@@ -13,9 +13,7 @@ import {
 import { RolesResponse } from 'src/app/shared/interfaces/rolesResponse';
 import { environment } from 'src/environments/environment.prod';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class RequestService {
   constructor(private http: HttpClient) {}
 

@@ -23,6 +23,8 @@ import { StoreModule } from '@ngrx/store';
 import { requestsModuleReducer } from './store/requests.reducer';
 import { RequestsEffects } from './store/requests.effects';
 import { EffectsModule } from '@ngrx/effects';
+import { RequestService } from './services/request.service';
+import { RequestNotificationService } from './services/request-notification.service';
 
 @NgModule({
   declarations: [
@@ -51,5 +53,6 @@ import { EffectsModule } from '@ngrx/effects';
     MatButtonModule,
     MatSelectModule,
   ],
+  providers: [RequestService, RequestNotificationService],
 })
 export class RequestModule {}
