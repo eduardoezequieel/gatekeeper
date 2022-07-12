@@ -1,0 +1,49 @@
+<link
+  href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+  rel="stylesheet"
+/>
+
+<div class="heading">
+  <div class="title">
+    <h2>Applications</h2>
+  </div>
+  <div class="user">
+    <img [src]="user.image" alt="user_img.jpg" width="40px" height="40px" />
+    <span class="username">{{ user.name }}</span>
+  </div>
+</div>
+
+<div class="main-container">
+  <div class="search-container">
+    <mat-form-field appearance="standard" class="input-search">
+      <mat-label>Search</mat-label>
+      <input matInput />
+      <span matPrefix><i class="ri-search-line"></i></span>
+    </mat-form-field>
+    <div class="buttons">
+      <button class="secondary-button" mat-flat-button>Search</button>
+      <button class="primary-button" mat-flat-button color="warn">
+        Add new
+      </button>
+    </div>
+  </div>
+
+  <div class="applications-container">
+    <app-application></app-application>
+    <app-application></app-application>
+    <app-application></app-application>
+    <app-application></app-application>
+  </div>
+
+  <div class="paginator">
+    <mat-paginator
+      length="0"
+      pageSize="15"
+      [pageSizeOptions]="[5, 10, 25]"
+      pageIndex="0"
+      aria-label="Select page"
+      class="pag"
+    >
+    </mat-paginator>
+  </div>
+</div>
