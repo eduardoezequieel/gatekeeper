@@ -114,13 +114,23 @@ export const requestsModuleReducer = createReducer(
 
     return {
       ...state,
-        regularRequests: mergeArrays(state.regularRequests, response),
-        pagination: {
-          pageIndex: 0,
-          pageSize: 10,
-          length: ids.length,
-        },
-        filteredRequestsIds: ids,
+      regularRequests: mergeArrays(state.regularRequests, response),
+      pagination: {
+        pageIndex: 0,
+        pageSize: 10,
+        length: ids.length,
+      },
+      filteredRequestsIds: ids,
     };
   }),
+  on(requestActions.restartPagination, (state) => {
+    return {
+      ...state,
+      pagination: {
+        pageIndex: 0,
+        pageSize: 10,
+        length: 0,
+      },
+    };
+  })
 );

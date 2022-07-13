@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="body">
+    <div class="img-container">
+      <img [src]="application.image" alt="" />
+    </div>
+    <h4>{{ application.name }}</h4>
+    <h5>{{ application.description.substring(0, 40) }}</h5>
+  </div>
+  <div class="footer">
+    <label>{{ application.enabled ? "Activated" : "Deactivated" }}</label>
+    <mat-slide-toggle
+      [checked]="application.enabled"
+      color="primary"
+    ></mat-slide-toggle>
+  </div>
+</div>

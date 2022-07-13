@@ -1,10 +1,12 @@
 import {
-  filteredUserRequests, pagination,
+  filteredUserRequests,
+  pagination,
 } from './../../store/requests.selectors';
 import {
   updatePagination,
   searchUserRequests,
   clearFiltersFromRequests,
+  restartPagination,
 } from './../../store/requests.actions';
 import { RequestsModuleState } from './../../store/requests.reducer';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -25,9 +27,7 @@ import { RequestService } from '../../services/request.service';
 import { AccessRequestComponent } from '../dialogs/access-request/access-request.component';
 import { DeleteAllComponent } from '../dialogs/delete-all/delete-all.component';
 import { DeleteOneComponent } from '../dialogs/delete-one/delete-one.component';
-import {
-  userRequests,
-} from '../../store/requests.selectors';
+import { userRequests } from '../../store/requests.selectors';
 import {
   getUserRequests,
   getUserRequestsSuccess,
@@ -66,6 +66,7 @@ export class RegularRequestComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.store.dispatch(restartPagination());
     this.closeRequestMessages();
     this.fillRequestTable();
     this.filter();

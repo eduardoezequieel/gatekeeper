@@ -1,29 +1,35 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @include mat.core();
 $gatekeeper-trainee-program-primary: mat.define-palette(mat.$indigo-palette);
-$gatekeeper-trainee-program-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$gatekeeper-trainee-program-accent: mat.define-palette(
+  mat.$pink-palette,
+  A200,
+  A100,
+  A400
+);
 
 $gatekeeper-trainee-program-warn: mat.define-palette(mat.$red-palette);
-$gatekeeper-trainee-program-theme: mat.define-light-theme((
-  color: (
-    primary: $gatekeeper-trainee-program-primary,
-    accent: $gatekeeper-trainee-program-accent,
-    warn: $gatekeeper-trainee-program-warn,
+$gatekeeper-trainee-program-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $gatekeeper-trainee-program-primary,
+      accent: $gatekeeper-trainee-program-accent,
+      warn: $gatekeeper-trainee-program-warn,
+    ),
   )
-));
+);
 
 @include mat.all-component-themes($gatekeeper-trainee-program-theme);
 
 /* You can add global styles to this file, and also import other style files */
 
-  
-  $applaudo-navy-blue: #011625;
-  $cool-gray: #687177;
+$applaudo-navy-blue: #011625;
+$cool-gray: #687177;
 
 * {
   margin: 0;
   padding: 0;
-  font-family: 'Avenir Next LT Pro', sans-serif !important;  
+  font-family: "Avenir Next LT Pro", sans-serif !important;
 }
 
 html,
@@ -43,7 +49,7 @@ a {
 .mat-form-field {
   line-height: 1.5;
   .mat-input-element {
-    color: $applaudo-navy-blue
+    color: $applaudo-navy-blue;
   }
   .mat-form-field-label {
     color: #687177;
@@ -58,10 +64,10 @@ a {
     color: #687177;
   }
   .mat-hint {
-    color: $cool-gray
+    color: $cool-gray;
   }
 }
-.mat-dialog-content{
+.mat-dialog-content {
   overflow: hidden !important;
 }
 .mat-dialog-container {
@@ -73,14 +79,13 @@ a {
   flex-direction: column;
   margin-bottom: 10px;
   .mat-hint {
-    color: #ff4040
+    color: #ff4040;
   }
 }
 
 .mat-form-field-flex {
   padding-top: 0 !important;
 }
-
 
 @mixin primary-button {
   .primary-button {
@@ -104,23 +109,29 @@ a {
     font-size: 16px;
     line-height: 24px;
     color: #ff4040;
-    border: 2px solid lightgrey;
+    border: 2px solid #e2e2e2;
     background-color: white;
   }
 }
 
 @font-face {
   font-family: "Avenir Next LT Pro";
-  src: local("Avenir Next LT Pro"), url(./assets/fonts/Avenir-Next-LT-Pro-Regular/Avenir-Next-LT-Pro-Regular.otf) format("truetype");
+  src: local("Avenir Next LT Pro"),
+    url(./assets/fonts/Avenir-Next-LT-Pro-Regular/Avenir-Next-LT-Pro-Regular.otf)
+      format("truetype");
 }
 @font-face {
   font-family: "Avenir Next LT Pro";
-  src: local("Avenir Next LT Pro"), url(./assets/fonts/Avenir-Next-LT-Pro-Regular/AvenirLTProBlack.otf) format("truetype");
+  src: local("Avenir Next LT Pro"),
+    url(./assets/fonts/Avenir-Next-LT-Pro-Regular/AvenirLTProBlack.otf)
+      format("truetype");
   font-weight: 700;
 }
 @font-face {
   font-family: "Avenir Next LT Pro";
-  src: local("Avenir Next LT Pro"), url(./assets/fonts/Avenir-Next-LT-Pro-Regular/AvenirLTProHeavy.otf) format("truetype");
+  src: local("Avenir Next LT Pro"),
+    url(./assets/fonts/Avenir-Next-LT-Pro-Regular/AvenirLTProHeavy.otf)
+      format("truetype");
   font-weight: 600;
 }
-@import url('https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css');
+@import url("https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css");
