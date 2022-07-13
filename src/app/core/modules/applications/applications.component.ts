@@ -20,6 +20,7 @@ import {
   filteredApplicationsLength,
   pagination,
 } from './store/applications.selectors';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-applications',
@@ -35,10 +36,12 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();
   searchInput = new FormControl('');
   filters = false;
+  noResults = false;
 
   constructor(
     private userService: UserService,
-    private store: Store<ApplicationsModuleState>
+    private store: Store<ApplicationsModuleState>,
+    private actions$: Actions
   ) {}
 
   ngOnInit(): void {
@@ -92,10 +95,24 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
       this.store
         .pipe(select(filteredApplicationsLength), takeUntil(this.unsubscribe$))
         .subscribe((response) => (this.filteredApplicationsLength = response));
+
+      this.actions$
+        .pipe(
+          ofType(applicationsActions.searchApplicationsSuccess),
+          takeUntil(this.unsubscribe$)
+        )
+        .subscribe(() => {
+          if (this.filteredApplicationsLength < 1) {
+            this.noResults = true;
+          } else {
+            this.noResults = false;
+          }
+        });
     }
   }
 
   clearFilters(): void {
+    this.noResults = false;
     this.filters = false;
     this.applications$ = this.store.pipe(select(applications));
 

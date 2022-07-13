@@ -35,6 +35,10 @@
       *ngFor="let app of applications$ | async"
       [application]="app"
     ></app-application>
+
+    <div *ngIf="noResults" class="noResults">
+      <img src="../../../../assets/images/not-found.png" alt="" />
+    </div>
   </div>
 
   <div class="paginator">

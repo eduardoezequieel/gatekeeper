@@ -21,6 +21,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   take,
+  Observable,
 } from 'rxjs';
 import { ApplicationsService } from './services/applications.service';
 import { Actions, ofType } from '@ngrx/effects';
@@ -32,7 +33,7 @@ import { Actions, ofType } from '@ngrx/effects';
 })
 export class EmployeesComponent implements OnInit, OnDestroy {
   user!: User;
-  employees!: Employee[];
+  employees$!: Observable<Employee[]>;
   employeesLength = 0;
   applications!: Application[];
   roles!: Roles[];
@@ -77,9 +78,7 @@ export class EmployeesComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(employeesActions.getEmployees());
 
-    this.store
-      .pipe(select(selectors.employees), takeUntil(this.unsubscribe$))
-      .subscribe((response) => (this.employees = response));
+    this.employees$ = this.store.pipe(select(selectors.employees));
 
     this.store
       .pipe(select(selectors.pagination), takeUntil(this.unsubscribe$))
@@ -150,16 +149,19 @@ export class EmployeesComponent implements OnInit, OnDestroy {
             })
           );
 
-          this.store
-            .pipe(select(selectors.filteredEmployees), take(2))
-            .subscribe((response) => {
-              this.employees = response;
-            });
+          this.employees$ = this.store.pipe(
+            select(selectors.filteredEmployees)
+          );
 
           this.actions$
             .pipe(take(1), ofType(employeesActions.getFilteredEmployeesSuccess))
             .subscribe(() => {
-              if (this.employees.length == 0) {
+              let length = 0;
+              this.employees$
+                .pipe(take(1))
+                .subscribe((response) => (length = response.length));
+
+              if (length == 0) {
                 this.noResults = true;
               } else {
                 this.noResults = false;
@@ -170,9 +172,7 @@ export class EmployeesComponent implements OnInit, OnDestroy {
   }
 
   clearFilters(): void {
-    this.store
-      .pipe(select(selectors.employees), takeUntil(this.unsubscribe$))
-      .subscribe((response) => (this.employees = response));
+    this.employees$ = this.store.pipe(select(selectors.employees));
     this.form.controls['byName'].setValue('');
     this.form.controls['byApp'].setValue('');
     this.form.controls['byRole'].setValue('');
