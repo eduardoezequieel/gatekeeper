@@ -43,10 +43,10 @@
       </mat-select>
     </mat-form-field>
   </form>
-  <div class="employees-container" *ngIf="employees">
+  <div class="employees-container" *ngIf="employees$">
     <div
       class="employee-container"
-      *ngFor="let employee of employees"
+      *ngFor="let employee of employees$ | async"
       (click)="openUserProfile(employee.id)"
     >
       <div class="img-container">
