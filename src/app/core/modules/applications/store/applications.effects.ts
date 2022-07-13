@@ -37,14 +37,13 @@ export class ApplicationsEffects {
       withLatestFrom(this.store.select(pagination)),
       mergeMap(([{ search }, { pagination }]) =>
         this.applicationsService
-          .searchApplications(
-            pagination.pageIndex + 1,
-            pagination.pageSize,
-            search
-          )
+          .searchApplications(1, pagination.pageSize, search)
           .pipe(
             map((response) =>
-              applicationsActions.searchApplicationsSuccess({ response, search })
+              applicationsActions.searchApplicationsSuccess({
+                response,
+                search,
+              })
             )
           )
       )

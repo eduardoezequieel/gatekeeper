@@ -17,7 +17,7 @@
   <div class="search-container">
     <mat-form-field appearance="standard" class="input-search">
       <mat-label>Search</mat-label>
-      <input matInput [formControl]="searchInput" />
+      <input matInput [formControl]="searchInput" (keyup.enter)="search()" />
       <span matPrefix><i class="ri-search-line"></i></span>
     </mat-form-field>
     <div class="buttons">
@@ -30,9 +30,9 @@
     </div>
   </div>
 
-  <div class="applications-container" *ngIf="applications">
+  <div class="applications-container" *ngIf="applications$">
     <app-application
-      *ngFor="let app of applications"
+      *ngFor="let app of applications$ | async"
       [application]="app"
     ></app-application>
   </div>

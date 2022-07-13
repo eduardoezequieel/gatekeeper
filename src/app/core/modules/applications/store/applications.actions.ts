@@ -18,19 +18,23 @@ export const updatePagination = createAction(
 
 export const searchApplications = createAction(
   '[Applications Module] Search applications',
-  props<{ search: string; }>()
+  props<{ search: string }>()
 );
 
 export const searchApplicationsSuccess = createAction(
   '[Applications Module] Gotten filtered applications',
-  props<{ response: ApplicationsResponse; search: string; }>()
+  props<{ response: ApplicationsResponse; search: string }>()
 );
 
 export const getFilteredApplications = createAction(
   '[Applications Module] Get filtered applications from next page'
-)
+);
 
 export const getFilteredApplicationsSuccess = createAction(
   '[Applications Module] Gotten filtered applications from next page',
-  props<{response: ApplicationsResponse; }>()
-)
+  props<{ response: ApplicationsResponse }>()
+);
+
+export const clearFilters = createAction(
+  '[Applications Module] Clear filters from applications pagination'
+);

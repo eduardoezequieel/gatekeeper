@@ -2,13 +2,24 @@ import { FormControl } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { select, Store } from '@ngrx/store';
-import { Subject, takeUntil } from 'rxjs';
+import {
+  Subject,
+  takeUntil,
+  take,
+  Observable,
+  distinctUntilChanged,
+} from 'rxjs';
 import { Application } from 'src/app/shared/interfaces/applicationResponse';
 import { User } from 'src/app/shared/interfaces/loginResponse';
 import { UserService } from 'src/app/shared/nav/services/user.service';
 import * as applicationsActions from './store/applications.actions';
 import { ApplicationsModuleState } from './store/applications.reducer';
-import { applications, pagination } from './store/applications.selectors';
+import {
+  applications,
+  filteredApplications,
+  filteredApplicationsLength,
+  pagination,
+} from './store/applications.selectors';
 
 @Component({
   selector: 'app-applications',
@@ -17,10 +28,11 @@ import { applications, pagination } from './store/applications.selectors';
 })
 export class ApplicationsComponent implements OnInit, OnDestroy {
   user!: User;
-  applications!: Application[];
+  applications$!: Observable<Application[]>;
   applicationsLength = 0;
+  filteredApplicationsLength = 0;
   pagination!: PageEvent;
-  unsusbcribe$ = new Subject();
+  unsubscribe$ = new Subject();
   searchInput = new FormControl('');
   filters = false;
 
@@ -34,20 +46,18 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
     this.store.dispatch(applicationsActions.getApplications());
 
     this.store
-      .pipe(select(pagination), takeUntil(this.unsusbcribe$))
+      .pipe(select(pagination), takeUntil(this.unsubscribe$))
       .subscribe(({ pagination, applicationsLength }) => {
         this.pagination = pagination;
         this.applicationsLength = applicationsLength;
       });
 
-    this.store
-      .pipe(select(applications), takeUntil(this.unsusbcribe$))
-      .subscribe((response) => (this.applications = response));
+    this.applications$ = this.store.pipe(select(applications));
 
     this.searchInput.valueChanges
-      .pipe(takeUntil(this.unsusbcribe$))
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response: string) => {
-        if (response.length < 1) {
+        if (this.searchInput.dirty && response.length < 1) {
           this.clearFilters();
         }
       });
@@ -61,7 +71,7 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
         this.store.dispatch(applicationsActions.getApplications());
       }
     } else {
-      if (this.applicationsLength < this.pagination.length) {
+      if (this.filteredApplicationsLength < this.pagination.length) {
         this.store.dispatch(applicationsActions.getFilteredApplications());
       }
     }
@@ -76,13 +86,26 @@ export class ApplicationsComponent implements OnInit, OnDestroy {
           search: this.searchInput.value,
         })
       );
+
+      this.applications$ = this.store.pipe(select(filteredApplications));
+
+      this.store
+        .pipe(select(filteredApplicationsLength), takeUntil(this.unsubscribe$))
+        .subscribe((response) => (this.filteredApplicationsLength = response));
     }
   }
 
-  clearFilters(): void {}
+  clearFilters(): void {
+    this.filters = false;
+    this.applications$ = this.store.pipe(select(applications));
+
+    this.searchInput.reset('');
+
+    this.store.dispatch(applicationsActions.clearFilters());
+  }
 
   ngOnDestroy(): void {
-    this.unsusbcribe$.next(true);
-    this.unsusbcribe$.complete();
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete();
   }
 }

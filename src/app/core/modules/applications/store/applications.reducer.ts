@@ -1,4 +1,5 @@
 import {
+  clearFilters,
   getApplicationsSuccess,
   getFilteredApplicationsSuccess,
   searchApplicationsSuccess,
@@ -86,6 +87,17 @@ export const applicationsModuleReducer = createReducer(
         length: response.pagination.totalItems,
       },
       filteredApplicationsIds: Array.from(ids) as number[],
+    };
+  }),
+  on(clearFilters, (state) => {
+    return {
+      ...state,
+      pagination: {
+        pageIndex: 0,
+        pageSize: 12,
+        length: state.totalApplications,
+      },
+      filteredApplicationsIds: [],
     };
   })
 );
