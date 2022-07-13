@@ -53,3 +53,7 @@ export const searchUserRequestsSuccess = createAction(
 export const clearFiltersFromRequests = createAction(
   '[Requests Module] Clear filters from requests pagination'
 );
+
+export const restartPagination = createAction(
+  '[Requests Module] Restart pagination'
+);

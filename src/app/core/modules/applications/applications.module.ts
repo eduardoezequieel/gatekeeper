@@ -1,3 +1,5 @@
+import { ReactiveFormsModule } from '@angular/forms';
+import { EffectsModule } from '@ngrx/effects';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgModule } from '@angular/core';
@@ -16,12 +18,19 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { ApplicationComponent } from './components/application/application.component';
+import { ApplicationsModuleService } from './services/applications-module.service';
+import { applicationsModuleReducer } from './store/applications.reducer';
+import { StoreModule } from '@ngrx/store';
+import { ApplicationsEffects } from './store/applications.effects';
 
 @NgModule({
   declarations: [ApplicationsComponent, ApplicationComponent],
   imports: [
     CommonModule,
     ApplicationsRoutingModule,
+    StoreModule.forFeature('applicationsModule', applicationsModuleReducer),
+    EffectsModule.forFeature([ApplicationsEffects]),
+    ReactiveFormsModule,
     MatInputModule,
     MatSelectModule,
     MatPaginatorModule,
@@ -33,5 +42,6 @@ import { ApplicationComponent } from './components/application/application.compo
     MatProgressSpinnerModule,
     MatSlideToggleModule,
   ],
+  providers: [ApplicationsModuleService],
 })
 export class ApplicationsModule {}

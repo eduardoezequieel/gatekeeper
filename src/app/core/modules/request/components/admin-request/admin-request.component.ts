@@ -7,6 +7,7 @@ import {
   clearFiltersFromRequests,
   getAppsRequests,
   getAppsRequestsSuccess,
+  restartPagination,
   searchAppsRequests,
   updatePagination,
 } from './../../store/requests.actions';
@@ -77,6 +78,8 @@ export class AdminRequestComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.store.dispatch(restartPagination());
+    
     this.twoFAuthEnabled = this.userService.getUser().twoFactorEnabled;
     this.closeRequestMessages();
     this.applications = this.requestService.getOneAplications().pipe(
